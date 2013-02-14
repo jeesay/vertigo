@@ -1,4 +1,4 @@
 vertigo
 =======
 
-A rendering engine for Imagej and OpenGL
+A rendering engine for Imagej using OpenGL (jogl and lwjgl)
