@@ -29,7 +29,7 @@ import ij.IJ;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
 
-public class CrazyBio_Viewer implements PlugIn {
+public class Vertigo_Viewer implements PlugIn {
 
     public void run (String options) {
 	test();
