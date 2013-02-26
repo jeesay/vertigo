@@ -21,7 +21,7 @@
  *
  * Authors :
  *Florin Buga
- *Olivier Catoliquot,
+ *Olivier Catoliquot
  *Clement Delestre
  */
 
