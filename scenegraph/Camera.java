@@ -28,11 +28,11 @@
 class Camera extends Node {
 
     public Camera(){
-	super(); // un commentaire en essai
+	super();
     }
 
     public void setParent(Node anode){	
-	System.out.println("Scene must not have any parents.");
+	System.out.println("Scene must not have any parents...");
     }
 
    setPerspective() {
