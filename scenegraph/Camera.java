@@ -32,7 +32,7 @@ class Camera extends Node {
     }
 
     public void setParent(Node anode){	
-	System.out.println("Scene must not have any parents");
+	System.out.println("Scene must not have any parents.............");
     }
 
    setPerspective() {
