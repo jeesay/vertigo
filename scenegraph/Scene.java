@@ -23,7 +23,6 @@
  * Florin Buga
  * Olivier Catoliquot
  * Clement Delestre
- * test
  */
 
 class Scene extends Node {
