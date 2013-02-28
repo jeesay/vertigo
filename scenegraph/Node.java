@@ -20,10 +20,12 @@
  * 02110-1301  USA, or see the FSF site: http://www.fsf.org.
  *
  * Authors :
- *Florin Buga
- *Olivier Catoliquot
- *Clement Delestre
+ * Florin Buga
+ * Olivier Catoliquot
+ * Clement Delestre
  */
+
+
 
 import java.util.ArrayList;
 import math.Matrix4;
