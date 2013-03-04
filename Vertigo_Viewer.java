@@ -51,5 +51,5 @@ public class Vertigo_Viewer implements PlugIn {
 	cam.add(scene);
 	
     }
-
+// TEST SI CA MARCHE
 }// end of class Vertigo.Viewer
