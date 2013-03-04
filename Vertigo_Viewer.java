@@ -24,7 +24,9 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
+package vertigo;
 
+import vertigo.scenegraph.Scene;
 import ij.IJ;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
@@ -32,7 +34,7 @@ import ij.process.ImageProcessor;
 public class Vertigo_Viewer implements PlugIn {
 
     public void run (String options) {
-	//test(); // je commente pour tester
+	test(); 
     }
 
 
@@ -50,4 +52,4 @@ public class Vertigo_Viewer implements PlugIn {
 	
     }
 
-}
+}// end of class Vertigo.Viewer
