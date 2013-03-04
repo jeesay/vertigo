@@ -32,7 +32,7 @@ import ij.process.ImageProcessor;
 public class Vertigo_Viewer implements PlugIn {
 
     public void run (String options) {
-	test();
+	//test(); // je commente pour tester
     }
 
 
