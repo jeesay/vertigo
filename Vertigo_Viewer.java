@@ -32,6 +32,10 @@ import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
 
 public class Vertigo_Viewer implements PlugIn {
+    private String title_;
+    private float red;
+    private float green;
+    private float blue;
 
     public void run (String options) {
 	test(); 
@@ -70,6 +74,7 @@ public class Vertigo_Viewer implements PlugIn {
     *
     */
     public Scene getScene() {
+        return scene_;
     }
 
     /**
@@ -77,6 +82,7 @@ public class Vertigo_Viewer implements PlugIn {
     *
     */
     public Camera getCamera() {
+        return camera_;
     }
 
     public static void main(String [] args) {
