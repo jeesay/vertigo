@@ -24,8 +24,9 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
+package vertigo.scenegraph;
 
-class Scene extends Node {
+public class Scene extends Node {
 
     public Scene (){
 	super();
