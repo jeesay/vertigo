@@ -35,6 +35,47 @@ public class Vertigo_Viewer implements PlugIn {
 	test();
     }
 
+    /**
+    * Sets The title of the Window
+    *
+    * @param a_title A string containing the title
+    */
+    public void setTitle(String a_title) {
+        title_ = a_title;
+    }
+
+    /**
+    * Sets the background color
+    *
+    * @param red integer value between 0 and 255 for the red component
+    * @param green integer value between 0 and 255 for the red component
+    * @param blue integer value between 0 and 255 for the red component
+    */
+    public void setBackgroundColor(int red, int green, int blue) {
+        this.red = red / 255.0f;
+        this.green = green / 255.0f;
+        this.blue = blue / 255.0f;
+    }
+
+    /**
+    * Displays the window and triggers the OpenGL rendering in an infinite loop.
+    */
+    public void show() {
+    }
+
+    /**
+    * Gets the root of the scene graph.
+    *
+    */
+    public Scene getScene() {
+    }
+
+    /**
+    * Gets the Camera for *this* (default) scene graph. This is a convenient method equivalent to `getScene().getCamera()'.
+    *
+    */
+    public Camera getCamera() {
+    }
 
     public static void main(String [] args) {
         System.out.println("main");
