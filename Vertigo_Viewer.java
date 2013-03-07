@@ -27,15 +27,21 @@
 package vertigo;
 
 import vertigo.scenegraph.Scene;
+import vertigo.scenegraph.Camera;
 import ij.IJ;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
+import vertigo.graphics.Renderer;
+
 
 public class Vertigo_Viewer implements PlugIn {
     private String title_;
     private float red;
     private float green;
     private float blue;
+    private Scene scene_;
+    private Camera camera_;
+    private Renderer renderer;
 
     public void run (String options) {
 	test(); 
@@ -67,6 +73,8 @@ public class Vertigo_Viewer implements PlugIn {
     * Displays the window and triggers the OpenGL rendering in an infinite loop.
     */
     public void show() {
+        renderer = (Renderer) new vertigo.graphics.jogl.Renderer(getScene());
+        renderer.display();
     }
 
     /**
@@ -93,9 +101,9 @@ public class Vertigo_Viewer implements PlugIn {
 
     private static void test () {
 	Scene scene = new Scene();
-        scene.add(new Cube());
-	Camera cam = new Camera();
-	cam.add(scene);
+        //scene.add(new Cube());
+	//Camera cam = new Camera();
+	//cam.add(scene);
 	
     }
 

@@ -1,3 +1,5 @@
+
+
 /*
  * $Id:$
  *
@@ -25,7 +27,26 @@
  *Clement Delestre
  */
 
-class Renderer  { 
+package vertigo.graphics.jogl;
+
+import vertigo.scenegraph.Scene;
+import vertigo.scenegraph.Renderer;
+
+public class Renderer  { 
+    
+    private Renderer instance;
+    
+    public Renderer(Scene scene) {
+        if (instance==null)
+            newInstance(scene);
+        else
+            return instance;
+    
+    }
+    
+    private  newInstance(Scene) {
+        
+    }
     //public Renderer(){} 
     //singleton
     public void initShader(){
