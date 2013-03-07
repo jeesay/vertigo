@@ -32,4 +32,4 @@ public class Scene extends Node {
 	super();
     }
 
-}
+} // end of class Scene
