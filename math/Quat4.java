@@ -86,21 +86,8 @@ public class Quat4 extends Tuple4 implements Serializable {
 	super(q1);
     }
 
-    /**
-     * Constructs and initializes a Quat4 from the specified Quat4d.
-     * @param q1 the Quat4d containing the initialization x y z w data
-     */
-    public Quat4(Quat4d q1) {
-	super(q1);
-    }
+  
 
-    /**
-      * Constructs and initializes a Quat4 from the specified Tuple4d.
-      * @param t1 the Tuple4d containing the initialization x y z w data
-      */
-    public Quat4(Tuple4d t1) {
-	super(t1);
-    }
 
     /**
       * Constructs and initializes a Quat4 from the specified Tuple4.
@@ -285,13 +272,7 @@ public class Quat4 extends Tuple4 implements Serializable {
      * the passed matrix.
      * @param m1 the matrix4d
      */
-    public final void set(Matrix4d m1) {
-	setFromMat(
-	    m1.m00, m1.m01, m1.m02,
-	    m1.m10, m1.m11, m1.m12,
-	    m1.m20, m1.m21, m1.m22
-	    );
-    }
+ 
 
     /**
      * Sets the value of this quaternion to the rotational component of
@@ -311,13 +292,7 @@ public class Quat4 extends Tuple4 implements Serializable {
      * the passed matrix.
      * @param m1 the matrix3d
      */
-    public final void set(Matrix3d m1) {
-	setFromMat(
-	    m1.m00, m1.m01, m1.m02,
-	    m1.m10, m1.m11, m1.m12,
-	    m1.m20, m1.m21, m1.m22
-	    );
-    }
+
 
     /**
      * Sets the value of this quaternion to the equivalent rotation of teh
@@ -337,23 +312,7 @@ public class Quat4 extends Tuple4 implements Serializable {
 	w = (float)Math.cos(0.5*a1.angle);
     }
 
-    /**
-     * Sets the value of this quaternion to the equivalent rotation of teh
-     * AxisAngle argument.
-     * @param a1 the axis-angle
-     */
-    public final void set(AxisAngle4d a1) {
-	x = (float)a1.x;
-	y = (float)a1.y;
-	z = (float)a1.z;
-	double n = Math.sqrt(x*x + y*y + z*z);
-	// zero-div may occur.
-	float s = (float)(Math.sin(0.5*a1.angle)/n);
-	x *= s;
-	y *= s;
-	z *= s;
-	w = (float)Math.cos(0.5*a1.angle);
-    }
+ 
 
     /**
       * Performs a great circle interpolation between this quaternion and the
@@ -451,4 +410,4 @@ public class Quat4 extends Tuple4 implements Serializable {
 	    }
 	}
     }
-}
+} // end of class Quat4

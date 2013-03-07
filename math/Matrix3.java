@@ -1195,4 +1195,4 @@ public class Matrix3 implements Serializable {
 	m21 = (float)(tmp1 + tmp2);
     }
 
-}
+} // end of class Matrix3

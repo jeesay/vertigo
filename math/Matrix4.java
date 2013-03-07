@@ -944,38 +944,9 @@ public class Matrix4 implements Serializable {
 	setFromAxisAngle(a1.x, a1.y, a1.z, a1.angle);
     }
 
-    /**
-      * Sets the value of this matrix to the matrix conversion of the
-      * (double precision) quaternion argument.
-      * @param q1 the quaternion to be converted
-      */
-    public final void set(Quat4d q1) {
-	setFromQuat(q1.x, q1.y, q1.z, q1.w);
-    }
+ 
 
-    /**
-      * Sets the value of this matrix to the matrix conversion of the
-      * single precision axis and angle argument.
-      * @param a1 the axis and angle to be converted
-      */
-    public final void set(AxisAngle4d a1) {
-	setFromAxisAngle(a1.x, a1.y, a1.z, a1.angle);
-    }
-
-  /**
-    * Sets the value of this matrix from the rotation expressed by the
-    * quaternion q1, the translation t1, and the scale s.
-    * @param q1  the rotation expressed as a quaternion
-    * @param t1  the translation
-    * @param s  the scale value
-    */
-    public final void set(Quat4d q1, Vector3d t1, double s) {
-	set(q1);
-	mulRotationScale((float)s);
-	m03 = (float)t1.x;
-	m13 = (float)t1.y;
-	m23 = (float)t1.z;
-    }
+ 
 
   /**
     * Sets the value of this matrix from the rotation expressed by the
@@ -1084,20 +1055,7 @@ public class Matrix4 implements Serializable {
 	m30 =   0.0f; m31 =   0.0f; m32 =   0.0f; m33 = 1.0f;
     }
 
-    /**
-      * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * values in the double precision Matrix3d argument; the other elements of
-      * this matrix are initialized as if this were an identity matrix
-      * (ie, affine matrix with no translational component).
-      * @param m1 the 3x3 matrix
-      */
-    public final void set(Matrix3d m1)  {
-	m00 = (float)m1.m00; m01 = (float)m1.m01; m02 = (float)m1.m02; m03 = 0.0f;
-	m10 = (float)m1.m10; m11 = (float)m1.m11; m12 = (float)m1.m12; m13 = 0.0f;
-	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22; m23 = 0.0f;
-	m30 =    0.0f;       m31 =    0.0f;       m32 =    0.0f;       m33 = 1.0f;
-    }
-
+ 
     /**
      * Sets the value of this matrix to a scale matrix with the
      * passed scale amount.
@@ -1175,20 +1133,7 @@ public class Matrix4 implements Serializable {
 	m33 = 1.0f;
     }
 
-    /**
-      * Sets the value of this matrix from the rotation expressed by the
-      * rotation matrix m1, the translation t1, and the scale s. The translation
-      * is not modified by the scale.
-      * @param m1 The rotation component
-      * @param t1 The translation component
-      * @param scale The scale component
-      */
-    public final void set(Matrix3d m1, Vector3d t1, double scale) {
-	setRotationScale(m1);
-	mulRotationScale((float)scale);
-	setTranslation(t1);
-	m33 = 1.0f;
-    }
+  
 
     /**
       * Modifies the translational components of this matrix to the values of
@@ -1615,39 +1560,7 @@ public class Matrix4 implements Serializable {
 	m33 = w3;
     }
 
-    /**
-      * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * equivalent values of the quaternion argument; the other elements of this
-      * matrix are unchanged; a singular value decomposition is performed on
-      * this object's upper 3x3 matrix to factor out the scale, then this
-      * object's upper 3x3 matrix components are replaced by the matrix
-      * equivalent of the quaternion, and then the scale is reapplied to the
-      * rotational components.
-      * @param q1 the quaternion that specifies the rotation
-      */
-    public final void setRotation(Quat4d q1) {
-	float scale = SVD(null, null);
-	// save other values
-	float tx = m03;
-	float ty = m13;
-	float tz = m23;
-	float w0 = m30;
-	float w1 = m31;
-	float w2 = m32;
-	float w3 = m33;
-
-	set(q1);
-	mulRotationScale(scale);
-
-	// set back
-	m03 = tx;
-	m13 = ty;
-	m23 = tz;
-	m30 = w0;
-	m31 = w1;
-	m32 = w2;
-	m33 = w3;
-    }
+   
 
     /**
       * Sets the rotational component (upper 3x3) of this matrix to the matrix
@@ -1835,15 +1748,7 @@ public class Matrix4 implements Serializable {
     }
 
 
-    /**
-      * Gets the upper 3x3 values of this matrix and places them into the matrix m1.
-      * @param m1 The matrix that will hold the values
-      */
-    private final void getRotationScale(Matrix3d m1) {
-	m1.m00 = m00; m1.m01 = m01; m1.m02 = m02;
-	m1.m10 = m10; m1.m11 = m11; m1.m12 = m12;
-	m1.m20 = m20; m1.m21 = m21; m1.m22 = m22;
-    }
+    
 
     private void setFromQuat(double x, double y, double z, double w) {
 	double n = x*x + y*y + z*z + w*w;

@@ -168,16 +168,7 @@ public abstract class Tuple4f implements Serializable {
 	w = t1.w;
     }
 
-    /**
-      * Sets the value of this tuple to the value of tuple t1.
-      * @param t1 the tuple to be copied
-      */
-    public final void set(Tuple4d t1) {
-	x = (float)t1.x;
-	y = (float)t1.y;
-	z = (float)t1.z;
-	w = (float)t1.w;
-    }
+
 
     /**
       * Copies the value of the elements of this tuple into the array t[].
@@ -492,4 +483,4 @@ public abstract class Tuple4f implements Serializable {
 	z = beta*z + alpha*t1.z;
 	w = beta*w + alpha*t1.w;
     }
-}
+} // end of class Tuple4f
