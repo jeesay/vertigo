@@ -1917,7 +1917,7 @@ public class Matrix4 implements Serializable {
 	m21 = (float)(tmp1 + tmp2);
     }
 
-}
+} // end of class matrix4
 
 /*******
 public class Matrix4 {
