@@ -24,21 +24,27 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
+package vertigo.scenegraph;
 
-class Material{
+public class Material {
 
-   private float[] color;
+    private float[] color;
 
-    public void setColor(float red, float green, float blue){
+    public void setColor(float red, float green, float blue) {
+        color[0] = red;
+        color[1] = green;
+        color[2] = blue;
         color[3] = 1.0f;
     }
 
-    public void setColor(float red, float green, float blue, float alpha){
-
+    public void setColor(float red, float green, float blue, float alpha) {
+        color[0] = red;
+        color[1] = green;
+        color[2] = blue;
+        color[3] = alpha;
     }
 
-    public void  getColor(){
-	return color;
+    public float[] getColor() {
+        return color;
     }
-
-}
+} // end of class Material

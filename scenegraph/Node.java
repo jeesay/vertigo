@@ -35,7 +35,6 @@ public class Node {
     private ArrayList<Node> children;
     private Matrix4 matrix;
 
-    //private-protected ?
     public Node() {
         children = new ArrayList();
         Node parent = null;
@@ -52,16 +51,12 @@ public class Node {
     }
 
     public void add(Node anode) {
-
         children.add(anode);
         anode.setParent(this);
-
     }
 
     public void remove(Node anode) {
-
         children.remove(anode);
-
     }
 
     public ArrayList<Node> getChildren() {
@@ -72,10 +67,12 @@ public class Node {
         return children.get(index);
     }
 
-    public void getParent() {
+    public Node getParent() {
+           return parent;
     }
 
-    public void size() {
+    public int size() {
+           return children.size();
     }
 
     public void traverseUp() {
@@ -85,4 +82,4 @@ public class Node {
     }
     
     
-} // Ebd of class Node
+} // End of class Node
