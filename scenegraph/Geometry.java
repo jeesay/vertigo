@@ -26,14 +26,10 @@
  */
 
 package vertigo.scenegraph;
-
-class Geometry {
+public class Geometry {
 
     public Geometry(){
-	
     }
     public Geometry(float [] data, int type){
-	
     }
-
-}
+} // end of class Geometry
