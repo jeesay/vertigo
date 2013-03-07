@@ -45,8 +45,7 @@
 */
 
 
-package VoltIJ.math;
-
+package vertigo.math;
 import java.io.Serializable;
 
 /**
@@ -239,17 +238,13 @@ public class Matrix4 implements Serializable {
       * Constructs a new matrix with the same values as the Matrix4d parameter.
       * @param m1 The source matrix.
       */
-    public Matrix4(Matrix4d m1) {
-	set(m1);
-    }
+  
 
     /**
       * Constructs a new matrix with the same values as the Matrix4 parameter.
       * @param m1 The source matrix.
       */
-    public Matrix4(Matrix4 m1) {
-	set(m1);
-    }
+  
 
     /**
       * Constructs and initializes a Matrix4 from the rotation matrix,
@@ -1011,24 +1006,14 @@ public class Matrix4 implements Serializable {
       * passed matrix m1.
       * @param m1 the matrix to be copied
       */
-    public final void set(Matrix4d m1) {
+    public final void set(Matrix4 m1) {
 	m00 = (float)m1.m00; m01 = (float)m1.m01; m02 = (float)m1.m02; m03 = (float)m1.m03;
 	m10 = (float)m1.m10; m11 = (float)m1.m11; m12 = (float)m1.m12; m13 = (float)m1.m13;
 	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22; m23 = (float)m1.m23;
 	m30 = (float)m1.m30; m31 = (float)m1.m31; m32 = (float)m1.m32; m33 = (float)m1.m33;
     }
 
-    /**
-      * Sets the value of this matrix to a copy of the
-      * passed matrix m1.
-      * @param m1 the matrix to be copied
-      */
-    public final void set(Matrix4 m1) {
-	m00 = m1.m00; m01 = m1.m01; m02 = m1.m02; m03 = m1.m03;
-	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12; m13 = m1.m13;
-	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22; m23 = m1.m23;
-	m30 = m1.m30; m31 = m1.m31; m32 = m1.m32; m33 = m1.m33;
-    }
+
 
 
 
