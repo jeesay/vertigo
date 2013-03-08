@@ -17,5 +17,9 @@ package vertigo.graphics;
     public int getHandle() {
         return handle;
     }
+    
+    public boolean isDirty() {
+     return (handle==-1);
+    }
 
 } // End of class BO
