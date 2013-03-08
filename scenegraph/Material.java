@@ -26,10 +26,22 @@
  */
 package vertigo.scenegraph;
 
+import vertigo.graphics.ShaderProg;
+import vertigo.graphics.ShaderFactory;
+
 public class Material {
 
     private float[] color;
+    private ShaderProg shader;
+    
+    public Material() {
+        shader = null;
+    }
 
+    public void setShaderMaterial(String shaderName) {
+        shader = ShaderFactory.getShader(shaderName);
+    }
+    
     public void setColor(float red, float green, float blue) {
         color[0] = red;
         color[1] = green;
@@ -47,4 +59,5 @@ public class Material {
     public float[] getColor() {
         return color;
     }
+    
 } // end of class Material
