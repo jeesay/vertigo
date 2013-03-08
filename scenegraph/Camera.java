@@ -42,7 +42,7 @@ public class Camera extends Node {
 	System.out.println("Scene must not have any parents...");
     }
 
-   public void setPerspective() {
+   public void setPerspective(float fovy, float aspect, float zNear, float zFar) {
 
    }
 
