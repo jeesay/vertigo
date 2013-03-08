@@ -1,3 +1,5 @@
+package vertigo.graphics;
+
 public class VBO extends BO {
   
   private FloatBuffer buffer;
