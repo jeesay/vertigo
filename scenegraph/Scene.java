@@ -25,7 +25,9 @@
  * Clement Delestre
  */
 
-class Scene extends Node {
+package vertigo.scenegraph;
+
+public class Scene extends Node {
 
     public Scene (){
 	super();

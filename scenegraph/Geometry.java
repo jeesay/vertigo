@@ -1,4 +1,4 @@
-/*
+/**
  * $Id:$
  *
  * crazybio_viewer: 3D Viewer Plugin for ImageJ.
@@ -25,14 +25,11 @@
  * Clement Delestre
  */
 
-
-class Geometry {
+package vertigo.scenegraph;
+public class Geometry {
 
     public Geometry(){
-	
     }
     public Geometry(float [] data, int type){
-	
     }
-
-}
+} // end of class Geometry

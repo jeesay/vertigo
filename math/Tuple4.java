@@ -24,9 +24,9 @@ import java.io.Serializable;
   * @version specification 1.1, implementation $Revision: 1.11 $, $Date: 1999/10/05 07:03:50 $
   * @author Kenji hiranabe
   */
-public abstract class Tuple4f implements Serializable {
+public abstract class Tuple4 implements Serializable {
 /*
- * $Log: Tuple4f.java,v $
+ * $Log: Tuple4.java,v $
  * Revision 1.11  1999/10/05  07:03:50  hiranabe
  * copyright change
  *
@@ -87,44 +87,37 @@ public abstract class Tuple4f implements Serializable {
     public float w;
 
     /**
-      * Constructs and initializes a Tuple4f from the specified xyzw coordinates.
+      * Constructs and initializes a Tuple4 from the specified xyzw coordinates.
       * @param x the x coordinate
       * @param y the y coordinate
       * @param z the z coordinate
       * @param w the w coordinate
       */
-    public Tuple4f(float x, float y, float z, float w) {
+    public Tuple4(float x, float y, float z, float w) {
 	set(x, y, z, w);
     }
 
     /**
-      * Constructs and initializes a Tuple4f from the specified array.
+      * Constructs and initializes a Tuple4 from the specified array.
       * @param t the array of length 4 containing xyzw in order
       */
-    public Tuple4f(float t[]) {
+    public Tuple4(float t[]) {
 	set(t);
     }
 
     /**
-      * Constructs and initializes a Tuple4f from the specified Tuple4f.
-      * @param t1 the Tuple4f containing the initialization x y z w data
+      * Constructs and initializes a Tuple4 from the specified Tuple4.
+      * @param t1 the Tuple4 containing the initialization x y z w data
       */
-    public Tuple4f(Tuple4f t1) {
+    public Tuple4(Tuple4 t1) {
 	set(t1);
     }
 
-    /**
-      * Constructs and initializes a Tuple4f from the specified Tuple4d.
-      * @param t1 the Tuple4d containing the initialization x y z w data
-      */
-    public Tuple4f(Tuple4d t1) {
-	set(t1);
-    }
 
     /**
-      * Constructs and initializes a Tuple4f to (0,0,0,0).
+      * Constructs and initializes a Tuple4 to (0,0,0,0).
       */
-    public Tuple4f() {
+    public Tuple4() {
 	x = 0.0f;
 	y = 0.0f;
 	z = 0.0f;
@@ -161,13 +154,12 @@ public abstract class Tuple4f implements Serializable {
       * Sets the value of this tuple to the value of tuple t1.
       * @param t1 the tuple to be copied
       */
-    public final void set(Tuple4f t1) {
+    public final void set(Tuple4 t1) {
 	x = t1.x;
 	y = t1.y;
 	z = t1.z;
 	w = t1.w;
     }
-
 
 
     /**
@@ -183,10 +175,10 @@ public abstract class Tuple4f implements Serializable {
     }
 
     /**
-      * Gets the value of this tuple and copies the values into the Tuple4f.
-      * @param t Tuple4f object into which that values of this object are copied
+      * Gets the value of this tuple and copies the values into the Tuple4.
+      * @param t Tuple4 object into which that values of this object are copied
       */
-    public final void get(Tuple4f t) {
+    public final void get(Tuple4 t) {
 	t.x = x;
 	t.y = y;
 	t.z = z;
@@ -198,7 +190,7 @@ public abstract class Tuple4f implements Serializable {
       * @param t1 the first tuple
       * @param t2 the second tuple
       */
-    public final void add(Tuple4f t1, Tuple4f t2) {
+    public final void add(Tuple4 t1, Tuple4 t2) {
 	x = t1.x + t2.x;
 	y = t1.y + t2.y;
 	z = t1.z + t2.z;
@@ -209,7 +201,7 @@ public abstract class Tuple4f implements Serializable {
       * Sets the value of this tuple to the vector sum of itself and tuple t1.
       * @param t1  the other tuple
       */
-    public final void add(Tuple4f t1) {
+    public final void add(Tuple4 t1) {
 	x += t1.x;
 	y += t1.y;
 	z += t1.z;
@@ -222,7 +214,7 @@ public abstract class Tuple4f implements Serializable {
       * @param t1 the first tuple
       * @param t2 the second tuple
       */
-    public final void sub(Tuple4f t1, Tuple4f t2) {
+    public final void sub(Tuple4 t1, Tuple4 t2) {
 	x = t1.x - t2.x;
 	y = t1.y - t2.y;
 	z = t1.z - t2.z;
@@ -233,7 +225,7 @@ public abstract class Tuple4f implements Serializable {
       * Sets the value of this tuple to the vector difference of itself and tuple t1 (this = this - t1).
       * @param t1 the other tuple
       */
-    public final void sub(Tuple4f t1) {
+    public final void sub(Tuple4 t1) {
 	x -= t1.x;
 	y -= t1.y;
 	z -= t1.z;
@@ -244,7 +236,7 @@ public abstract class Tuple4f implements Serializable {
       * Sets the value of this tuple to the negation of tuple t1.
       * @param t1 the source vector
       */
-    public final void negate(Tuple4f t1) {
+    public final void negate(Tuple4 t1) {
 	x = -t1.x;
 	y = -t1.y;
 	z = -t1.z;
@@ -267,7 +259,7 @@ public abstract class Tuple4f implements Serializable {
       * @param s the scalar value
       * @param t1 the source tuple
       */
-    public final void scale(float s, Tuple4f t1) {
+    public final void scale(float s, Tuple4 t1) {
 	x = s*t1.x;
 	y = s*t1.y;
 	z = s*t1.z;
@@ -292,7 +284,7 @@ public abstract class Tuple4f implements Serializable {
       * @param t1 the tuple to be multipled
       * @param t2 the tuple to be added
       */
-    public final void scaleAdd(float s, Tuple4f t1, Tuple4f t2) {
+    public final void scaleAdd(float s, Tuple4 t1, Tuple4 t2) {
 	x = s*t1.x + t2.x;
 	y = s*t1.y + t2.y;
 	z = s*t1.z + t2.z;
@@ -305,7 +297,7 @@ public abstract class Tuple4f implements Serializable {
       * @param s the scalar value
       * @param t1 the tuple to be added
       */
-    public final void scaleAdd(float s, Tuple4f t1) {
+    public final void scaleAdd(float s, Tuple4 t1) {
 	x = s*x + t1.x;
 	y = s*y + t1.y;
 	z = s*z + t1.z;
@@ -314,8 +306,8 @@ public abstract class Tuple4f implements Serializable {
 
     /**
       * Returns a hash number based on the data values in this object.
-      * Two different Tuple4f objects with identical data  values
-      * (ie, returns true for equals(Tuple4f) ) will return the same hash number.
+      * Two different Tuple4 objects with identical data  values
+      * (ie, returns true for equals(Tuple4) ) will return the same hash number.
       * Two vectors with different data members may return the same hash value,
       * although this is not likely.
       */
@@ -327,11 +319,11 @@ public abstract class Tuple4f implements Serializable {
       }
 
     /**
-      * Returns true if all of the data members of Tuple4f t1 are equal to the corresponding
+      * Returns true if all of the data members of Tuple4 t1 are equal to the corresponding
       * data members in this
       * @param t1 the vector with which the comparison is made.
       */
-    public boolean equals(Tuple4f t1) {
+    public boolean equals(Tuple4 t1) {
 	return t1 != null && x == t1.x && y == t1.y && z == t1.z && w == t1.w;
     }
 
@@ -342,7 +334,7 @@ public abstract class Tuple4f implements Serializable {
       * @param t1 the tuple to be compared to this tuple
       * @param epsilon the threshold value
       */
-    public boolean epsilonEquals(Tuple4f t1, float epsilon) {
+    public boolean epsilonEquals(Tuple4 t1, float epsilon) {
 	return (Math.abs(t1.x - this.x) <= epsilon) &&
 	    (Math.abs(t1.y - this.y) <= epsilon) &&
 	    (Math.abs(t1.z - this.z) <= epsilon) &&
@@ -350,7 +342,7 @@ public abstract class Tuple4f implements Serializable {
     }
 
     /**
-      * Returns a string that contains the values of this Tuple4f. The form is (x,y,z,w).
+      * Returns a string that contains the values of this Tuple4. The form is (x,y,z,w).
       * @return the String representation
       */
     public String toString() {
@@ -364,7 +356,7 @@ public abstract class Tuple4f implements Serializable {
       * @param max the highest value in the tuple after clamping
       * @param t the source tuple, which will not be modified
       */
-    public final void clamp(float min, float max, Tuple4f t) {
+    public final void clamp(float min, float max, Tuple4 t) {
 	set(t);
 	clamp(min, max);
     }
@@ -375,7 +367,7 @@ public abstract class Tuple4f implements Serializable {
       * @param min the lowest value in the tuple after clamping
       * @parm t the source tuple, which will not be modified
       */
-    public final void clampMin(float min, Tuple4f t) {
+    public final void clampMin(float min, Tuple4 t) {
 	set(t);
 	clampMin(min);
     }
@@ -386,7 +378,7 @@ public abstract class Tuple4f implements Serializable {
       * @param max the highest value in the tuple after clamping
       * @param t the source tuple, which will not be modified
       */
-    public final void clampMax(float max, Tuple4f t) {
+    public final void clampMax(float max, Tuple4 t) {
 	set(t);
 	clampMax(max);
     }
@@ -397,7 +389,7 @@ public abstract class Tuple4f implements Serializable {
       * places the modified values into this tuple.
       * @param t the source tuple, which will not be modified
       */
-    public final void absolute(Tuple4f t) {
+    public final void absolute(Tuple4 t) {
 	set(t);
 	absolute();
     }
@@ -463,7 +455,7 @@ public abstract class Tuple4f implements Serializable {
       * @param t2 the second tuple
       * @param alpha the alpha interpolation parameter
       */
-    public final void interpolate(Tuple4f t1, Tuple4f t2, float alpha) {
+    public final void interpolate(Tuple4 t1, Tuple4 t2, float alpha) {
 	set(t1);
 	interpolate(t2, alpha);
     }
@@ -476,11 +468,11 @@ public abstract class Tuple4f implements Serializable {
       * @param alpha the alpha interpolation parameter
       *
       */
-    public final void interpolate(Tuple4f t1, float alpha) {
+    public final void interpolate(Tuple4 t1, float alpha) {
 	float beta = 1 - alpha;
 	x = beta*x + alpha*t1.x;
 	y = beta*y + alpha*t1.y;
 	z = beta*z + alpha*t1.z;
 	w = beta*w + alpha*t1.w;
     }
-} // end of class Tuple4f
+}

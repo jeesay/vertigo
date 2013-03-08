@@ -25,7 +25,9 @@
  * Clement Delestre
  */
 
-class Camera extends Node {
+package vertigo.scenegraph;
+
+public class Camera extends Node {
 
     public Camera(){
 	super();
@@ -35,13 +37,13 @@ class Camera extends Node {
 	System.out.println("Scene must not have any parents...");
     }
 
-   setPerspective() {
+   public void setPerspective() {
 
    }
 
-   setStereoscopic() {
+   public void setStereoscopic() {
 
    }
 
 
-}
+} // End of class Camera

@@ -25,8 +25,8 @@
  * Clement Delestre
  */
 
-
-class Shape extends Node {
+package vertigo.scenegraph;
+public class Shape extends Node {
     Geometry geo;
     Material material;
 
@@ -35,7 +35,4 @@ class Shape extends Node {
         geo = new Geometry();
         material = new Material();
     }
-
-
-
-}
+} // End of class Shape
