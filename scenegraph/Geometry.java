@@ -46,7 +46,7 @@ public class Geometry {
      * @param type - Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
      * @param primitives - an array containing the data for each vertex (coordinates, normal, colors,etc.).
      */
-    public void setBuffer(String type, float[] data) {
+    public void setVertices(String type, float[] data) {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
@@ -64,7 +64,7 @@ public class Geometry {
      * @param contents - a String containing the various data type present in the primitives array. 
      * Ex: "[VEC3F,COL3F,NORM3F,TEX2F]" corresponds to Vertex, Color, Normal and finally TexCoords data for each vertex.
      */
-    public void setPackedBuffer(String[] types, float[] data) {
+    public void setPackedVertices(String[] types, float[] data) {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
