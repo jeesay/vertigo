@@ -1,4 +1,6 @@
- 
+package vertigo.graphics;
+
+
  public class BO {
    
    private int handle;
