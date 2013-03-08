@@ -1,4 +1,3 @@
-
 public class VBO extends BO {
   
   private FloatBuffer buffer;
@@ -12,12 +11,6 @@ public class VBO extends BO {
         buffer = buf;
     }
 
-    public void setFloatBuffer(String[] types, FloatBuffer buf) {
-        this.types = types;
-        packed = true;
-        buffer = buf;
-        this.stride = calc_stride(types);
-    }
 
     public FloatBuffer getFloatBuffer() {
         return buffer;
