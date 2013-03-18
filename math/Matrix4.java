@@ -45,8 +45,7 @@
 */
 
 
-package VoltIJ.math;
-
+package vertigo.math;
 import java.io.Serializable;
 
 /**
@@ -231,7 +230,7 @@ public class Matrix4 implements Serializable {
       * @param t1  The translational component of the matrix
       * @param s  The scale value applied to the rotational components
       */
-    public Matrix4(Quat4f q1, Vector3f t1, float s) {
+    public Matrix4(Quat4 q1, Vector3 t1, float s) {
 	set(q1, t1, s);
     }
 
@@ -239,18 +238,12 @@ public class Matrix4 implements Serializable {
       * Constructs a new matrix with the same values as the Matrix4d parameter.
       * @param m1 The source matrix.
       */
-    public Matrix4(Matrix4d m1) {
-	set(m1);
-    }
-
+  
     /**
       * Constructs a new matrix with the same values as the Matrix4 parameter.
       * @param m1 The source matrix.
       */
-    public Matrix4(Matrix4 m1) {
-	set(m1);
-    }
-
+  
     /**
       * Constructs and initializes a Matrix4 from the rotation matrix,
       * translation, and scale values; the scale is applied only to the
@@ -260,7 +253,7 @@ public class Matrix4 implements Serializable {
       * @param t1  The translational components of the matrix
       * @param s  The scale value applied to the rotational components
       */
-    public Matrix4(Matrix3f m1, Vector3f t1, float s) {
+    public Matrix4(Matrix3 m1, Vector3 t1, float s) {
 	set(m1);
 	mulRotationScale(s);
 	setTranslation(t1);
@@ -420,19 +413,10 @@ public class Matrix4 implements Serializable {
 
     /**
       * Performs an SVD normalization of this matrix in order to acquire the
-      * normalized rotational component; the values are placed into the Matrix3d parameter.
+      * normalized rotational component; the values are placed into the Matrix3 parameter.
       * @param m1 matrix into which the rotational component is placed
       */
-    public final void get(Matrix3d m1) {
-	SVD(m1);
-    }
-
-    /**
-      * Performs an SVD normalization of this matrix in order to acquire the
-      * normalized rotational component; the values are placed into the Matrix3f parameter.
-      * @param m1 matrix into which the rotational component is placed
-      */
-    public final void get(Matrix3f m1) {
+    public final void get(Matrix3 m1) {
 	SVD(m1, null);
     }
 
@@ -443,7 +427,7 @@ public class Matrix4 implements Serializable {
       * @param t1 The translation component
       * @return The scale component of this transform
       */
-    public final float get(Matrix3f m1, Vector3f t1) {
+    public final float get(Matrix3 m1, Vector3 t1) {
 	get(t1);
 	return SVD(m1, null);
     }
@@ -451,10 +435,10 @@ public class Matrix4 implements Serializable {
     /**
       * Performs an SVD normalization of this matrix in order to acquire the
       * normalized rotational component; the values are placed into
-      * the Quat4f parameter.
+      * the Quat4 parameter.
       * @param q1 quaternion into which the rotation component is placed
       */
-    public final void get(Quat4f q1) {
+    public final void get(Quat4 q1) {
 	q1.set(this);
 	q1.normalize();
     }
@@ -463,7 +447,7 @@ public class Matrix4 implements Serializable {
       * Retrieves the translational components of this matrix.
       * @param trans the vector that will receive the translational component
       */
-    public final void get(Vector3f trans) {
+    public final void get(Vector3 trans) {
 	trans.x = m03;
 	trans.y = m13;
 	trans.z = m23;
@@ -473,7 +457,7 @@ public class Matrix4 implements Serializable {
       * Gets the upper 3x3 values of this matrix and places them into the matrix m1.
       * @param m1 The matrix that will hold the values
       */
-    public final void getRotationScale(Matrix3f m1) {
+    public final void getRotationScale(Matrix3 m1) {
 	m1.m00 = m00; m1.m01 = m01; m1.m02 = m02;
 	m1.m10 = m10; m1.m11 = m11; m1.m12 = m12;
 	m1.m20 = m20; m1.m21 = m21; m1.m22 = m22;
@@ -492,7 +476,7 @@ public class Matrix4 implements Serializable {
       * Replaces the upper 3x3 matrix values of this matrix with the values in the matrix m1.
       * @param m1 The matrix that will be the new upper 3x3
       */
-    public final void setRotationScale(Matrix3f m1) {
+    public final void setRotationScale(Matrix3 m1) {
 	m00 = m1.m00; m01 = m1.m01; m02 = m1.m02;
 	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12;
 	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22;
@@ -600,7 +584,7 @@ public class Matrix4 implements Serializable {
      * @param row the matrix row
      * @param v The vector into which the matrix row values will be copied
      */
-    public final void getRow(int row, Vector4f v) {
+    public final void getRow(int row, Vector4 v) {
 	if (row == 0) {
 	    v.x = m00;
 	    v.y = m01;
@@ -760,7 +744,7 @@ public class Matrix4 implements Serializable {
      * @param column the matrix column
      * @param v The vector into which the matrix column values will be copied
      */
-    public final void getColumn(int column, Vector4f v) {
+    public final void getColumn(int column, Vector4 v) {
 	if (column == 0) {
 	    v.x = m00;
 	    v.y = m10;
@@ -946,7 +930,7 @@ public class Matrix4 implements Serializable {
      * single precision quaternion argument.
      * @param q1 the quaternion to be converted
      */
-    public final void set(Quat4f q1)  {
+    public final void set(Quat4 q1)  {
 	setFromQuat(q1.x, q1.y, q1.z, q1.w);
     }
     /**
@@ -958,23 +942,9 @@ public class Matrix4 implements Serializable {
 	setFromAxisAngle(a1.x, a1.y, a1.z, a1.angle);
     }
 
-    /**
-      * Sets the value of this matrix to the matrix conversion of the
-      * (double precision) quaternion argument.
-      * @param q1 the quaternion to be converted
-      */
-    public final void set(Quat4d q1) {
-	setFromQuat(q1.x, q1.y, q1.z, q1.w);
-    }
+ 
 
-    /**
-      * Sets the value of this matrix to the matrix conversion of the
-      * single precision axis and angle argument.
-      * @param a1 the axis and angle to be converted
-      */
-    public final void set(AxisAngle4d a1) {
-	setFromAxisAngle(a1.x, a1.y, a1.z, a1.angle);
-    }
+ 
 
   /**
     * Sets the value of this matrix from the rotation expressed by the
@@ -983,22 +953,7 @@ public class Matrix4 implements Serializable {
     * @param t1  the translation
     * @param s  the scale value
     */
-    public final void set(Quat4d q1, Vector3d t1, double s) {
-	set(q1);
-	mulRotationScale((float)s);
-	m03 = (float)t1.x;
-	m13 = (float)t1.y;
-	m23 = (float)t1.z;
-    }
-
-  /**
-    * Sets the value of this matrix from the rotation expressed by the
-    * quaternion q1, the translation t1, and the scale s.
-    * @param q1  the rotation expressed as a quaternion
-    * @param t1  the translation
-    * @param s  the scale value
-    */
-    public final void set(Quat4f q1, Vector3f t1, float s) {
+    public final void set(Quat4 q1, Vector3 t1, float s) {
 	set(q1);
 	mulRotationScale(s);
 	m03 = t1.x;
@@ -1011,24 +966,13 @@ public class Matrix4 implements Serializable {
       * passed matrix m1.
       * @param m1 the matrix to be copied
       */
-    public final void set(Matrix4d m1) {
+    public final void set(Matrix4 m1) {
 	m00 = (float)m1.m00; m01 = (float)m1.m01; m02 = (float)m1.m02; m03 = (float)m1.m03;
 	m10 = (float)m1.m10; m11 = (float)m1.m11; m12 = (float)m1.m12; m13 = (float)m1.m13;
 	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22; m23 = (float)m1.m23;
 	m30 = (float)m1.m30; m31 = (float)m1.m31; m32 = (float)m1.m32; m33 = (float)m1.m33;
     }
 
-    /**
-      * Sets the value of this matrix to a copy of the
-      * passed matrix m1.
-      * @param m1 the matrix to be copied
-      */
-    public final void set(Matrix4 m1) {
-	m00 = m1.m00; m01 = m1.m01; m02 = m1.m02; m03 = m1.m03;
-	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12; m13 = m1.m13;
-	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22; m23 = m1.m23;
-	m30 = m1.m30; m31 = m1.m31; m32 = m1.m32; m33 = m1.m33;
-    }
 
 
 
@@ -1096,32 +1040,19 @@ public class Matrix4 implements Serializable {
 
     /**
       * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * values in the single precision Matrix3f argument; the other elements of
+      * values in the single precision Matrix3 argument; the other elements of
       * this matrix are initialized as if this were an identity matrix
       * (ie, affine matrix with no translational component).
       * @param m1 the 3x3 matrix
       */
-    public final void set(Matrix3f m1)  {
+    public final void set(Matrix3 m1)  {
 	m00 = m1.m00; m01 = m1.m01; m02 = m1.m02; m03 = 0.0f;
 	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12; m13 = 0.0f;
 	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22; m23 = 0.0f;
 	m30 =   0.0f; m31 =   0.0f; m32 =   0.0f; m33 = 1.0f;
     }
 
-    /**
-      * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * values in the double precision Matrix3d argument; the other elements of
-      * this matrix are initialized as if this were an identity matrix
-      * (ie, affine matrix with no translational component).
-      * @param m1 the 3x3 matrix
-      */
-    public final void set(Matrix3d m1)  {
-	m00 = (float)m1.m00; m01 = (float)m1.m01; m02 = (float)m1.m02; m03 = 0.0f;
-	m10 = (float)m1.m10; m11 = (float)m1.m11; m12 = (float)m1.m12; m13 = 0.0f;
-	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22; m23 = 0.0f;
-	m30 =    0.0f;       m31 =    0.0f;       m32 =    0.0f;       m33 = 1.0f;
-    }
-
+ 
     /**
      * Sets the value of this matrix to a scale matrix with the
      * passed scale amount.
@@ -1152,7 +1083,7 @@ public class Matrix4 implements Serializable {
      * passed translation value.
      * @param v1 the translation amount
      */
-    public final void set(Vector3f v1) {
+    public final void set(Vector3 v1) {
 	setIdentity();
 	setTranslation(v1);
     }
@@ -1164,7 +1095,7 @@ public class Matrix4 implements Serializable {
      * @param scale the scale factor for the matrix
      * @param v1 the translation amount
      */
-    public final void set(float scale, Vector3f v1) {
+    public final void set(float scale, Vector3 v1) {
 	set(scale);
 	setTranslation(v1);
     }
@@ -1176,7 +1107,7 @@ public class Matrix4 implements Serializable {
      * @param v1 the translation amount
      * @param scale the scale factor for the matrix
      */
-    public final void set(Vector3f v1, float scale) {
+    public final void set(Vector3 v1, float scale) {
 	m00 = scale; m01 = 0.0f;  m02 = 0.0f;  m03 = scale*v1.x;
 	m10 = 0.0f;  m11 = scale; m12 = 0.0f;  m13 = scale*v1.y;
 	m20 = 0.0f;  m21 = 0.0f;  m22 = scale; m23 = scale*v1.z;
@@ -1192,34 +1123,21 @@ public class Matrix4 implements Serializable {
       * @param t1 The translation component
       * @param scale The scale component
       */
-    public final void set(Matrix3f m1, Vector3f t1, float scale) {
+    public final void set(Matrix3 m1, Vector3 t1, float scale) {
 	setRotationScale(m1);
 	mulRotationScale(scale);
 	setTranslation(t1);
 	m33 = 1.0f;
     }
 
-    /**
-      * Sets the value of this matrix from the rotation expressed by the
-      * rotation matrix m1, the translation t1, and the scale s. The translation
-      * is not modified by the scale.
-      * @param m1 The rotation component
-      * @param t1 The translation component
-      * @param scale The scale component
-      */
-    public final void set(Matrix3d m1, Vector3d t1, double scale) {
-	setRotationScale(m1);
-	mulRotationScale((float)scale);
-	setTranslation(t1);
-	m33 = 1.0f;
-    }
+  
 
     /**
       * Modifies the translational components of this matrix to the values of
-      * the Vector3f argument; the other values of this matrix are not modified.
+      * the Vector3 argument; the other values of this matrix are not modified.
       * @param trans the translational component
       */
-    public void setTranslation(Vector3f trans) {
+    public void setTranslation(Vector3 trans) {
 	m03 = trans.x;
         m13 = trans.y;
 	m23 = trans.z;
@@ -1504,7 +1422,7 @@ public class Matrix4 implements Serializable {
      * @param vec the single precision vector to be transformed
      * @param vecOut the vector into which the transformed values are placed
      */
-    public final void transform(Tuple4f vec, Tuple4f vecOut) {
+    public final void transform(Tuple4 vec, Tuple4 vecOut) {
 	// alias-safe
 	vecOut.set(
 	    m00*vec.x + m01*vec.y + m02*vec.z + m03*vec.w,
@@ -1519,7 +1437,7 @@ public class Matrix4 implements Serializable {
      * result back into vec.
      * @param vec the single precision vector to be transformed
      */
-    public final void transform(Tuple4f vec)  {
+    public final void transform(Tuple4 vec)  {
 	transform(vec, vec);
     }
 
@@ -1555,7 +1473,7 @@ public class Matrix4 implements Serializable {
      * @param normal the input normal to be transformed.
      * @param normalOut the transformed normal
      */
-    public final void transform(Vector3f normal, Vector3f normalOut) {
+    public final void transform(Vector3 normal, Vector3 normalOut) {
 	normalOut.set(
 	    m00 * normal.x + m01 * normal.y + m02 * normal.z,
 	    m10 * normal.x + m11 * normal.y + m12 * normal.z,
@@ -1568,13 +1486,13 @@ public class Matrix4 implements Serializable {
      * back into normal.  The fourth element of the normal is assumed to be zero.
      * @param normal the input normal to be transformed.
      */
-    public final void transform(Vector3f normal) {
+    public final void transform(Vector3 normal) {
 	transform(normal, normal);
     }
 
     /**
       * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * values in the single precision Matrix3f argument; the other elements of
+      * values in the single precision Matrix3 argument; the other elements of
       * this matrix are unchanged; a singular value decomposition is performed
       * on this object's upper 3x3 matrix to factor out the scale, then this
       * object's upper 3x3 matrix components are replaced by the passed rotation
@@ -1582,27 +1500,13 @@ public class Matrix4 implements Serializable {
       * components.
       * @param m1 single precision 3x3 matrix
       */
-    public final void setRotation(Matrix3d m1) {
+    public final void setRotation(Matrix3 m1) {
 	float scale = SVD(null);
 	setRotationScale(m1);
 	mulRotationScale(scale);
     }
 
-    /**
-      * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * values in the single precision Matrix3f argument; the other elements of
-      * this matrix are unchanged; a singular value decomposition is performed
-      * on this object's upper 3x3 matrix to factor out the scale, then this
-      * object's upper 3x3 matrix components are replaced by the passed rotation
-      * components, and then the scale is reapplied to the rotational
-      * components.
-      * @param m1 single precision 3x3 matrix
-      */
-    public final void setRotation(Matrix3f m1) {
-	float scale = SVD(null);
-	setRotationScale(m1);
-	mulRotationScale(scale);
-    }
+  
 
     /**
       * Sets the rotational component (upper 3x3) of this matrix to the matrix
@@ -1614,7 +1518,7 @@ public class Matrix4 implements Serializable {
       * rotational components.
       * @param q1 the quaternion that specifies the rotation
       */
-    public final void setRotation(Quat4f q1) {
+    public final void setRotation(Quat4 q1) {
 	float scale = SVD(null, null);
 
 	// save other values
@@ -1639,39 +1543,7 @@ public class Matrix4 implements Serializable {
 	m33 = w3;
     }
 
-    /**
-      * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * equivalent values of the quaternion argument; the other elements of this
-      * matrix are unchanged; a singular value decomposition is performed on
-      * this object's upper 3x3 matrix to factor out the scale, then this
-      * object's upper 3x3 matrix components are replaced by the matrix
-      * equivalent of the quaternion, and then the scale is reapplied to the
-      * rotational components.
-      * @param q1 the quaternion that specifies the rotation
-      */
-    public final void setRotation(Quat4d q1) {
-	float scale = SVD(null, null);
-	// save other values
-	float tx = m03;
-	float ty = m13;
-	float tz = m23;
-	float w0 = m30;
-	float w1 = m31;
-	float w2 = m32;
-	float w3 = m33;
-
-	set(q1);
-	mulRotationScale(scale);
-
-	// set back
-	m03 = tx;
-	m13 = ty;
-	m23 = tz;
-	m30 = w0;
-	m31 = w1;
-	m32 = w2;
-	m33 = w3;
-    }
+   
 
     /**
       * Sets the rotational component (upper 3x3) of this matrix to the matrix
@@ -1757,7 +1629,7 @@ public class Matrix4 implements Serializable {
       * @param rot4 the rotation factor(Matrix4) only upper 3x3 elements are changed.
       * @return scale factor
       */
-    private float SVD(Matrix3f rot3, Matrix4 rot4) {
+    private float SVD(Matrix3 rot3, Matrix4 rot4) {
 	// this is a simple svd.
 	// Not complete but fast and reasonable.
 	// See comment in Matrix3d.
@@ -1793,7 +1665,7 @@ public class Matrix4 implements Serializable {
       * @param rot the rotation factor.
       * @return scale factor
       */
-    private float SVD(Matrix3d rot) {
+    private float SVD(Matrix3 rot) {
 	// this is a simple svd.
 	// Not complete but fast and reasonable.
 	// See comment in Matrix3d.
@@ -1852,22 +1724,12 @@ public class Matrix4 implements Serializable {
       * the Vector3d argument; the other values of this matrix are not modified.
       * @param trans the translational component
       */
-    private void setTranslation(Vector3d trans) {
+    private void setTranslation(Vector3 trans) {
 	m03 = (float)trans.x;
         m13 = (float)trans.y;
 	m23 = (float)trans.z;
     }
 
-
-    /**
-      * Gets the upper 3x3 values of this matrix and places them into the matrix m1.
-      * @param m1 The matrix that will hold the values
-      */
-    private final void getRotationScale(Matrix3d m1) {
-	m1.m00 = m00; m1.m01 = m01; m1.m02 = m02;
-	m1.m10 = m10; m1.m11 = m11; m1.m12 = m12;
-	m1.m20 = m20; m1.m21 = m21; m1.m22 = m22;
-    }
 
     private void setFromQuat(double x, double y, double z, double w) {
 	double n = x*x + y*y + z*z + w*w;
@@ -1917,171 +1779,4 @@ public class Matrix4 implements Serializable {
 	m21 = (float)(tmp1 + tmp2);
     }
 
-} // end of class matrix4
-
-/*******
-public class Matrix4 {
-
-   float M00;
-   float M10;
-   float M20;
-   float M30;
-   float M01;
-   float M11;
-   float M21;
-   float M31;
-   float M02;
-   float M12;
-   float M22;
-   float M32;
-   float M03;
-   float M13;
-   float M23;
-   float M33;
-
-   public Matrix4() {
-      setIdentity();
-   }
-
-   public void get(float[] dest) {
-      dest[0] = M00;
-      dest[1] = M10;
-      dest[2] = M20;
-      dest[3] = M30;
-      dest[4] = M01;
-      dest[5] = M11;
-      dest[6] = M21;
-      dest[7] = M31;
-      dest[8] = M02;
-      dest[9] = M12;
-      dest[10] = M22;
-      dest[11] = M32;
-      dest[12] = M03;
-      dest[13] = M13;
-      dest[14] = M23;
-      dest[15] = M33;
-   }
-
-   public void setZero() {
-      M00 = M01 = M02 = M03 = M10 = M11 = M12 = M13 = M20 = M21 = M22 = M23 = M30 = M31 = M32 = M33 = 0.0f;
-   }
-
-   public void setIdentity() {
-      setZero();
-      M00 = M11 = M22 = M33 = 1.0f;
-   }
-
-   public void setRotation(Quat4f q1) {
-      float n, s;
-      float xs, ys, zs;
-      float wx, wy, wz;
-      float xx, xy, xz;
-      float yy, yz, zz;
-
-      n = (q1.x * q1.x) + (q1.y * q1.y) + (q1.z * q1.z) + (q1.w * q1.w);
-      s = (n > 0.0f) ? (2.0f / n) : 0.0f;
-
-      xs = q1.x * s;
-      ys = q1.y * s;
-      zs = q1.z * s;
-      wx = q1.w * xs;
-      wy = q1.w * ys;
-      wz = q1.w * zs;
-      xx = q1.x * xs;
-      xy = q1.x * ys;
-      xz = q1.x * zs;
-      yy = q1.y * ys;
-      yz = q1.y * zs;
-      zz = q1.z * zs;
-
-      M00 = 1.0f - (yy + zz);
-      M01 = xy - wz;
-      M02 = xz + wy;
-      M03 = 0f;
-      M10 = xy + wz;
-      M11 = 1.0f - (xx + zz);
-      M12 = yz - wx;
-      M13 = 0f;
-      M20 = xz - wy;
-      M21 = yz + wx;
-      M22 = 1.0f - (xx + yy);
-      M23 = 0f;
-      M30 = 0f;
-      M31 = 0f;
-      M32 = 0f;
-      M33 = 1f;
-   }
-
-   public final void set(Matrix4 m1) {
-      M00 = m1.M00;
-      M01 = m1.M01;
-      M02 = m1.M02;
-      M03 = m1.M03;
-      M10 = m1.M10;
-      M11 = m1.M11;
-      M12 = m1.M12;
-      M13 = m1.M13;
-      M20 = m1.M20;
-      M21 = m1.M21;
-      M22 = m1.M22;
-      M23 = m1.M23;
-      M30 = m1.M30;
-      M31 = m1.M31;
-      M32 = m1.M32;
-      M33 = m1.M33;
-   }
-
-   /**
-    * Sets the value of this matrix to the result of multiplying
-    * the two argument matrices together.
-    *
-    * @param m1 the first matrix
-    * @param m2 the second matrix
-    
-   public final void mul(Matrix4 m1, Matrix4 m2) {
-      // alias-safe way.
-      set(
-              m1.M00 * m2.M00 + m1.M01 * m2.M10 + m1.M02 * m2.M20 + m1.M03 * m2.M30,
-              m1.M00 * m2.M01 + m1.M01 * m2.M11 + m1.M02 * m2.M21 + m1.M03 * m2.M31,
-              m1.M00 * m2.M02 + m1.M01 * m2.M12 + m1.M02 * m2.M22 + m1.M03 * m2.M32,
-              m1.M00 * m2.M03 + m1.M01 * m2.M13 + m1.M02 * m2.M23 + m1.M03 * m2.M33,
-              m1.M10 * m2.M00 + m1.M11 * m2.M10 + m1.M12 * m2.M20 + m1.M13 * m2.M30,
-              m1.M10 * m2.M01 + m1.M11 * m2.M11 + m1.M12 * m2.M21 + m1.M13 * m2.M31,
-              m1.M10 * m2.M02 + m1.M11 * m2.M12 + m1.M12 * m2.M22 + m1.M13 * m2.M32,
-              m1.M10 * m2.M03 + m1.M11 * m2.M13 + m1.M12 * m2.M23 + m1.M13 * m2.M33,
-              m1.M20 * m2.M00 + m1.M21 * m2.M10 + m1.M22 * m2.M20 + m1.M23 * m2.M30,
-              m1.M20 * m2.M01 + m1.M21 * m2.M11 + m1.M22 * m2.M21 + m1.M23 * m2.M31,
-              m1.M20 * m2.M02 + m1.M21 * m2.M12 + m1.M22 * m2.M22 + m1.M23 * m2.M32,
-              m1.M20 * m2.M03 + m1.M21 * m2.M13 + m1.M22 * m2.M23 + m1.M23 * m2.M33,
-              m1.M30 * m2.M00 + m1.M31 * m2.M10 + m1.M32 * m2.M20 + m1.M33 * m2.M30,
-              m1.M30 * m2.M01 + m1.M31 * m2.M11 + m1.M32 * m2.M21 + m1.M33 * m2.M31,
-              m1.M30 * m2.M02 + m1.M31 * m2.M12 + m1.M32 * m2.M22 + m1.M33 * m2.M32,
-              m1.M30 * m2.M03 + m1.M31 * m2.M13 + m1.M32 * m2.M23 + m1.M33 * m2.M33);
-   }
-
-   
-    * Sets 16 values
-  
-   private void set(float m00, float m01, float m02, float m03,
-           float m10, float m11, float m12, float m13,
-           float m20, float m21, float m22, float m23,
-           float m30, float m31, float m32, float m33) {
-      this.M00 = m00;
-      this.M01 = m01;
-      this.M02 = m02;
-      this.M03 = m03;
-      this.M10 = m10;
-      this.M11 = m11;
-      this.M12 = m12;
-      this.M13 = m13;
-      this.M20 = m20;
-      this.M21 = m21;
-      this.M22 = m22;
-      this.M23 = m23;
-      this.M30 = m30;
-      this.M31 = m31;
-      this.M32 = m32;
-      this.M33 = m33;
-   }
-}
-****/
+} // End of class Matrix4
