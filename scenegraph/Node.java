@@ -35,7 +35,6 @@ public class Node {
     private ArrayList<Node> children;
     private Matrix4 matrix;
 
-    //private-protected ?
     public Node() {
         children = new ArrayList();
         Node parent = null;
