@@ -969,7 +969,7 @@ public class Matrix4 implements Serializable {
 	m30 = (float)m1.m30; m31 = (float)m1.m31; m32 = (float)m1.m32; m33 = (float)m1.m33;
     }
 
-  /**
+    /**
      * Sets the value of this matrix to the matrix inverse
      * of the passed matrix m1.
      * @param m1 the matrix to be inverted
