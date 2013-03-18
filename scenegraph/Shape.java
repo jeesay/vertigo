@@ -25,8 +25,8 @@
  * Clement Delestre
  */
 
-
-class Shape extends Node {
+package vertigo.scenegraph;
+public class Shape extends Node {
     Geometry geo;
     Material material;
 
@@ -35,7 +35,37 @@ class Shape extends Node {
         geo = new Geometry();
         material = new Material();
     }
-
-
-
-}
+    
+    public void addGeometry(String type, float[] data) {
+    	// check if the string 'type' contains comma -> packedGeometry otherwise single Geometry
+    	if (isPacked(type) ) 
+    		geo.setPackedGeometry(type,data);
+    	else
+    		geo.setGeometry(type,data);
+    	
+    }
+    
+    public void setIndexedGeometry(String type, float[] data, int[] indices) {
+    	// check if the string 'type' contains comma -> packedGeometry otherwise single Geometry
+    	if (isPacked(type) ) 
+    		geo.setPackedGeometry(type,data);
+    	else
+    		geo.setGeometry(type,data);
+		geo.setIndices(indices);    	
+    }
+    
+    public setColor(float red, float green, float blue, float alpha) {
+    	// TODO
+    }
+    
+    public setShaderMaterial(String shaderName) {
+		// TODO
+    }
+    
+    private boolean isPacked(String type) {
+    	// TODO
+    	return false;
+    }
+    
+    
+} // End of class Shape

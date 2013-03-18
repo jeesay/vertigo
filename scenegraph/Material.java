@@ -24,21 +24,40 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
+package vertigo.scenegraph;
 
-class Material{
+import vertigo.graphics.ShaderProg;
+import vertigo.graphics.ShaderFactory;
 
-   private float[] color;
+public class Material {
 
-    public void setColor(float red, float green, float blue){
+    private float[] color;
+    private ShaderProg shader;
+    
+    public Material() {
+        shader = null;
+    }
+
+    public void setShaderMaterial(String shaderName) {
+        shader = ShaderFactory.getShader(shaderName);
+    }
+    
+    public void setColor(float red, float green, float blue) {
+        color[0] = red;
+        color[1] = green;
+        color[2] = blue;
         color[3] = 1.0f;
     }
 
-    public void setColor(float red, float green, float blue, float alpha){
-
+    public void setColor(float red, float green, float blue, float alpha) {
+        color[0] = red;
+        color[1] = green;
+        color[2] = blue;
+        color[3] = alpha;
     }
 
-    public void  getColor(){
-	return color;
+    public float[] getColor() {
+        return color;
     }
-
-}
+    
+} // end of class Material

@@ -1,4 +1,4 @@
-/*
+/**
  * $Id:$
  *
  * crazybio_viewer: 3D Viewer Plugin for ImageJ.
@@ -25,14 +25,61 @@
  * Clement Delestre
  */
 
+package vertigo.scenegraph;
 
-class Geometry {
+import vertigo.graphics.BO;
+import vertigo.graphics.VBO;
+import vertigo.graphics.PackedVBO;
+import vertigo.graphics.IBO;
 
+public class Geometry {
+
+    private ArrayList<BO> buffers;
+    
     public Geometry(){
-	
+        buffers = new ArrayList<BO>();
     }
-    public Geometry(float [] data, int type){
-	
+    
+    
+        /**
+     * Sets the geometry
+     * @param type - Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
+     * @param primitives - an array containing the data for each vertex (coordinates, normal, colors,etc.).
+     */
+    public void setVertices(String type, float[] data) {
+        FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
+        buf.put(data);
+        buf.rewind();
+        VBO vbo = new VBO();
+        vbo.setFloatBuffer(type,buf);
+        buffers.add(vbo);
     }
 
-}
+
+    /**
+     * Sets the whole geometry in one single buffer. Ex: X Y Z R G B X Y Z R ...
+     * May contain various types of data: XYZ-coordinates, Normals, Colors, UV-TexCoords,etc.
+     * @param types -  Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
+     * @param primitives - an array containing the data for each vertex (coordinates, normal, colors,etc.).
+     * @param contents - a String containing the various data type present in the primitives array. 
+     * Ex: "[VEC3F,COL3F,NORM3F,TEX2F]" corresponds to Vertex, Color, Normal and finally TexCoords data for each vertex.
+     */
+    public void setPackedVertices(String[] types, float[] data) {
+        FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
+        buf.put(data);
+        buf.rewind();
+        PackedVBO vbo = new PackedVBO();
+        vbo.setFloatBuffer(types,buf);
+        buffers.add(vbo);
+   }
+
+    public void setIndices(int[] indexes) {
+        IntBuffer buf = BufferTools.newIntBuffer(indexes.length);
+        buf.put(indexes);
+        buf.rewind();
+        IBO ibo = new IBO();
+        ibo.setIntBuffer(buf);
+        buffers.add(ibo);
+    }
+
+} // end of class Geometry

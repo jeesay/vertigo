@@ -25,20 +25,15 @@
  * Clement Delestre
  */
 
-
-class Light extends Node {
+package vertigo.scenegraph;
+public class Light extends Node {
 
     public Light (){
-
 	super();
-
     }
-
 
     public void add(Node anode){
 	System.out.println("Light must not have any children");
-	
     }
 
-
-}
+} //end of class Light
