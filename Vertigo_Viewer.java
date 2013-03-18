@@ -93,9 +93,9 @@ public class Vertigo_Viewer implements PlugIn {
 
     private static void test () {
 	Scene scene = new Scene();
-        scene.add(new Cube());
-	Camera cam = new Camera();
-	cam.add(scene);
+        //scene.add(new Cube());
+	//Camera cam = new Camera();
+	//cam.add(scene);
 	
     }
 
