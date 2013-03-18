@@ -51,6 +51,7 @@ public class Node {
     }
 
     public void add(Node anode) {
+<<<<<<< HEAD
 
         children.add(anode);
         anode.setParent(this);
@@ -75,6 +76,30 @@ public class Node {
     }
 
     public void size() {
+=======
+        children.add(anode);
+        anode.setParent(this);
+    }
+
+    public void remove(Node anode) {
+        children.remove(anode);
+    }
+
+    public ArrayList<Node> getChildren() {
+        return children;
+    }
+
+    public Node getChild(int index) {
+        return children.get(index);
+    }
+
+    public Node getParent() {
+           return parent;
+    }
+
+    public int size() {
+           return children.size();
+>>>>>>> branch 'master' of https://github.com/jeesay/vertigo.git
     }
 
     public void traverseUp() {
