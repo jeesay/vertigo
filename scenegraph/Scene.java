@@ -26,11 +26,6 @@
  */
 package vertigo.scenegraph;
 
-<<<<<<< HEAD
-=======
-package vertigo.scenegraph;
-
->>>>>>> branch 'master' of https://github.com/jeesay/vertigo.git
 public class Scene extends Node {
 
     public Scene (){

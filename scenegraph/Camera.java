@@ -26,11 +26,6 @@
  */
 
 package vertigo.scenegraph;
-<<<<<<< HEAD
-
-public class Camera extends Node {
-=======
->>>>>>> branch 'master' of https://github.com/jeesay/vertigo.git
 
 import vertigo.math.Matrix4;
 
@@ -47,21 +42,14 @@ public class Camera extends Node {
 	System.out.println("Scene must not have any parents...");
     }
 
-<<<<<<< HEAD
-   public void setPerspective() {
-=======
-   public void setPerspective(float fovy, float aspect, float zNear, float zFar) {
->>>>>>> branch 'master' of https://github.com/jeesay/vertigo.git
 
+   public void setPerspective(float fovy, float aspect, float zNear, float zFar) {
    }
 
    public void setStereoscopic() {
-
    }
 
 
-<<<<<<< HEAD
-=======
     /**
      *
      *  Creates a perspective projection transform that mimics a standard,
@@ -191,5 +179,6 @@ public class Camera extends Node {
     }
 
 
->>>>>>> branch 'master' of https://github.com/jeesay/vertigo.git
+
+
 } // End of class Camera
