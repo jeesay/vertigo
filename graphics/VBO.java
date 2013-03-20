@@ -1,8 +1,11 @@
 package vertigo.graphics;
 
+import java.nio.FloatBuffer;
+
 public class VBO extends BO {
   
   private FloatBuffer buffer;
+    private String type;
   
   public VBO() {
     super();
