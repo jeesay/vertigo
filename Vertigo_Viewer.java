@@ -100,11 +100,11 @@ test();
 
 
     private static void test () {
-Scene scene = new Scene();
+	Scene scene = new Scene();
         //scene.add(new Cube());
-//Camera cam = new Camera();
-//cam.add(scene);
-
+	//Camera cam = new Camera();
+	//cam.add(scene);
+	
     }
 
 }// end of class Vertigo.Viewer
