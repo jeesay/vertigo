@@ -24,7 +24,7 @@
  *
  */
 
-package vertigo;
+package vertigo.graphics;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
