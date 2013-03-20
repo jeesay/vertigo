@@ -1,3 +1,5 @@
+
+
 /*
  * $Id:$
  *
@@ -28,7 +30,7 @@
 package vertigo.graphics.jogl;
 
 import vertigo.scenegraph.Scene;
-import vertigo.scenegraph.Renderer;
+
 
 public class Renderer  { 
     
@@ -37,12 +39,10 @@ public class Renderer  {
     public Renderer(Scene scene) {
         if (instance==null)
             newInstance(scene);
-        else
-            return instance;
     
     }
     
-    private  newInstance(Scene) {
+    private void newInstance(Scene a_scene) {
         
     }
     //public Renderer(){} 
