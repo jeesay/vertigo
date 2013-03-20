@@ -27,10 +27,11 @@
 
 package vertigo.scenegraph;
 public class Light extends Node {
-
+private static int count = 0; 
     public Light (){
 	super();
-        name="light";
+        count++;
+        name="Light_n"+count;
     }
 
     public void add(Node anode){

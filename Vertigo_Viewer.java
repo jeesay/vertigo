@@ -101,9 +101,24 @@ test();
 
 
     private static void test () {
+        // create a scene, add a light, test getName method
 	Scene scene = new Scene();
-        scene.add(new Light());
+        Light light=new Light();
+        scene.add(light);
         System.out.println("La scène se nomme : "+scene.getName());
+        //test traverseUp and traverseDown methods
+        scene.traverseUp();
+       light.traverseDown();
+       
+       // add the second light
+       Light two=new Light();
+       scene.add(two);
+       scene.traverseDown();
+       // add a cam
+       Camera cam = new Camera();
+	cam.add(scene);
+        cam.traverseUp(); // cam is the new root
+       
 	//Camera cam = new Camera();
 	//cam.add(scene);
 	

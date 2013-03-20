@@ -138,19 +138,18 @@ public class Node {
 
     public Node traverseUp() {
         if (parent == null) {
-            System.out.println("La racine a été trouvée !");
+            System.out.println("La racine a été trouvée ! Elle se nomme "+this.getName());
             return this;
         } else {
             Node a_node = this.getParent();
             a_node.traverseUp();
-
         }
         return null;
     }
 
     public Node traverseDown() {
         if (children.isEmpty()) {
-            System.out.println("Une feuille a été trouvée !");
+            System.out.println("Une feuille a été trouvée ! Elle se nomme "+this.getName());
             return this;
         } else {
             for (Iterator<Node> it = children.iterator(); it.hasNext();) {
