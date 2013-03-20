@@ -1,4 +1,4 @@
-package vertigo.lwjgl;
+package vertigo.graphics.lwjgl;
 
 
 

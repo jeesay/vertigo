@@ -135,7 +135,11 @@ public class Node {
     public int size() {
         return children.size();
     }
-
+/**
+     * Get the root.
+     *
+     * @return Node.
+     */
     public Node traverseUp() {
         if (parent == null) {
             System.out.println("La racine a été trouvée ! Elle se nomme "+this.getName());
@@ -146,17 +150,21 @@ public class Node {
         }
         return null;
     }
-
-    public Node traverseDown() {
+/**
+     * Get the leafs.
+     *
+     * @return Node.
+     */
+    public void traverseDown() {
         if (children.isEmpty()) {
             System.out.println("Une feuille a été trouvée ! Elle se nomme "+this.getName());
-            return this;
+            
         } else {
             for (Iterator<Node> it = children.iterator(); it.hasNext();) {
                 Node nodetemp = it.next();
                 nodetemp.traverseDown();
             }
         }
-        return null;
+        
     }
 } // End of class Node
