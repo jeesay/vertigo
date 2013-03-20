@@ -259,7 +259,7 @@ public class Quat4 extends Tuple4 implements Serializable {
      * the passed matrix.
      * @param m1 the matrix4f
      */
-    public final void set(Matrix4f m1) {
+    public final void set(Matrix4 m1) {
 	setFromMat(
 	    m1.m00, m1.m01, m1.m02,
 	    m1.m10, m1.m11, m1.m12,
@@ -279,7 +279,7 @@ public class Quat4 extends Tuple4 implements Serializable {
      * the passed matrix.
      * @param m1 the matrix3f
      */
-    public final void set(Matrix3f m1) {
+    public final void set(Matrix3 m1) {
 	setFromMat(
 	    m1.m00, m1.m01, m1.m02,
 	    m1.m10, m1.m11, m1.m12,
@@ -287,11 +287,6 @@ public class Quat4 extends Tuple4 implements Serializable {
 	    );
     }
 
-    /**
-     * Sets the value of this quaternion to the rotational component of
-     * the passed matrix.
-     * @param m1 the matrix3d
-     */
 
 
     /**
@@ -299,7 +294,7 @@ public class Quat4 extends Tuple4 implements Serializable {
      * AxisAngle argument.
      * @param a1 the axis-angle
      */
-    public final void set(AxisAngle4f a1) {
+    public final void set(AxisAngle4 a1) {
 	x = a1.x;
 	y = a1.y;
 	z = a1.z;

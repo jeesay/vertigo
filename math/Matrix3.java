@@ -124,7 +124,7 @@ public class Matrix3 implements Serializable {
       * @param m21 the [2][1] element
       * @param m22 the [2][2] element
       */
-    public Matrix(float m00, float m01, float m02,
+    public Matrix3(float m00, float m01, float m02,
                     float m10, float m11, float m12,
                     float m20, float m21, float m22) {
 	set(
@@ -139,7 +139,7 @@ public class Matrix3 implements Serializable {
       * element array.  this.m00 =v[0], this.m01=v[1], etc.
       * @param  v the array of length 9 containing in order
       */
-    public Matrix(float v[]) {
+    public Matrix3(float v[]) {
 	set(v);
     }
 
@@ -152,7 +152,7 @@ public class Matrix3 implements Serializable {
       * Constructs a new matrix with the same values as the Matrix parameter.
       * @param m1 The source matrix.
       */
-    public Matrix(Matrix m1) {
+    public Matrix3(Matrix3 m1) {
 	m00 = m1.m00; m01 = m1.m01; m02 = m1.m02;
 	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12;
 	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22;
@@ -161,7 +161,7 @@ public class Matrix3 implements Serializable {
     /**
       * Constructs and initializes a Matrix to all zeros.
       */
-    public Matrix() {
+    public Matrix3() {
 	setZero();
     }
 
@@ -304,7 +304,7 @@ public class Matrix3 implements Serializable {
      * @param row the row number to be modified (zero indexed)
      * @param v the replacement row
      */
-    public final void setRow(int row, Vector3f v) {
+    public final void setRow(int row, Vector3 v) {
 	if (row == 0) {
 	    m00 = v.x;
 	    m01 = v.y;
@@ -352,7 +352,7 @@ public class Matrix3 implements Serializable {
      * @param row the matrix row
      * @param v The vector into which the matrix row values will be copied
      */
-    public final void getRow(int row, Vector3f v) {
+    public final void getRow(int row, Vector3 v) {
 	if (row == 0) {
 	    v.x = m00;
 	    v.y = m01;
@@ -423,7 +423,7 @@ public class Matrix3 implements Serializable {
       * @param column the column number to be modified (zero indexed)
       * @param v the replacement column
       */
-    public final void setColumn(int column, Vector3f v) {
+    public final void setColumn(int column, Vector3 v) {
 	if (column == 0) {
 	    m00 = v.x;
 	    m10 = v.y;
@@ -470,7 +470,7 @@ public class Matrix3 implements Serializable {
       * @param column the matrix column
       * @param v The vector into which the matrix row values will be copied
       */
-    public final void getColumn(int column, Vector3f v) {
+    public final void getColumn(int column, Vector3 v) {
 	if (column == 0) {
 	    v.x = m00;
 	    v.y = m10;
@@ -539,7 +539,7 @@ public class Matrix3 implements Serializable {
       * @param scalar The scalar adder.
       * @parm m1 The original matrix values.
       */
-    public final void add(float scalar, Matrix m1) {
+    public final void add(float scalar, Matrix3 m1) {
 	set(m1);
 	add(scalar);
     }
@@ -550,7 +550,7 @@ public class Matrix3 implements Serializable {
      * @param m1 the first matrix 
      * @param m2 the second matrix 
      */
-    public final void add(Matrix m1, Matrix m2) {
+    public final void add(Matrix3 m1, Matrix3 m2) {
 	// note this is alias safe.
 	set(
 	    m1.m00 + m2.m00,
@@ -569,7 +569,7 @@ public class Matrix3 implements Serializable {
      * Sets the value of this matrix to sum of itself and matrix m1. 
      * @param m1 the other matrix 
      */
-    public final void add(Matrix m1) {
+    public final void add(Matrix3 m1) {
 	m00 += m1.m00; m01 += m1.m01; m02 += m1.m02;
 	m10 += m1.m10; m11 += m1.m11; m12 += m1.m12;
 	m20 += m1.m20; m21 += m1.m21; m22 += m1.m22;
@@ -581,7 +581,7 @@ public class Matrix3 implements Serializable {
       * @param m1 the first matrix 
       * @param m2 the second matrix 
       */
-    public final void sub(Matrix m1, Matrix m2) {
+    public final void sub(Matrix3 m1, Matrix3 m2) {
 	set(
 	    m1.m00 - m2.m00,
 	    m1.m01 - m2.m01,
@@ -600,7 +600,7 @@ public class Matrix3 implements Serializable {
      * and matrix m1 (this = this - m1). 
      * @param m1 the other matrix 
      */
-    public final void sub(Matrix m1) {
+    public final void sub(Matrix3 m1) {
 	m00 -= m1.m00; m01 -= m1.m01; m02 -= m1.m02;
 	m10 -= m1.m10; m11 -= m1.m11; m12 -= m1.m12;
 	m20 -= m1.m20; m21 -= m1.m21; m22 -= m1.m22;
@@ -628,7 +628,7 @@ public class Matrix3 implements Serializable {
      * Sets the value of this matrix to the transpose of the argument matrix
      * @param m1 the matrix to be transposed 
      */
-    public final void transpose(Matrix m1) {
+    public final void transpose(Matrix3 m1) {
 	// alias-safe
 	set(m1);
 	transpose();
@@ -639,7 +639,7 @@ public class Matrix3 implements Serializable {
       * (single precision) quaternion argument. 
       * @param q1 the quaternion to be converted 
       */
-    public final void set(Quat4f q1) {
+    public final void set(Quat4 q1) {
 	setFromQuat(q1.x, q1.y, q1.z, q1.w);
     }
 
@@ -648,49 +648,23 @@ public class Matrix3 implements Serializable {
       * single precision axis and angle argument. 
       * @param a1 the axis and angle to be converted 
       */
-    public final void set(AxisAngle4f a1) {
+    public final void set(AxisAngle4 a1) {
 	setFromAxisAngle(a1.x, a1.y, a1.z, a1.angle);
     }
 
-    /**
-      * Sets the value of this matrix to the matrix conversion of the
-      * double precision axis and angle argument. 
-      * @param a1 the axis and angle to be converted 
-      */
-    public final void set(AxisAngle4d a1) {
-	setFromAxisAngle(a1.x, a1.y, a1.z, a1.angle);
-    }
-
-    /**
-      * Sets the value of this matrix to the matrix conversion of the
-      * (double precision) quaternion argument. 
-      * @param q1 the quaternion to be converted 
-      */
-    public final void set(Quat4d q1) {
-	setFromQuat(q1.x, q1.y, q1.z, q1.w);
-    }
 
     /**
       * Sets the value of this matrix to the double value of the Matrix
       * argument.
       * @param m1 the matrix3f
     */
-    public final void set(Matrix m1)  {
+    public final void set(Matrix3 m1)  {
 	m00 = m1.m00; m01 = m1.m01; m02 = m1.m02;
 	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12;
 	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22;
     }
 
-    /**
-      * Sets the value of this matrix to the float value of the Matrix3d
-      * argument.
-      * @param m1 the matrix3f
-    */
-    public final void set(Matrix3d m1)  {
-	m00 = (float)m1.m00; m01 = (float)m1.m01; m02 = (float)m1.m02;
-	m10 = (float)m1.m10; m11 = (float)m1.m11; m12 = (float)m1.m12;
-	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22;
-    }
+
 
 
     /**
@@ -709,7 +683,7 @@ public class Matrix3 implements Serializable {
      * of the passed matrix m1. 
      * @param m1 the matrix to be inverted 
      */
-    public final void invert(Matrix m1)  {
+    public final void invert(Matrix3 m1)  {
 	set(m1);
 	invert();
     }
@@ -809,7 +783,7 @@ public class Matrix3 implements Serializable {
       * @param scalar The scalar multiplier.
       * @param m1 The original matrix.
       */
-     public final void mul(float scalar, Matrix m1) {
+     public final void mul(float scalar, Matrix3 m1) {
 	 set(m1);
 	 mul(scalar);
      }
@@ -819,7 +793,7 @@ public class Matrix3 implements Serializable {
      * with matrix m1. 
      * @param m1 the other matrix 
      */
-    public final void mul(Matrix m1) {
+    public final void mul(Matrix3 m1) {
 	mul(this, m1);
     }
 
@@ -829,7 +803,7 @@ public class Matrix3 implements Serializable {
      * @param m1 the first matrix 
      * @param m2 the second matrix 
      */
-    public final void mul(Matrix m1, Matrix m2) {
+    public final void mul(Matrix3 m1, Matrix3 m2) {
 	// alias-safe way.
 	set(
 	    m1.m00*m2.m00 + m1.m01*m2.m10 + m1.m02*m2.m20,
@@ -852,7 +826,7 @@ public class Matrix3 implements Serializable {
       * SVDnorm(this*m1).
       * @param m1 the matrix on the right hand side of the multiplication
       */
-    public final void mulNormalize(Matrix m1) {
+    public final void mulNormalize(Matrix3 m1) {
 	mul(m1);
 	SVD(this);
     }
@@ -864,7 +838,7 @@ public class Matrix3 implements Serializable {
       * @param m1  the matrix on the left hand side of the multiplication
       * @param m2  the matrix on the right hand side of the multiplication
       */
-    public final void mulNormalize(Matrix m1, Matrix m2) {
+    public final void mulNormalize(Matrix3 m1, Matrix3 m2) {
 	mul(m1, m2);
 	SVD(this);
     }
@@ -875,7 +849,7 @@ public class Matrix3 implements Serializable {
       * @param m1 The matrix on the left hand side of the multiplication
       * @param m2 The matrix on the right hand side of the multiplication
       */
-    public final void mulTransposeBoth(Matrix m1, Matrix m2) {
+    public final void mulTransposeBoth(Matrix3 m1, Matrix3 m2) {
 	mul(m2, m1);
 	transpose();
     }
@@ -886,7 +860,7 @@ public class Matrix3 implements Serializable {
       * @param m1 The matrix on the left hand side of the multiplication
       * @param m2 The matrix on the right hand side of the multiplication
       */
-    public final void mulTransposeRight(Matrix m1, Matrix m2) {
+    public final void mulTransposeRight(Matrix3 m1, Matrix3 m2) {
 	// alias-safe way.
 	set(
 	    m1.m00*m2.m00 + m1.m01*m2.m01 + m1.m02*m2.m02,
@@ -910,7 +884,7 @@ public class Matrix3 implements Serializable {
       * @param m1 The matrix on the left hand side of the multiplication
       * @param m2 The matrix on the right hand side of the multiplication
       */
-    public final void mulTransposeLeft(Matrix m1, Matrix m2) {
+    public final void mulTransposeLeft(Matrix3 m1, Matrix3 m2) {
 	// alias-safe way.
 	set(
 	    m1.m00*m2.m00 + m1.m10*m2.m10 + m1.m20*m2.m20,
@@ -939,7 +913,7 @@ public class Matrix3 implements Serializable {
       * place the normalized values into this.
       * @param m1 Provides the matrix values to be normalized
       */
-    public final void normalize(Matrix m1) {
+    public final void normalize(Matrix3 m1) {
 	set(m1);
 	SVD(this);
     }
@@ -958,7 +932,7 @@ public class Matrix3 implements Serializable {
       * normalized values into this.
       * @param m1 Provides the matrix values to be normalized
       */
-    public final void normalizeCP(Matrix m1) {
+    public final void normalizeCP(Matrix3 m1) {
 	set(m1);
 	normalizeCP();
     }
@@ -971,7 +945,7 @@ public class Matrix3 implements Serializable {
      * @param m1 The matrix with which the comparison is made. 
      * @return true or false 
      */
-    public boolean equals(Matrix m1)  {
+    public boolean equals(Matrix3 m1)  {
 	return  m1 != null
 	        && m00 == m1.m00
 		&& m01 == m1.m01
@@ -991,7 +965,7 @@ public class Matrix3 implements Serializable {
       * @param o1 the object with which the comparison is made.
       */
     public boolean equals(Object o1) {
-	return o1 != null && (o1 instanceof Matrix) && equals((Matrix)o1);
+	return o1 != null && (o1 instanceof Matrix3) && equals((Matrix3)o1);
     }
 
     /**
@@ -1002,7 +976,7 @@ public class Matrix3 implements Serializable {
       * @param m1 The matrix to be compared to this matrix
       * @param epsilon the threshold value
       */
-      public boolean epsilonEquals(Matrix m1, double epsilon) {
+      public boolean epsilonEquals(Matrix3 m1, double epsilon) {
 	  return  Math.abs(m00 - m1.m00) <= epsilon
 		&& Math.abs(m01 - m1.m01) <= epsilon
 		&& Math.abs(m02 - m1.m02 ) <= epsilon
@@ -1059,7 +1033,7 @@ public class Matrix3 implements Serializable {
       * parameter.
       * @param m1 The source matrix
       */
-    public final void negate(Matrix m1) {
+    public final void negate(Matrix3 m1) {
 	set(m1);
 	negate();
     }
@@ -1069,7 +1043,7 @@ public class Matrix3 implements Serializable {
      * result back into vec.
      * @param vec the single precision vector to be transformed
      */
-    public final void transform(Tuple3f t)  {
+    public final void transform(Tuple3 t)  {
 	// alias-safe
 	transform(t, t);
     }
@@ -1080,7 +1054,7 @@ public class Matrix3 implements Serializable {
      * @paramt the single precision vector to be transformed
      * @param result the vector into which the transformed values are placed
      */
-    public final void transform(Tuple3f t, Tuple3f result) {
+    public final void transform(Tuple3 t, Tuple3 result) {
 	// alias-safe
 	result.set(
 	    m00*t.x + m01*t.y + m02*t.z,
@@ -1106,7 +1080,7 @@ public class Matrix3 implements Serializable {
       * @param rot the rotation factor.
       * @return scale factor
       */
-    private float SVD(Matrix rot) {
+    private float SVD(Matrix3 rot) {
 	// this is a simple svd.
 	// Not complete but fast and reasonable.
 

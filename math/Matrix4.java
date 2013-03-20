@@ -512,7 +512,7 @@ public class Matrix4 implements Serializable {
      * @param row the row number to be modified (zero indexed)
      * @param v the replacement row
      */
-    public final void setRow(int row, Vector4f v) {
+    public final void setRow(int row, Vector4 v) {
 	if (row == 0) {
 	    m00 = v.x;
 	    m01 = v.y;
@@ -672,7 +672,7 @@ public class Matrix4 implements Serializable {
       * @param column the column number to be modified (zero indexed)
       * @param v the replacement column
       */
-    public final void setColumn(int column, Vector4f v) {
+    public final void setColumn(int column, Vector4 v) {
 	if (column == 0) {
 	    m00 = v.x;
 	    m10 = v.y;
@@ -929,7 +929,7 @@ public class Matrix4 implements Serializable {
       * single precision axis and angle argument.
       * @param a1 the axis and angle to be converted
       */
-    public final void set(AxisAngle4f a1) {
+    public final void set(AxisAngle4 a1) {
 	setFromAxisAngle(a1.x, a1.y, a1.z, a1.angle);
     }
 
@@ -1438,7 +1438,7 @@ public class Matrix4 implements Serializable {
       * @param point the input point to be transformed.
       * @param pointOut the transformed point
       */
-    public final void transform(Point3f point, Point3f pointOut) {
+    public final void transform(Point3 point, Point3 pointOut) {
 	pointOut.set(
 	    m00*point.x + m01*point.y + m02*point.z + m03,
 	    m10*point.x + m11*point.y + m12*point.z + m13,
@@ -1453,7 +1453,7 @@ public class Matrix4 implements Serializable {
      * point input paramter is assumed to be one.
      * @param point the input point to be transformed.
      */
-    public final void transform(Point3f point) {
+    public final void transform(Point3 point) {
 	transform(point, point);
     }
 
@@ -1480,21 +1480,6 @@ public class Matrix4 implements Serializable {
 	transform(normal, normal);
     }
 
-    /**
-      * Sets the rotational component (upper 3x3) of this matrix to the matrix
-      * values in the single precision Matrix3 argument; the other elements of
-      * this matrix are unchanged; a singular value decomposition is performed
-      * on this object's upper 3x3 matrix to factor out the scale, then this
-      * object's upper 3x3 matrix components are replaced by the passed rotation
-      * components, and then the scale is reapplied to the rotational
-      * components.
-      * @param m1 single precision 3x3 matrix
-      */
-    public final void setRotation(Matrix3 m1) {
-	float scale = SVD(null);
-	setRotationScale(m1);
-	mulRotationScale(scale);
-    }
 
 
     /**
@@ -1561,7 +1546,7 @@ public class Matrix4 implements Serializable {
       * rotational components.
       * @param a1 the axis-angle to be converted (x, y, z, angle)
       */
-    public final void setRotation(AxisAngle4f a1) {
+    public final void setRotation(AxisAngle4 a1) {
 	float scale = SVD(null, null);
 	// save other values
 	float tx = m03;
@@ -1714,30 +1699,6 @@ public class Matrix4 implements Serializable {
 	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12;
 	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22;
     }
-
-    /**
-      * Replaces the upper 3x3 matrix values of this matrix with the values in the matrix m1.
-      * @param m1 The matrix that will be the new upper 3x3
-      */
-    private void setRotationScale(Matrix3d m1) {
-	m00 = (float)m1.m00; m01 = (float)m1.m01; m02 = (float)m1.m02;
-	m10 = (float)m1.m10; m11 = (float)m1.m11; m12 = (float)m1.m12;
-	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22;
-    }
-
-    /**
-      * Modifies the translational components of this matrix to the values of
-      * the Vector3d argument; the other values of this matrix are not modified.
-      * @param trans the translational component
-      */
-    private void setTranslation(Vector3 trans) {
-	m03 = (float)trans.x;
-        m13 = (float)trans.y;
-	m23 = (float)trans.z;
-    }
-
-
-
 
     private void setFromQuat(double x, double y, double z, double w) {
 	double n = x*x + y*y + z*z + w*w;
