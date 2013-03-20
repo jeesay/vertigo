@@ -28,9 +28,15 @@ package vertigo.scenegraph;
 
 import java.util.ArrayList;
 import vertigo.math.Matrix4;
+import java.util.Iterator;
 
 public class Node {
+/** 
+ * Classe Node
+ *@author Florin Buga Olivier Catoliquot Clement Delestre
+ * @version 1.0
 
+ */
     private Node parent;
     private ArrayList<Node> children;
     private Matrix4 matrix;
@@ -45,8 +51,9 @@ public class Node {
     }
 
     /**
-     * Sets Node name
-     *
+     * Sets Node name   
+     * 
+     *@param String
      */
     public void setName(String name) {
         this.name = name;
@@ -54,7 +61,7 @@ public class Node {
 
     /**
      * Get Node name
-     *
+    *
      * @return String
      */
     public String getName() {
@@ -62,41 +69,85 @@ public class Node {
     }
 
     /**
-     *
-     *
+     *Sets node's Parent
+     * 
+     *@param Node 
      */
     public void setParent(Node a_node) {
         this.parent = a_node;
     }
-
+    
+/**
+	 * Method for add one child.
+         * 
+	 * @param Node anode
+	 */
     public void add(Node a_node) {
         children.add(a_node);
         a_node.setParent(this);
     }
-
+/**
+	 * Remove one child.
+	 * @param Node anode
+	 */
     public void remove(Node a_node) {
         children.remove(a_node);
     }
-
+/**
+	 * Get the Node's children.
+	 * @param Node anode
+	 * @return ArrayList
+	 */
     public ArrayList<Node> getChildren() {
         return children;
     }
-
+/**
+ * Get a node's child.
+ * @param index
+ * @return ArrayList
+ */
     public Node getChild(int index) {
         return children.get(index);
     }
-
+/**
+	 * Get the Node's parent
+	 * @return  Node.
+	 */
     public Node getParent() {
         return parent;
     }
-
-    public int size() {
+/**
+	 * Get the node's number of children.
+	 * @return  int.
+	 */
+    public  int size() {
         return children.size();
     }
 
-    public void traverseUp() {
+    public Node traverseUp() {
+        if (parent==null){
+                System.out.println("La racine a été trouvée !");
+               return this;
+        }
+        else{
+             Node a_node=this.getParent();
+             a_node.traverseUp();
+             
+        }
+        return null;
     }
 
-    public void traverseDown() {
+    public Node traverseDown() {
+           if(children.isEmpty()){
+               System.out.println("Une feuille a été trouvée !");
+               return this;
+           }
+           else {
+            for (Iterator i = children.iterator(); i.hasNext();){
+		Node nodetemp=(Node)i.next();
+                nodetemp.traverseDown();
+            }
+           }
+           return null;
     }
 } // End of class Node
