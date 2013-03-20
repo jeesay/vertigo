@@ -234,10 +234,6 @@ public class Matrix4 implements Serializable {
 	set(q1, t1, s);
     }
 
-    /**
-      * Constructs a new matrix with the same values as the Matrix4d parameter.
-      * @param m1 The source matrix.
-      */
 
 
     /**
@@ -969,6 +965,7 @@ public class Matrix4 implements Serializable {
 	m30 = (float)m1.m30; m31 = (float)m1.m31; m32 = (float)m1.m32; m33 = (float)m1.m33;
     }
 
+
     /**
      * Sets the value of this matrix to the matrix inverse
      * of the passed matrix m1.
@@ -1500,6 +1497,22 @@ public class Matrix4 implements Serializable {
     }
 
 
+    /**
+      * Sets the rotational component (upper 3x3) of this matrix to the matrix
+      * values in the single precision Matrix3 argument; the other elements of
+      * this matrix are unchanged; a singular value decomposition is performed
+      * on this object's upper 3x3 matrix to factor out the scale, then this
+      * object's upper 3x3 matrix components are replaced by the passed rotation
+      * components, and then the scale is reapplied to the rotational
+      * components.
+      * @param m1 single precision 3x3 matrix
+      */
+    public final void setRotation(Matrix3 m1) {
+	float scale = SVD(null);
+	setRotationScale(m1);
+	mulRotationScale(scale);
+    }
+
 
     /**
       * Sets the rotational component (upper 3x3) of this matrix to the matrix
@@ -1724,6 +1737,7 @@ public class Matrix4 implements Serializable {
     }
 
 
+
     private void setFromQuat(double x, double y, double z, double w) {
 	double n = x*x + y*y + z*z + w*w;
 	double s = (n > 0.0) ? (2.0/n) : 0.0;
@@ -1773,3 +1787,4 @@ public class Matrix4 implements Serializable {
     }
 
 } // End of class Matrix4
+
