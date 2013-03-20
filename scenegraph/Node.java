@@ -46,20 +46,17 @@ public class Node {
      *
      *
      */
-    public void setParent(Node anode) {
-        this.parent = anode;
+    public void setParent(Node a_node) {
+        this.parent = a_node;
     }
 
-    public void add(Node anode) {
-        children.add(anode);
-        anode.setParent(this);
-
+    public void add(Node a_node) {
+        children.add(a_node);
+        a_node.setParent(this);
     }
 
-    public void remove(Node anode) {
-
-        children.remove(anode);
-
+    public void remove(Node a_node) {
+        children.remove(a_node);
     }
 
     public ArrayList<Node> getChildren() {
@@ -70,15 +67,16 @@ public class Node {
         return children.get(index);
     }
 
-    public void getParent() {
+    public Node getParent() {
+           return parent;
     }
 
-    public void size() {
-       children.add(anode);
-        anode.setParent(this);
+    public int size() {
+           return children.size();
     }
- 
-  public void traverseUp() {
+
+    public void traverseUp() {
+
     }
 
     public void traverseDown() {

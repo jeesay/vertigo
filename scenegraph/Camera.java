@@ -47,6 +47,7 @@ public class Camera extends Node {
    }
 
    public void setStereoscopic() {
+
    }
 
 
@@ -80,30 +81,30 @@ public class Camera extends Node {
      *   value must be positive, and must be greater than near.
      *
      **/
-    public void frustum(double left, double right, double bottom, double top, double near, double far) {
-        double rl = right - left;
-        double tb = top - bottom;
-        double fn = far - near;
+    public void frustum(float left, float right, float bottom, float top, float near, float far) {
+        float rl = right - left;
+        float tb = top - bottom;
+        float fn = far - near;
 
-        proj_matrix.m00 = 2 * near / rl;
-        proj_matrix.m01 = 0;
+        proj_matrix.m00 = 2.0f * near / rl;
+        proj_matrix.m01 = 0.0f;
         proj_matrix.m02 = (right + left) / rl;
-        proj_matrix.m03 = 0;
+        proj_matrix.m03 = 0.0f;
 
-        proj_matrix.m10 = 0;
-        proj_matrix.m11 = 2 * near / tb;
+        proj_matrix.m10 = 0.0f;
+        proj_matrix.m11 = 2.0f * near / tb;
         proj_matrix.m12 = (top + bottom) / tb;
-        proj_matrix.m13 = 0;
+        proj_matrix.m13 = 0.0f;
 
-        proj_matrix.m20 = 0;
-        proj_matrix.m21 = 0;
+        proj_matrix.m20 = 0.0f;
+        proj_matrix.m21 = 0.0f;
         proj_matrix.m22 = -(far + near) / fn;
-        proj_matrix.m23 = -2 * far * near / fn;
+        proj_matrix.m23 = -2.0f * far * near / fn;
 
-        proj_matrix.m30 = 0;
-        proj_matrix.m31 = 0;
-        proj_matrix.m32 = -1;
-        proj_matrix.m33 = 0;
+        proj_matrix.m30 = 0.0f;
+        proj_matrix.m31 = 0.0f;
+        proj_matrix.m32 = -1.0f;
+        proj_matrix.m33 = 0.0f;
 
     }
 
@@ -123,10 +124,10 @@ public class Camera extends Node {
      *        positive, (the value -zNear is the location of the near clip plane).
      * @param zFar the distance to the frustum's far clipping plane.
      */
-    public void perspective(double fovy, double aspect, double zNear, double zFar) {
-        double tan = Math.tan(fovy / 2);
-        double top = zNear * tan;
-        double right = top * aspect;
+    public void perspective(float fovy, float aspect, float zNear, float zFar) {
+        float tan = (float) Math.tan(fovy / 2.0f);
+        float top = zNear * tan;
+        float right = top * aspect;
         frustum(-right, right, -top, top, zNear, zFar);
     }
 
@@ -151,34 +152,32 @@ public class Camera extends Node {
      *   (the value -near is the location of the near clip plane)
      *   @param far - the distance to the frustum's far clipping plane.
      */
-    public void ortho(double left, double right, double bottom, double top, double near, double far) {
-        double rl = right - left;
-        double tb = top - bottom;
-        double fn = far - near;
+    public void ortho(float left, float right, float bottom, float top, float near, float far) {
+        float rl = right - left;
+        float tb = top - bottom;
+        float fn = far - near;
 
-        proj_matrix.m00 = 2 / rl;
-        proj_matrix.m01 = 0;
-        proj_matrix.m02 = 0;
+        proj_matrix.m00 = 2.0f / rl;
+        proj_matrix.m01 = 0.0f;
+        proj_matrix.m02 = 0.0f;
         proj_matrix.m03 = -(right + left) / rl;
 
-        proj_matrix.m10 = 0;
-        proj_matrix.m11 = 2 / tb;
-        proj_matrix.m12 = 0;
+        proj_matrix.m10 = 0.0f;
+        proj_matrix.m11 = 2.0f / tb;
+        proj_matrix.m12 = 0.0f;
         proj_matrix.m13 = -(top + bottom) / tb;
 
-        proj_matrix.m20 = 0;
-        proj_matrix.m21 = 0;
-        proj_matrix.m22 = -2 / fn;
+        proj_matrix.m20 = 0.0f;
+        proj_matrix.m21 = 0.0f;
+        proj_matrix.m22 = -2.0f / fn;
         proj_matrix.m23 = -(far + near) / fn;
 
-        proj_matrix.m30 = 0;
-        proj_matrix.m31 = 0;
-        proj_matrix.m32 = 0;
-        proj_matrix.m33 = 1;
+        proj_matrix.m30 = 0.0f;
+        proj_matrix.m31 = 0.0f;
+        proj_matrix.m32 = 0.0f;
+        proj_matrix.m33 = 1.0f;
 
     }
-
-
 
 
 } // End of class Camera
