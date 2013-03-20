@@ -36,6 +36,7 @@ public class Camera extends Node {
     public Camera(){
 	super();
 	proj_matrix = new Matrix4();
+        name="Camera";
     }
 
     public void setParent(Node anode){	

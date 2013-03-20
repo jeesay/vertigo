@@ -28,6 +28,7 @@ package vertigo;
 
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
+import vertigo.scenegraph.Light;
 import ij.IJ;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
@@ -101,10 +102,11 @@ test();
 
     private static void test () {
 	Scene scene = new Scene();
-        //scene.add(new Cube());
+        scene.add(new Light());
+        System.out.println("La scène se nomme : "+scene.getName());
 	//Camera cam = new Camera();
 	//cam.add(scene);
 	
     }
 
-}// end of class Vertigo.Viewer
+}// end of class Vertigo_Viewer

@@ -26,11 +26,11 @@
  */
 package vertigo.scenegraph;
 
-
 public class Scene extends Node {
 
     public Scene (){
 	super();
+         name="Scene";
     }
 
 } // end of class Scene
