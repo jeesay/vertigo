@@ -30,6 +30,7 @@ public class Light extends Node {
 
     public Light (){
 	super();
+        name="light";
     }
 
     public void add(Node anode){

@@ -27,8 +27,12 @@
 
 package vertigo.scenegraph;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
 import vertigo.graphics.BO;
 import vertigo.graphics.VBO;
+import vertigo.graphics.BufferTools;
 import vertigo.graphics.PackedVBO;
 import vertigo.graphics.IBO;
 
@@ -81,5 +85,16 @@ public class Geometry {
         ibo.setIntBuffer(buf);
         buffers.add(ibo);
     }
+    
+    public void  setPackedGeometry (String _s, float[] f){
+        
+        
+    }
+      public void  setGeometry (String _s, float[] f){
+        
+        
+    }
+            
+            
 
 } // end of class Geometry

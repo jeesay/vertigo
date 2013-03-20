@@ -34,12 +34,31 @@ public class Node {
     private Node parent;
     private ArrayList<Node> children;
     private Matrix4 matrix;
+    protected String name;
 
     public Node() {
         children = new ArrayList();
         Node parent = null;
         matrix = new Matrix4();
         matrix.setIdentity();
+        name = "node";
+    }
+
+    /**
+     * Sets Node name
+     *
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Get Node name
+     *
+     * @return String
+     */
+    public String getName() {
+        return this.name;
     }
 
     /**
@@ -68,19 +87,16 @@ public class Node {
     }
 
     public Node getParent() {
-           return parent;
+        return parent;
     }
 
     public int size() {
-           return children.size();
+        return children.size();
     }
 
     public void traverseUp() {
-
     }
 
     public void traverseDown() {
     }
-    
-    
 } // End of class Node

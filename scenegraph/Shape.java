@@ -26,6 +26,7 @@
  */
 
 package vertigo.scenegraph;
+
 public class Shape extends Node {
     Geometry geo;
     Material material;
@@ -54,11 +55,11 @@ public class Shape extends Node {
 		geo.setIndices(indices);    	
     }
     
-    public setColor(float red, float green, float blue, float alpha) {
+    public void setColor(float red, float green, float blue, float alpha) {
     	// TODO
     }
     
-    public setShaderMaterial(String shaderName) {
+    public void setShaderMaterial(String shaderName) {
 		// TODO
     }
     
