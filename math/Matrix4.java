@@ -235,7 +235,6 @@ public class Matrix4 implements Serializable {
     }
 
 
-
     /**
       * Constructs and initializes a Matrix4 from the rotation matrix,
       * translation, and scale values; the scale is applied only to the
@@ -964,6 +963,7 @@ public class Matrix4 implements Serializable {
 	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22; m23 = (float)m1.m23;
 	m30 = (float)m1.m30; m31 = (float)m1.m31; m32 = (float)m1.m32; m33 = (float)m1.m33;
     }
+
 
 
     /**
@@ -1735,6 +1735,7 @@ public class Matrix4 implements Serializable {
         m13 = (float)trans.y;
 	m23 = (float)trans.z;
     }
+
 
 
 

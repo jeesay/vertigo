@@ -44,6 +44,7 @@ public class Camera extends Node {
 
 
    public void setPerspective(float fovy, float aspect, float zNear, float zFar) {
+
    }
 
    public void setStereoscopic() {
@@ -81,6 +82,7 @@ public class Camera extends Node {
      *   value must be positive, and must be greater than near.
      *
      **/
+
     public void frustum(float left, float right, float bottom, float top, float near, float far) {
         float rl = right - left;
         float tb = top - bottom;
@@ -106,6 +108,7 @@ public class Camera extends Node {
         proj_matrix.m32 = -1.0f;
         proj_matrix.m33 = 0.0f;
 
+
     }
 
     /**
@@ -124,10 +127,12 @@ public class Camera extends Node {
      *        positive, (the value -zNear is the location of the near clip plane).
      * @param zFar the distance to the frustum's far clipping plane.
      */
+
     public void perspective(float fovy, float aspect, float zNear, float zFar) {
         float tan = (float) Math.tan(fovy / 2.0f);
         float top = zNear * tan;
         float right = top * aspect;
+
         frustum(-right, right, -top, top, zNear, zFar);
     }
 
@@ -152,6 +157,7 @@ public class Camera extends Node {
      *   (the value -near is the location of the near clip plane)
      *   @param far - the distance to the frustum's far clipping plane.
      */
+
     public void ortho(float left, float right, float bottom, float top, float near, float far) {
         float rl = right - left;
         float tb = top - bottom;

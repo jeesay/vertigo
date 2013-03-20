@@ -31,7 +31,6 @@ package vertigo.graphics.jogl;
 
 import vertigo.scenegraph.Scene;
 
-
 public class Renderer  { 
     
     private Renderer instance;
@@ -39,7 +38,6 @@ public class Renderer  {
     public Renderer(Scene scene) {
         if (instance==null)
             newInstance(scene);
-    
     }
     
     private void newInstance(Scene a_scene) {
@@ -59,5 +57,4 @@ public class Renderer  {
 	//boucle for(Shape)
 
     }
-}
 } //end of class Renderer

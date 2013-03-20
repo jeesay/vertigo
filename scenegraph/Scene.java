@@ -27,7 +27,6 @@
 package vertigo.scenegraph;
 
 
-
 public class Scene extends Node {
 
     public Scene (){
