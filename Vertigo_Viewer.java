@@ -29,6 +29,7 @@ package vertigo;
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Light;
+
 import ij.IJ;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
@@ -118,9 +119,9 @@ test();
        Camera cam = new Camera();
 	cam.add(scene);
         cam.traverseUp(); // cam is the new root
+      
        
-	//Camera cam = new Camera();
-	//cam.add(scene);
+	
 	
     }
 

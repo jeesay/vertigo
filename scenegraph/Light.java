@@ -27,7 +27,7 @@
 
 package vertigo.scenegraph;
 public class Light extends Node {
-private static int count = 0; 
+public static int count = 0; 
     public Light (){
 	super();
         count++;
@@ -36,6 +36,9 @@ private static int count = 0;
 
     public void add(Node anode){
 	System.out.println("Light must not have any children");
+    }
+    public int getNumberCamera(){
+        return count;
     }
 
 } //end of class Light
