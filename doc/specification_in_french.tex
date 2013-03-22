@@ -21,7 +21,9 @@
 
 % 2 trucs ; graphe de scène + partie "open GL" qui sera dupliqué selon la librairie utilisée (jogl ou lwjgl ) la partie VBO fait le liens entre les 2.
 
-
+% %http://glasnost.itcarlow.ie/~powerk/GeneralGraphicsNotes/scenegraph/scenegraph.htm
+%Garder ce liens ! c est un graphe de scène avec animation. On pourra toujours dire qq part que ça existe et que dans les versions suivantes on pourra le rajouter. 
+% cours de taveau : http://www.u-bordeaux1.fr/crazybiocomputing/docs/tbs3xx/cours_4_opengl.pdf
 
 \author{Floryn Buga\and Olivier Catoliquot\and Clement Delestre}
 \title{Cahier des Charges}
@@ -106,6 +108,7 @@ La principale nouveauté apportée par le \textit{pipeline} programmable est l'u
 % Le schema ci dessous vient du site http://alexandre-laurent.developpez.com/tutoriels/OpenGL/OpenGL-GLSL/?page=page_1
 
 
+
 \begin{figure}[h!]
   \caption{Illustration du pipeline dynamique\cite{screenshotOpenGL2}}
   \centering
@@ -165,7 +168,7 @@ Cette dernière étant la librairie utilisée par ImageJ.
 
 \section{Besoins fonctionnels}
 Tout d'abord, notre classe principale devra hériter de la classe \textit{pluggin} d'ImageJ pour pouvoir établir la liaison avec ce logiciel.
-Le langage de programmation utilisé est le langage Java car il est obligatoire pour pouvoir interagir avec ImageJ. Éventuellement, l'utilisateur pourra faire une capture d'écran de son (ou ses) objet(s) 3D au format d'ImageJ : ImagePlus.
+Le langage de programmation utilisé est le langage Java car il est obligatoire pour pouvoir interagir avec ImageJ. Si le temps le permet, l'utilisateur aura la possibilité de faire une capture d'écran de son (ou ses) objet(s) 3D au format d'ImageJ : ImagePlus.
 De plus, notre travail sera sous licence GPL à la demande du client.\\
 
 Vertigo devra également être codé de telle façon que l'on puisse facilement modifier notre code source : commentaires en anglais et documentation de l'API réalisée. En effet, cette dernière est prévue pour être utilisée en autonome mais aussi pour s'intégrer facilement au \textit{plugin} voltIJ. En conséquence il ne possédera pas d'interface graphique utilisateur (GUI).
@@ -181,37 +184,102 @@ Il pourra également :
 \item Choisir les couleurs des objets 3D.
 \item Choisir la texture des objets 3D.
 \item Indicer les sommets de l'objet 3D (voir \ref{VBO}).
-\item Ajouter une caméra à la scène (voir \ref{Gscene}).
-\item Ajouter des lumières à la scène (voir \ref{Gscene}).
+\item Ajouter une caméra à la scène (voir \ref{gScene}).
+\item Ajouter des lumières à la scène (voir \ref{gScene}).
 \end{itemize}
 
-Durant l'élaboration de notre projet nous réutiliserons certaines classes provenant de VoltIJ, ses dernières servant aux calculs matricielles que nous sommes obligés d'utiliser afin d'afficher un objet en 3D. Ces classes se nomment : \texttt{ArcBall, AxisAngle4, Matrix4, Matrix3, Point3, Point4, Quat4, Tuple3, Tuple4, Vector3, Vector4, ShaderUtils}.
+Durant l'élaboration de notre projet nous réutiliserons certaines classes provenant de VoltIJ, ses dernières servant aux calculs matricielles que nous sommes obligés d'utiliser afin d'afficher un objet en 3D. Ces classes nommées \texttt{ArcBall, AxisAngle4, Matrix4, Matrix3, Point3, Point4, Quat4, Tuple3, Tuple4, Vector3, Vector4, ShaderUtils}
+font partie du paquetage libre vecmath développé par Kenji Hiranabe.
 Alors que d'autres classes seront créées spécialement pour notre projet, ces dernières se nomment : \texttt{Node, Camera, Geometry, Light, Material, Scène, Shape, Renderer, Vertigo\_Viewer}.
 
-Enfin, notre \textit{plugin} devra être multi-plateformes et compatibles avec Lwjgl et JOGL.
+Enfin, notre \textit{plugin} devra être multi-plateforme et compatible avec Lwjgl et JOGL.
 
 Vertigo sera composé de trois parties distinctes que nous allons aborder.
 \subsection{Graphe de scène} \label{gScene}
 Un graphe de scène est une structure de données couramment utilisé dans les programmes faisant appel à la 3D.
 Afin de simplifier le code (lecture, maintenance, et modifications éventuelles), cette partie ne devra pas contenir de code OpenGL.\\
-Ce graphe de scène devra être implanté sous forme d'un arbe. 
+
+Ce graphe de scène devra être implanté sous forme d'un arbre c'est-à-dire un graphe acyclique orienté possédant une unique racine, et tel que tous les nœuds sauf la racine ont un unique parent. Ceux n'ayant pas d'enfants sont appelés des feuilles. \\
+
+Le graphe de scène devra comporter : 
+\begin{itemize}
+\item Une ou plusieurs lumière (nommée \texttt{Light}) servant à éclairer les objets avec une couleur, à réaliser l' ombrage : Cet effet rend l'objet plus claire là où est dirigée la lumière, alors qu'il est plus sombre aux autres endroits ( voir \ref{ombrage}). La lumière peut aussi servir pour afficher les ombres portées.
+\item Un ou plusieurs objets, que nous nommerons \texttt{Shape}. Ce dernier sera composé d'une géométrie contenant les coordonnées x y z des sommets ainsi que les vecteurs normales, les coordonnées de texture et d'un matériau représentant sa couleur, un shader, et sa texture (une texture est une image plaquée sur une face d'un objet).
+\item D'une caméra représentant l'origine ainsi que le point de vue de l'utilisateur. Cette caméra transforme les coordonnées 3D en coordonnées 2D à l'aide d'une projection.
+\item D'une scène, qui contiendra les \texttt{Shapes} ainsi que les \texttt{Lights}.
+\item Un nœud simple dont l'utilité sera décrit plus bas.
+\end{itemize}
+
+
+
+Un exemple d'un graphe de scène est montré à la figure \ref{graphscene}.
 % Lumière : position direction et couleur
 % Caméra modifie les coords de 3D en 2D selon la perspective
 % Shape partie matérial (ex couleurs de l objet) 
 %et une partie géomtrie (coordonnées) -> Le shape sera utilisé par les VBO. Et les VBO par OpenGL.
-\subsection{VBO} 
+\begin{figure}[h!]
+  \caption{Exemple d'effet d'ombrage : on remarque que la sphère est plus claire en haut à gauche que en bas à droite.}
+  \centering
+\includegraphics[scale=1]{ombrage.png} 
+\label{ombrage}
+\end{figure}
+
+\begin{figure}[h!]
+  \caption{Exemple d'un graphe de scène.}
+  \centering
+\includegraphics[scale=1]{snapshot1.png} 
+\label{graphscene}
+\end{figure}
+
+Dans certains cas, il est utile que deux objets partagent le même parent.Par exemple, l'objet "voiture" peut lui-même être décomposé en plusieurs objets (pneus, carrosserie etc...).\\
+
+Dans le cas de notre projet Vertigo, si deux \textit{shapes} doivent être liés , nous créerons alors un nouveau nœud qui sera leur parent. Chaque \textit{shapes} contiendra sa propre géométrie et son propre matériel. Plusieurs \textit{shapes} ne pourront pas partager un même matériel comme c'est parfois le cas dans d'autres graphes de scène.
+
+Un exemple simple du graphe de scène attendu est illustré à la figure \ref{SchemaGrapheSceneSimple}. Un exemple un peu plus complexe (avec un node) est illustré à la figure \ref{graphescenecomplexe}.
+
+\begin{figure}[h!]
+  \caption{Exemple d'un graphe de scène avec un node (la flèche signifiant "est le parent de").}
+  \centering
+\includegraphics[scale=1]{graphescenecomplexe.png} 
+\label{graphescenecomplexe}
+\end{figure}
+
+
+\subsection{BO : Buffer Objects} 
 \label{VBO}% Les vbo sont un format pour openGL
-% L affichage peut etre de plusieurs types : points,lignes, ou lignes  brisées, triangles. (openGL utilise que des triangles).
-% Buffer Object (uniquement les indices)
-% VBO : plusieurs réels representant les sommets ou autres choses
-% packed VBO : plusieurs réels representant les sommets + autres choses
-% normales, textures, coordonnées, couleurs.
+Les VBO sont le format dans lequel nous allons recevoir nos données. 
+Les BO contiennent les indices des sommets que l'on désire relier. Par exemple, BO=[1,4,5,10,1] signifie que l'on veut relier le sommet numéro 1 au 4, le 4 au 5, le 5 au 10, et le 10 au 1. 
+% balise LATEX pour n° ?
+ L affichage peut être de plusieurs types : points,lignes, ou lignes  brisées, triangles (OpenGL utilise que des triangles).\\
+ 
+ Les VBO peuvent contenir soit les normales, soit les textures, soit les coordonnées, soit les couleurs.
+ Les packed VBO peuvent contenir plusieurs de ses éléments entrelacés.
+ Exemple : \\
+ PackedVBO = X,Y,Z,R,G,B,NX,NY,NZ,X,Y,Z,R,G,B,NX,NY,NZ,X,Y,Z,R,G,B,NX,NY,NZ\\
+ % Ici c est un packed VBO pour 3 points. 
+ % ça sera bien de faire un exemple plus "parlant" genre avec des couleurs pour chaque point.
+ VBO = X,Y,Z,X,Y,Z
+ 
+
+
 \subsection{Open GL}
-% 2 implémentations différentes selon la librairie utilisée
-% 1 création des VBO sur la carte graphique RENDERER
-%2 chargement des shaders (couleur et textures)
-% Les textures des shaders sont écrits en GLSL
-%3 affichage : evenement (souris) et transformation de matrice. 
+ 2 implémentations différentes selon la librairie utilisée
+ ça se passe en 3 étapes :
+ 1 création des VBO sur la carte graphique via RENDERER
+2 chargement des shaders (couleur et textures)
+ Les textures des shaders sont écrits en GLSL
+3 affichage : evenement (souris) et transformation de matrice. 
+
+% copier coller d un truc + bas
+Ce renderer va :
+\begin{itemize}
+\item Initialiser un contexte graphique. % c'est ce qui fait la connexion AWT ↔ OpenGL
+\item Initialiser les VBOs par lecture du graphe de scène.
+\item Initialiser les \textit{shaders}. % c'est ce qui transforme les points en pixels
+\end{itemize}
+
+
+
 \section{Besoins non fonctionnels}
 Étant donné que nous allons travailler à plusieurs sur les mêmes fichiers, nous avons décidé d'utiliser un logiciel de gestion de version. Nous avons choisi d'utiliser git\cite{git} et de stocker nos fichiers sur le site github\cite{github}.
 De plus, afin de programmer plus rapidement, nous avons choisi d'utiliser NetBeans\cite{netbeans}, un IDE\footnote{Integrated Development Environment}, dont la version que nous avons utilisée (7.3) est compatible avec git.
@@ -246,9 +314,10 @@ Afin d'obtenir une image en 3D, nous devons implémenter un graphe non-orienté,
 %\newpage
 
 \begin{figure}[h!]
-  \caption{Schéma de notre graphe de scène.}
+  \caption{Schéma de notre graphe de scène (la flèche signifiant "est le parent de").}
   \centering
     \includegraphics[scale=1]{GrapheScene.png} 
+    \label{SchemaGrapheSceneSimple}
 \end{figure}
  
 \begin{figure}[h!]
