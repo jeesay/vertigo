@@ -1,0 +1,294 @@
+\documentclass[11pt]{report}
+\usepackage[francais]{babel}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc} 
+ \usepackage{lscape}
+\usepackage[T1]{fontenc} 
+\usepackage{listingsutf8} 
+\lstset{inputencoding=utf8/latin1}
+\usepackage{graphicx}
+\begin{document}
+%\usepackage{lstlistings}
+% existe - il + que 2 types de Shaders ?
+% Devra-t-on coder en GLSL ?
+% Comment connaitrons la texture à mettre sur nos objets ?
+
+% Ce qu'il y a à modifier :
+% Mettre les mots en anglais en italiques
+% Enlever le paragraphe sur le pipeline fixe car on ne l utilise pas, nous on s occupe surtout des VBO et faut le dire.
+% Quelle est la version actuelle d'openGL ? ; 4.3 Et celle du Cremi? glxinfo | grep ‘OpenGL version string’
+% Retravailler les trucs sur la fin ( à partir de la page10, graphe de scéne etc..)
+
+% 2 trucs ; graphe de scène + partie "open GL" qui sera dupliqué selon la librairie utilisée (jogl ou lwjgl ) la partie VBO fait le liens entre les 2.
+
+
+
+\author{Floryn Buga\and Olivier Catoliquot\and Clement Delestre}
+\title{Cahier des Charges}
+
+\maketitle % affiche le titre
+\tableofcontents % affiche la table des matieres
+%\addcontentsline{toc}{chapter}{Introduction}
+\newpage
+\chapter{Contexte}
+\section{Sujet}
+Notre projet sera réalisé auprès du laboratoire de Chimie et Biologie des Membranes et Nano-objets de Bordeaux (CMBN)  qui est un laboratoire de recherche public, constitué de plusieurs équipes. Nous allons travailler pour celle de Mr. J.C. Taveaux qui s'occupe de l'Architecture des Complexes Membranaires et processus cellulaires. Pour ses travaux, elle fait régulièrement appel à des logiciels de traitement d'images tel que ImageJ \cite{imagej}.
+
+
+\section{Objectif}
+
+ L'objectif de notre projet, est de réaliser un \textit{plugin} pour ImageJ. Celui- ci est un logiciel de traitement et d’analyse d’images, \textit{open-source}, développé en langage Java\cite{java} par le Nation Institute of Health (NIH). 
+Il est libre de droit, multi-plateforme et bien connu de la communauté scientifique car initialement conçu pour des applications biomédicales. Il s’est peu à peu démocratisé dans d’autres domaines pour sa facilité d’utilisation et les possibilités de développement qu’il offre. 
+En effet, il est possible de développer soi-même et assez facilement des \textit{plugins} en Java. Ces derniers sont pour la plupart sous licence GPL \footnote{GNU General Public License}.
+ Ainsi, dans le cadre de notre projet, nous allons en développer un qui affichera des objets en 3D, et s'appellera Vertigo. Ce dernier doit être compatible avec JOGL\footnote{Java Open GL} \cite{jogl} et LWJGL\footnote{Lightweight Java Game Library} \cite{lwjgl} : deux librairies Java encapsulant OpenGL couramment utilisés.
+enfin, il devra également être multi-plateforme et compatible avec OpenGL 3.0 ou supérieur.
+
+
+
+Notre objectif est de construire un \textit{plugin} qui sera utilisé par un programmeur client. Ce dernier enverra comme entrée dans notre programme un tableau de réels (ou \textit{floats}) représentant chacun au minimum les coordonnées dans l'espace, (x, y et z) d'un sommet d'un objet 3D. Exemple : le client fournira un tableau de 24 réels (8x3) pour un cube.
+
+ Ces données seront donc envoyées à notre programme via imageJ, en langage javascript\cite{javascript}.
+ 
+Ainsi, notre \textit{plugin}, pourra fonctionner en autonome. Cependant, il sera aussi utilisé comme moteur graphique pour un autre \textit{plugin} développé au laboratoire : voltIJ qui possède un GUI \footnote{Graphical User Interface}.
+Le code source de celui-ci étant devenu trop compliqué dû fait des dernières modifications -par différentes personnes- durant ces 3 dernières années.
+\\
+
+
+
+Enfin, éventuellement, l'utilisateur pourra faire une capture d'écran via ImageJ.
+% source : http://rsb.info.nih.gov/ij/developer/api/ij/ImagePlus.html
+
+\chapter{État de l'art}
+
+
+\section{OpenGL}
+% http://bakura.developpez.com/tutoriels/jeux/utilisation-vbo-avec-opengl-3-x/
+% http://www.siteduzero.com/informatique/tutoriels/rendus-optimises-dl-va-vbo
+% http://alexandre-laurent.developpez.com/tutoriels/OpenGL/OpenGL-GLSL/?page=page_1
+% DOIT ON PARLER DES DISPLAY LIST ??? SI C EST LE CAS J AI RIEN COMPRIS
+
+  En règle générale, il s'agit d'une librairie multi-plateforme qui rend possible l'interaction entre les GPU \footnote{Graphics Processing Unit} et l' utilisateur dans le but d'offrir des images 3D en temps réel. Celle-ci est présente dans un certain nombre de jeux  3D, les CAD (dessin assisté par ordinateur) et les logiciels de visualisation des données. Elle est apparue en début des années 90 comme un projet de standardisation initié par SGI (Silicon Graphics) qui ont implémenté les librairies graphiques dans leurs machines puissantes pour l'époque. 
+\\
+
+ OpenGL permet de communiquer avec la carte graphique en C++. Afin de programmer en Java, nous devons donc utilisés des librairies encapsulant OpenGL, dans notre cas, nous utiliserons JOGL et Lwjgl cités précédemment.
+
+
+Comme nous l'avons dit, notre API doit être compatible avec OpenGL 3.x, c'est-à-dire avec la version 3.0 d'OpenGL ou supérieure.
+\subsection{Open GL 3.x}
+Sortie en août 2008, la version 3.0 a longtemps créé la polémique. Devant être une refonte complète de l'API (nom de code « Long Peaks »), cette nouvelle version n'a finalement été qu'une importante évolution de l'API.\cite{opengl3} % source http://bakura.developpez.com/tutoriels/jeux/opengl-3-x-point-sur-nouveautes/
+\\
+
+Cette version offre d'importantes nouveautés par rapport aux versions antérieures :
+\begin{itemize}
+\item Les Vertex Array Object
+\item Le Pipeline programmable
+\end{itemize}
+
+\subsubsection{Vertex Array Object}
+Cette extension, nommée "GL ARB vertex array object", permet de simplifier l'utilisation des VBO.
+\\
+
+	Le principe de cette technique est de rassembler l'ensemble des vertex d'une géométrie dans un tableau unique. Il peut y avoir un tableau par type d'information ou un seul tableau "entrelacé" contenant toutes les informations.
+
+L'intérêt, est de réduire la quantité d'information envoyée à la carte graphique et ainsi d'effectuer un programme plus rapidement. \cite{vbo}
+
+\subsubsection{Pipeline programmable} % source pour les  paragraphes ci dessous: %http://cpp.developpez.com/redaction/data/pages/users/gbdivers/qtopengl/?page=opengl#L4
+% Ce liens est intéréssant, faudra le garder
+
+
+% source : http://www.fevrierdorian.com/blog/post/2010/10/04/Une-introduction-%C3%A0-l-OpenGL-Moderne-Chapitre-1%3A-Le-Pipeline-Graphique#le_pipeline_graphique
+
+
+Le \textit{pipeline} programmable utilise des \textit{shaders}, (qui provient de l'anglais \textit{to shade} qui signifie nuancer) qui permettent aux développeurs de modifier certaines étapes du \textit{pipeline} 3D selon leurs besoins. Cette transition s'est effectuée en 2001-2002, avec l'arrivée de DirectX8 et des OpenGL Shader extensions.
+\\ 
+
+La principale nouveauté apportée par le \textit{pipeline} programmable est l'utilisation de programmes remplaçant certaines étapes du rendu 3D qui étaient auparavant codées en "dur" dans le \textit{pipeline}. Ces programmes sont fournis par le développeur 3D à la carte graphique et permettent de personnaliser des étapes du rendu OpenGL. On peut citer comme exemple d'utilisations répandues : la gestion de l'éclairage dynamique, le rendu d'eau réaliste ou encore la gestion des reflets. Ces programmes sont constitués de plusieurs \textit{shaders}. Ces derniers sont écrits dans un langage proche du C et qui varie selon les API de rendu 3D utilisées. Dans le cas d'OpenGL, il s'agit du langage GLSL (OpenGL Shading Language), proche du langage C.
+% Le schema ci dessous vient du site http://alexandre-laurent.developpez.com/tutoriels/OpenGL/OpenGL-GLSL/?page=page_1
+
+
+\begin{figure}[h!]
+  \caption{Illustration du pipeline dynamique\cite{screenshotOpenGL2}}
+  \centering
+    \includegraphics[scale=1]{screenshotOpenGL2.png}
+    \label{PipelineP}
+\end{figure}
+ 
+
+Comme nous pouvons le voir dans la figure \ref{PipelineP}, il existe deux types de \textit{shaders} : Les \textit{vertex shaders} qui sont les sommets et les \textit{fragment shaders} qui sont des groupes de pixels.
+
+\subsection{Les \textit{Shaders}}
+
+Un \textit{shader} est un programme que l'on exécute dans le cœur même de la carte graphique. Celle-ci est optimisée pour tous les calculs nécessaires à la 3D (tels que la multiplication de matrices). Grâce aux \textit{shaders}, certaines parties de la carte graphique sont programmables. 
+\\
+
+    Le \textit{vertex shader} est exécuté pour chaque sommet.
+    Le \textit{fragment shader} est exécuté sur chaque groupe de pixels dessinés. % Sans le schema je ne sais pas si on comprend ces 2 lignes
+
+
+
+Comme nous l'avons évoqué, les shaders permettent de programmer directement nos cartes graphiques. Pour cela de nouveaux langages ont été inventés. Au tout début, c'était un assembleur spécialisé pour les cartes graphiques. Pour OpenGL, le langage s'appelle le \texttt{GLSL} pour OpenGL Shading Language (langage de shading pour OpenGL).
+
+
+% source du GLSL : http://alexandre-laurent.developpez.com/tutoriels/OpenGL/OpenGL-GLSL/?page=page_1
+% Parler de OpenGL 3.0 et du \textit{pipeline} programmable
+%  The specification says nothing on the subject of obtaining, and managing, an OpenGL context,
+% leaving this as a detail of the underlying windowing system. For the same reason, OpenGL is purely concerned with rendering -
+% it provides no APIs related to input, audio or windowing. This is perhaps the greatest difference between OpenGL and its competitor, DirectX.
+% On the 31st July, 2006 it was announced at SIGGRAPH that control of the OpenGL specification would be passed to the Khronos group.[16][17]
+% http://www.fevrierdorian.com/blog/post/2010/10/04/Une-introduction-%C3%A0-l-OpenGL-Moderne-Chapitre-1%3A-Le-\textit{pipeline}-Graphique -> Bien mais ne parle pas d'open GL 3.x
+% Les GPU modernes doivent leur flexibilité au fait de déléguer les étapes de "projection-dans-le-screen-space" (vertex shader) 
+%et "assignation-d'une-couleur" (fragment shader) a des petits programmes, envoyé au GPU, appelé shaders .
+%https://fr.wikipedia.org/wiki/Shader#OpenGL_shading_language
+%http://air.imag.fr/mediawiki/index.php/OpenGL_ES#D.C3.A9velopper_avec_OpenGL_ES_2.0_sur_Android
+% ici ils disent qu'open GL ES 2.0=openGL 2.0
+% http://fr.wikipedia.org/wiki/OpenGL_ES ici aussi '' 2.0, dérivée d'OpenGL 2.0, est arrivée peu avant les prototypes de processeurs embarqués haut de gamme. Elle s'allège de la plupart de ses fonctions précédentes 
+% dont toute son API de rendu à cheminement (\textit{pipeline}) fixe pour laisser la place à un système de shaders basé sur une variation de GLSL. ``
+% '' Compute shaders leveraging GPU parallelism within the context of the graphics pipeline `` http://en.wikipedia.org/wiki/OpenGL#History
+% http://www.developpez.net/forums/d1091686/applications/developpement-2d-3d-jeux/api-graphiques/opengl/pourquoi-passer-opengl-4-1-a/ cependant ici ils disent ce que Taveau disait aussi
+% http://www.scigems.org/Articles/Introduction.php le pipeline programmable est ici mieux expliqué jtrouve
+% http://www.developpez.net/forums/d1169408/applications/developpement-2d-3d-jeux/api-graphiques/opengl/debutant-monde-lopengl-moderne/ là aussi
+
+\subsection{JOGL}
+ \texttt{JOGL} est une librairie open source, développée à l'origine par Sun Microsystems ( JOGL est donc plus "officiel" ).
+Celle- ci permet d'accéder à la plupart des fonctionnalités disponibles en C, à l'exception notable des appels \textit{OpenGL utility toolkit} (GLUT) relatifs au système de fenêtrage, car Java a les siens ; \textit{Abstract Window Toolkit} (\texttt{AWT}), \texttt{Swing}, etc.
+
+
+\texttt{JOGL} est très proche de l'OpenGL en C/C++. Cette librairie possède beaucoup de méthodes pour peu de classes.
+
+
+\subsection{Lwjgl}
+Tout comme \texttt{JOGL}, cette librairie implémente la quasi totalité d'OpenGL. Elle est plus orientée jeux vidéos, et donc tournée vers le plus performant. De plus, elle dispose de son propre système de fenêtrage natif pour chaque plateformes (Windows, Linux et Mac), donc elle ne dépend ni de \texttt{AWT} ni de \texttt{Swing}. 
+Cependant il est possible d'utiliser \texttt{Lwjgl} dans une fenêtre \texttt{AWT}.
+Cette dernière étant la librairie utilisée par ImageJ.
+
+\chapter{Analyse des besoins}
+
+\section{Besoins fonctionnels}
+Tout d'abord, notre classe principale devra hériter de la classe \textit{pluggin} d'ImageJ pour pouvoir établir la liaison avec ce logiciel.
+Le langage de programmation utilisé est le langage Java car il est obligatoire pour pouvoir interagir avec ImageJ. Éventuellement, l'utilisateur pourra faire une capture d'écran de son (ou ses) objet(s) 3D au format d'ImageJ : ImagePlus.
+De plus, notre travail sera sous licence GPL à la demande du client.\\
+
+Vertigo devra également être codé de telle façon que l'on puisse facilement modifier notre code source : commentaires en anglais et documentation de l'API réalisée. En effet, cette dernière est prévue pour être utilisée en autonome mais aussi pour s'intégrer facilement au \textit{plugin} voltIJ. En conséquence il ne possédera pas d'interface graphique utilisateur (GUI).
+Concernant les fonctionnalités propre à la 3D, nous devons modifier l'angle de vue et zoomer  à l'aide de la souris.
+Comme nous l'avons évoqué précédemment, l'entrée attendue pour créer les objets 3D est un tableau de réels (représentant soit les coordonnées des sommets soit leurs couleurs). Si l'utilisateur désire afficher plusieurs objets, il devra entrer plusieurs tableaux.\\
+% Comment ça se passera pour la texture ??
+
+De surcroît, le programmeur client se servant de notre API pourra créer un graphe de scène (voir partie suivante) dans laquelle il ajoutera ses objets. 
+Il pourra également :
+\begin{itemize}
+\item Choisir le titre de la fenêtre.
+\item Choisir les dimensions de la fenêtre.
+\item Choisir les couleurs des objets 3D.
+\item Choisir la texture des objets 3D.
+\item Indicer les sommets de l'objet 3D (voir \ref{VBO}).
+\item Ajouter une caméra à la scène (voir \ref{Gscene}).
+\item Ajouter des lumières à la scène (voir \ref{Gscene}).
+\end{itemize}
+
+Durant l'élaboration de notre projet nous réutiliserons certaines classes provenant de VoltIJ, ses dernières servant aux calculs matricielles que nous sommes obligés d'utiliser afin d'afficher un objet en 3D. Ces classes se nomment : \texttt{ArcBall, AxisAngle4, Matrix4, Matrix3, Point3, Point4, Quat4, Tuple3, Tuple4, Vector3, Vector4, ShaderUtils}.
+Alors que d'autres classes seront créées spécialement pour notre projet, ces dernières se nomment : \texttt{Node, Camera, Geometry, Light, Material, Scène, Shape, Renderer, Vertigo\_Viewer}.
+
+Enfin, notre \textit{plugin} devra être multi-plateformes et compatibles avec Lwjgl et JOGL.
+
+Vertigo sera composé de trois parties distinctes que nous allons aborder.
+\subsection{Graphe de scène} \label{gScene}
+Un graphe de scène est une structure de données couramment utilisé dans les programmes faisant appel à la 3D.
+Afin de simplifier le code (lecture, maintenance, et modifications éventuelles), cette partie ne devra pas contenir de code OpenGL.\\
+Ce graphe de scène devra être implanté sous forme d'un arbe. 
+% Lumière : position direction et couleur
+% Caméra modifie les coords de 3D en 2D selon la perspective
+% Shape partie matérial (ex couleurs de l objet) 
+%et une partie géomtrie (coordonnées) -> Le shape sera utilisé par les VBO. Et les VBO par OpenGL.
+\subsection{VBO} 
+\label{VBO}% Les vbo sont un format pour openGL
+% L affichage peut etre de plusieurs types : points,lignes, ou lignes  brisées, triangles. (openGL utilise que des triangles).
+% Buffer Object (uniquement les indices)
+% VBO : plusieurs réels representant les sommets ou autres choses
+% packed VBO : plusieurs réels representant les sommets + autres choses
+% normales, textures, coordonnées, couleurs.
+\subsection{Open GL}
+% 2 implémentations différentes selon la librairie utilisée
+% 1 création des VBO sur la carte graphique RENDERER
+%2 chargement des shaders (couleur et textures)
+% Les textures des shaders sont écrits en GLSL
+%3 affichage : evenement (souris) et transformation de matrice. 
+\section{Besoins non fonctionnels}
+Étant donné que nous allons travailler à plusieurs sur les mêmes fichiers, nous avons décidé d'utiliser un logiciel de gestion de version. Nous avons choisi d'utiliser git\cite{git} et de stocker nos fichiers sur le site github\cite{github}.
+De plus, afin de programmer plus rapidement, nous avons choisi d'utiliser NetBeans\cite{netbeans}, un IDE\footnote{Integrated Development Environment}, dont la version que nous avons utilisée (7.3) est compatible avec git.
+Afin de rendre notre programme le plus performant possible, la complexité devra être la plus faible possible. 
+\chapter{Implantation} % Je ne sais pas si c est un nouveau chapitre ou si c'est dans ''Analyse des besoins``
+% Peut on commencer par une phrase disant que notre client nous impose une certaine implantation ?
+\section{API publique} 
+L'API publique est accessible au programmateur client en javascript.
+Ce dernier aura accès aux classes Vertigo et Shape ainsi qu'à leur constructeur respectif.
+Il aura également accès à certaines méthodes de ces dernières telle que : 
+\\
+
+\textbf{Pour la classe Vertigo\_Viewer (héritant de la classe Pluggin d'imageJ) :}
+\begin{itemize}
+\item setTitle(String)
+\item setBackgroundColor(float,float,float)
+\item setDimension(int,int)
+\end{itemize}
+
+
+\textbf{Pour la classe Shape :}
+\begin{itemize}
+\item setGeometry % contient un tableau de float
+\item setGraphicsType
+\item setIndices % pour numeroter les sommets, et savoir dans quel ordre on ''trace`` des arrêtes
+\end{itemize}
+% il y aura aussi les classes Geometry et Material avec SetColor dans Material !
+
+\subsection{Partie de haut niveau : graphe de scène}
+Nous avons prévu d'utiliser un graphe de scène. 
+Afin d'obtenir une image en 3D, nous devons implémenter un graphe non-orienté, que nous nommerons Graphe de scène. Celui- ci sera composé de plusieurs Objets propre à la 3D tel que la Camera (qui doit être la racine du graphe et donc ne pas avoir de parents), les lumières, la scène et les  \textit{shapes}. 
+%\newpage
+
+\begin{figure}[h!]
+  \caption{Schéma de notre graphe de scène.}
+  \centering
+    \includegraphics[scale=1]{GrapheScene.png} 
+\end{figure}
+ 
+\begin{figure}[h!]
+  \caption{Diagramme de classe.}
+  \centering
+    \includegraphics[scale=0.30]{Diagramme1.png}
+\end{figure}
+ 
+
+
+
+
+\subsection{Partie graphique de bas-niveau}
+% Recherche à faire là dessus : 
+Renderer + ShaderUtils : classes utilitaires pour le chargement et compilation des \textit{shaders} (\textit{vertex} et \textit{fragment shaders}).
+Il doit y avoir deux versions de la classe Renderer, ces deux versions seront des sous classes de l'une des deux librairies (JOGL ou Lwjgl).
+Ce renderer va :
+\begin{itemize}
+\item Initialiser un contexte graphique. % c'est ce qui fait la connexion AWT ↔ OpenGL
+\item Initialiser les VBOs par lecture du graphe de scène.
+\item Initialiser les \textit{shaders}. % c'est ce qui transforme les points en pixels
+\end{itemize}
+Enfin, il contiendra la méthode \textit{display()} responsable de l'affichage de l'image.
+% faudrait mettre le nom de la methode en gras ou en couleur... On verra ça + tard
+
+
+%ici il y a les sites qui peuvent être utile pour nous mais qu'on ne citera pas.. ( ou du moins que j'ai pas réussi à citer ) 
+%http://info-rital.developpez.com/tutoriel/java/api/3d/
+%http://fr.wikipedia.org/wiki/OpenGL
+%http://www.developpez.net/forums/d658414/applications/developpement-2d-3d-jeux/api-graphiques/opengl/thread-jogl-vs-lwjgl/
+%http://fr.wikipedia.org/wiki/Java_OpenGL <- si je ne commente pas ça bug
+% http://duriansoftware.com/joe/An-intro-to-modern-OpenGL.-Chapter-1:-The-Graphics-Pipeline.html
+% http://www.opengl.org/discussion_boards/showthread.php/172423-OpenGL-3-x-tutorials
+ %http://goanna.cs.rmit.edu.au/~gl/teaching/rtr&3dgp/notes/pipeline.html
+\bibliographystyle{plain}
+  \bibliography{ma_biblio}
+  
+\chapter{Diagramme de Gantt} % A enlever peut être ??
+% IMPOSSIBLE DE METTRE UNE IMAGE SANS QUE CE SOIT MOCHE !
+% Soit on met en format paysage et il y a un saut de page sauvage qui apparait.
+% Soit on laisse en portait et l image et tout petite et coupée...
+ Avant de le connecter au logiciel ImageJ, nous afficherons tout d'abord un puis plusieurs objets 3D dont un cube, une pyramide, une sphère etc.  
+\end{document}
