@@ -264,10 +264,11 @@ Les BO contiennent les indices des sommets que l'on désire relier. Par exemple,
 
 \subsection{Open GL}
 
-Le \textit{renderer} va permettre de générer l'image, le rendu, à partir du graphe de scène. Le renderer est en communication avec la scène et envoie des données à la carte graphique sous forme de VBO qui sont stockés sur la VRAM. Ce n'est donc que dans cette partie que le code open GL se retrouvera.
-Le renderer est également chargé d'appliquer certains procédés comme des effets de transparences, d'ombre (etc.) et dans notre cas plus particulièrement les \textit{shaders}.
+Le \textit{renderer} va permettre de générer l'image, le rendu, à partir du graphe de scène. Le \textit{renderer} est en communication avec la scène et envoie des données à la carte graphique sous forme de VBO qui sont stockés sur la VRAM. Ce n'est donc que dans cette partie que le code open GL se retrouvera.
+Le \textit{renderer} est également chargé d'appliquer certains procédés comme des effets de transparences, d'ombre (etc.) et dans notre cas plus particulièrement les \textit{shaders}.
 Étant donné que nous avons décidé de rendre le plugin compatible sous les librairies jogl et lwjgl, une implémentation sera faite pour chacune des deux.
- 
+Enfin le \textit{renderer} va permettre à l'utilisateur d'interagir avec l'objet en instanciant les évènements liés à la souris(rotation).
+
 Trois partie peuvent être distinguées :
 \begin{itemize}
 \item Envoie des VBO vers la carte graphique via le renderer
