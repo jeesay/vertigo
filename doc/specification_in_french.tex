@@ -2,12 +2,15 @@
 \usepackage[francais]{babel}
 \usepackage{lmodern}
 \usepackage[utf8]{inputenc} 
- \usepackage{lscape}
+ \usepackage{pdflscape}
 \usepackage[T1]{fontenc} 
 \usepackage{listingsutf8} 
 \lstset{inputencoding=utf8/latin1}
 \usepackage{graphicx}
+\usepackage{color}
+
 \begin{document}
+\definecolor{dgreen}{rgb}{0.10,0.75,0.35}
 %\usepackage{lstlistings}
 % existe - il + que 2 types de Shaders ?
 % Devra-t-on coder en GLSL ?
@@ -168,20 +171,21 @@ Cette dernière étant la librairie utilisée par ImageJ.
 
 \section{Besoins fonctionnels}
 Tout d'abord, notre classe principale devra hériter de la classe \textit{pluggin} d'ImageJ pour pouvoir établir la liaison avec ce logiciel.
-Le langage de programmation utilisé est le langage Java car il est obligatoire pour pouvoir interagir avec ImageJ. Si le temps le permet, l'utilisateur aura la possibilité de faire une capture d'écran de son (ou ses) objet(s) 3D au format d'ImageJ : ImagePlus.
+Le langage de programmation utilisé est le langage Java car il est obligatoire pour pouvoir interagir avec ImageJ. Si le temps le permet, nous ajouterons la possibilité de faire une capture d'écran du ou des objet(s) 3D(s) au format d'ImageJ : ImagePlus.
 De plus, notre travail sera sous licence GPL à la demande du client.\\
 
 Vertigo devra également être codé de telle façon que l'on puisse facilement modifier notre code source : commentaires en anglais et documentation de l'API réalisée. En effet, cette dernière est prévue pour être utilisée en autonome mais aussi pour s'intégrer facilement au \textit{plugin} voltIJ. En conséquence il ne possédera pas d'interface graphique utilisateur (GUI).
-Concernant les fonctionnalités propre à la 3D, nous devons modifier l'angle de vue et zoomer  à l'aide de la souris.
-Comme nous l'avons évoqué précédemment, l'entrée attendue pour créer les objets 3D est un tableau de réels (représentant soit les coordonnées des sommets soit leurs couleurs). Si l'utilisateur désire afficher plusieurs objets, il devra entrer plusieurs tableaux.\\
+Concernant les fonctionnalités propre à la 3D, l'utilisateur sera capable de modifier l'angle de vue et de zoomer  à l'aide de la souris.
+Comme nous l'avons évoqué précédemment, l'entrée attendue pour créer les objets 3D est un tableau de réels (représentant les coordonnées des sommets). Si l'utilisateur désire afficher plusieurs objets, il devra entrer plusieurs tableaux.\\
 % Comment ça se passera pour la texture ??
 
-De surcroît, le programmeur client se servant de notre API pourra créer un graphe de scène (voir partie suivante) dans laquelle il ajoutera ses objets. 
+De surcroît, le programmeur client se servant de notre API pourra créer un graphe de scène (voir partie \ref{gScene}) dans laquelle il ajoutera ses objets. 
 Il pourra également :
 \begin{itemize}
 \item Choisir le titre de la fenêtre.
 \item Choisir les dimensions de la fenêtre.
 \item Choisir les couleurs des objets 3D.
+\item Choisir la couleur du fond.
 \item Choisir la texture des objets 3D.
 \item Indicer les sommets de l'objet 3D (voir \ref{VBO}).
 \item Ajouter une caméra à la scène (voir \ref{gScene}).
@@ -189,25 +193,35 @@ Il pourra également :
 \end{itemize}
 
 Durant l'élaboration de notre projet nous réutiliserons certaines classes provenant de VoltIJ, ses dernières servant aux calculs matricielles que nous sommes obligés d'utiliser afin d'afficher un objet en 3D. Ces classes nommées \texttt{ArcBall, AxisAngle4, Matrix4, Matrix3, Point3, Point4, Quat4, Tuple3, Tuple4, Vector3, Vector4, ShaderUtils}
-font partie du paquetage libre vecmath développé par Kenji Hiranabe.
+font partie du paquetage libre \texttt{vecmath} développé par Kenji Hiranabe.
 Alors que d'autres classes seront créées spécialement pour notre projet, ces dernières se nomment : \texttt{Node, Camera, Geometry, Light, Material, Scène, Shape, Renderer, Vertigo\_Viewer}.
 
 Enfin, notre \textit{plugin} devra être multi-plateforme et compatible avec Lwjgl et JOGL.
 
-Vertigo sera composé de trois parties distinctes que nous allons aborder.
+Comme nous pouvons le voir à la figure \ref{schemaVertigo}, Vertigo sera composé de trois parties distinctes que nous allons aborder.
+
+\begin{figure}[h!]
+  \caption{Schéma du fonctionnement de Vertigo.}
+  \centering
+  \label{schemaVertigo}
+    \includegraphics[scale=0.75]{schemaVertigo2.png}
+\end{figure}
+ 
+ 
+ 
 \subsection{Graphe de scène} \label{gScene}
 Un graphe de scène est une structure de données couramment utilisé dans les programmes faisant appel à la 3D.
 Afin de simplifier le code (lecture, maintenance, et modifications éventuelles), cette partie ne devra pas contenir de code OpenGL.\\
 
 Ce graphe de scène devra être implanté sous forme d'un arbre c'est-à-dire un graphe acyclique orienté possédant une unique racine, et tel que tous les nœuds sauf la racine ont un unique parent. Ceux n'ayant pas d'enfants sont appelés des feuilles. \\
 
-Le graphe de scène devra comporter : 
+Le graphe de scène que nous utiliserons devra comporter : 
 \begin{itemize}
-\item Une ou plusieurs lumière (nommée \texttt{Light}) servant à éclairer les objets avec une couleur, à réaliser l' ombrage : Cet effet rend l'objet plus claire là où est dirigée la lumière, alors qu'il est plus sombre aux autres endroits ( voir \ref{ombrage}). La lumière peut aussi servir pour afficher les ombres portées.
-\item Un ou plusieurs objets, que nous nommerons \texttt{Shape}. Ce dernier sera composé d'une géométrie contenant les coordonnées x y z des sommets ainsi que les vecteurs normales, les coordonnées de texture et d'un matériau représentant sa couleur, un shader, et sa texture (une texture est une image plaquée sur une face d'un objet).
+\item Une ou plusieurs lumière (nommée \texttt{Light}) servant à éclairer les objets avec une couleur, et à réaliser l' ombrage : Cet effet rend l'objet plus claire là où est dirigée la lumière, alors qu'il est plus sombre aux autres endroits ( voir \ref{ombrage}). La lumière peut aussi servir pour afficher les ombres portées.
+\item Un ou plusieurs objets, que nous nommerons \texttt{Shape}. Ce dernier sera composé : Tout d'abord d'une géométrie, contenant les coordonnées x, y, z, des sommets, celles des vecteurs normales, ainsi que les coordonnées de texture. Et puis d'un matériau représentant sa couleur, et son shader. % coordonnées textures = couleurs ?
 \item D'une caméra représentant l'origine ainsi que le point de vue de l'utilisateur. Cette caméra transforme les coordonnées 3D en coordonnées 2D à l'aide d'une projection.
 \item D'une scène, qui contiendra les \texttt{Shapes} ainsi que les \texttt{Lights}.
-\item Un nœud simple dont l'utilité sera décrit plus bas.
+\item Un nœud simple dont l'utilité sera décrit plus bas (cette classe sera appelé \texttt{Node}).
 \end{itemize}
 
 
@@ -231,9 +245,9 @@ Un exemple d'un graphe de scène est montré à la figure \ref{graphscene}.
 \label{graphscene}
 \end{figure}
 
-Dans certains cas, il est utile que deux objets partagent le même parent.Par exemple, l'objet "voiture" peut lui-même être décomposé en plusieurs objets (pneus, carrosserie etc...).\\
+Dans certains cas, il est utile que deux objets partagent le même parent.Par exemple, pour une voiture nous pouvons créer 4 pneus identiques auxquels nous appliquons des translations en fonction de l'endroit où nous voulons les positionner. Ceci permet de factoriser le code.\\
 
-Dans le cas de notre projet Vertigo, si deux \textit{shapes} doivent être liés , nous créerons alors un nouveau nœud qui sera leur parent. Chaque \textit{shapes} contiendra sa propre géométrie et son propre matériel. Plusieurs \textit{shapes} ne pourront pas partager un même matériel comme c'est parfois le cas dans d'autres graphes de scène.
+Dans le cas de notre projet Vertigo, si deux \textit{shapes} doivent être liés, nous créerons alors un nouveau nœud qui sera leur parent. Chaque \textit{shapes} contiendra sa propre géométrie et son propre matériel. Plusieurs \textit{shapes} ne pourront pas partager un même matériel comme c'est parfois le cas dans d'autres graphes de scène.
 
 Un exemple simple du graphe de scène attendu est illustré à la figure \ref{SchemaGrapheSceneSimple}. Un exemple un peu plus complexe (avec un node) est illustré à la figure \ref{graphescenecomplexe}.
 
@@ -252,17 +266,21 @@ Les BO contiennent les indices des sommets que l'on désire relier. Par exemple,
 % balise LATEX pour n° ?
  L affichage peut être de plusieurs types : points,lignes, ou lignes  brisées, triangles (OpenGL utilise que des triangles).\\
  
- Les VBO peuvent contenir soit les normales, soit les textures, soit les coordonnées, soit les couleurs.
- Les packed VBO peuvent contenir plusieurs de ses éléments entrelacés.
- Exemple : \\
- PackedVBO = X,Y,Z,R,G,B,NX,NY,NZ,X,Y,Z,R,G,B,NX,NY,NZ,X,Y,Z,R,G,B,NX,NY,NZ\\
+ Les VBO peuvent contenir soit les normales (généralement notée NX,NY et NZ), soit les textures, soit les coordonnées(X,Y,Z), soit les couleurs (au format RGB ou RGBA).
+ Les packed VBO peuvent contenir plusieurs de ses éléments entrelacés. Alors que les VBO ne contiennent qu'un seul type élément.
+ 
+ Exemple avec 3 points représentés chacun par une couleur : \\
+ PackedVBO = \textcolor{red} {X,Y,Z,R,G,B,NX,NY,NZ,}\textcolor{dgreen}{X,Y,Z,R,G,B,NX,NY,NZ,}\textcolor{blue}{X,Y,Z,R,G,B,NX,NY,NZ}\\
  % Ici c est un packed VBO pour 3 points. 
  % ça sera bien de faire un exemple plus "parlant" genre avec des couleurs pour chaque point.
- VBO = X,Y,Z,X,Y,Z
+ VBO = \textcolor{red}{X,Y,Z,}\textcolor{dgreen}{X,Y,Z,}\textcolor{blue}{X,Y,Z} \\
+ 
+ Notre programme Vertigo, utilisera ces VBO pour faire le liens entre la partie graphe de scène et la partie OpenGL/Renderer.
+ 
  
 
 
-\subsection{Open GL}
+\subsection{Open GL (Renderer)}
  2 implémentations différentes selon la librairie utilisée
  ça se passe en 3 étapes :
  1 création des VBO sur la carte graphique via RENDERER
@@ -354,10 +372,37 @@ Enfin, il contiendra la méthode \textit{display()} responsable de l'affichage d
  %http://goanna.cs.rmit.edu.au/~gl/teaching/rtr&3dgp/notes/pipeline.html
 \bibliographystyle{plain}
   \bibliography{ma_biblio}
-  
+
 \chapter{Diagramme de Gantt} % A enlever peut être ??
 % IMPOSSIBLE DE METTRE UNE IMAGE SANS QUE CE SOIT MOCHE !
 % Soit on met en format paysage et il y a un saut de page sauvage qui apparait.
 % Soit on laisse en portait et l image et tout petite et coupée...
+
  Avant de le connecter au logiciel ImageJ, nous afficherons tout d'abord un puis plusieurs objets 3D dont un cube, une pyramide, une sphère etc.  
+
+
+\begin{landscape}
+
+
+
+ \pagestyle{empty} 
+
+ \begin{figure}[h!]
+  \caption{Diagramme de Gantt PDF}
+  \hspace{-4cm}
+    \includegraphics[scale=1]{Diagramme_Gantt2.pdf}
+\end{figure}
+ 
+  \begin{figure}[h!]
+ 
+  
+  
+  \caption{Diagramme de Gantt PNG}
+   \hspace{-5cm}
+    \includegraphics[scale=0.45]{Diagramme_Gantt.png}
+    % peut etre bidouiller avec height et widths plutôt que scale
+    % ,width=\textwidth est une très mauvaise idée.
+\end{figure}
+
+ \end{landscape}
 \end{document}
