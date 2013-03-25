@@ -263,21 +263,17 @@ Les BO contiennent les indices des sommets que l'on désire relier. Par exemple,
 
 
 \subsection{Open GL}
- 2 implémentations différentes selon la librairie utilisée
- ça se passe en 3 étapes :
- 1 création des VBO sur la carte graphique via RENDERER
-2 chargement des shaders (couleur et textures)
- Les textures des shaders sont écrits en GLSL
-3 affichage : evenement (souris) et transformation de matrice. 
 
-% copier coller d un truc + bas
-Ce renderer va :
+Le \textit{renderer} va permettre de générer l'image, le rendu, à partir du graphe de scène. Le renderer est en communication avec la scène et envoie des données à la carte graphique sous forme de VBO qui sont stockés sur la VRAM. Ce n'est donc que dans cette partie que le code open GL se retrouvera.
+Le renderer est également chargé d'appliquer certains procédés comme des effets de transparences, d'ombre (etc.) et dans notre cas plus particulièrement les \textit{shaders}.
+Étant donné que nous avons décidé de rendre le plugin compatible sous les librairies jogl et lwjgl, une implémentation sera faite pour chacune des deux.
+ 
+Trois partie peuvent être distinguées :
 \begin{itemize}
-\item Initialiser un contexte graphique. % c'est ce qui fait la connexion AWT ↔ OpenGL
-\item Initialiser les VBOs par lecture du graphe de scène.
-\item Initialiser les \textit{shaders}. % c'est ce qui transforme les points en pixels
+\item Envoie des VBO vers la carte graphique via le renderer
+\item Chargement des shaders (écrit en langage GLSL)
+\item Affichage : évenements (actions de la souris) et matrices de transformations(rotation, translation, echelle).
 \end{itemize}
-
 
 
 \section{Besoins non fonctionnels}
