@@ -9,8 +9,29 @@
 \usepackage{graphicx}
 \usepackage{color}
 
+\usepackage{listings}
+
 \begin{document}
+
 \definecolor{dgreen}{rgb}{0.10,0.75,0.35}
+\definecolor{brown}{rgb}{0.85,0.45,0.05}
+ \lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{brown}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{brown}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{blue}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+% http://rnd.azoft.com/wp-content/uploads/image/h-GraphicsPipeline-480.png
+% http://rnd.azoft.com/fluid-dynamics-simulation-on-ios/
+
 %\usepackage{lstlistings}
 % existe - il + que 2 types de Shaders ?
 % Devra-t-on coder en GLSL ?
@@ -192,9 +213,8 @@ Il pourra également :
 \item Ajouter des lumières à la scène (voir \ref{gScene}).
 \end{itemize}
 
-Durant l'élaboration de notre projet nous réutiliserons certaines classes provenant de VoltIJ, ses dernières servant aux calculs matricielles que nous sommes obligés d'utiliser afin d'afficher un objet en 3D. Ces classes nommées \texttt{ArcBall, AxisAngle4, Matrix4, Matrix3, Point3, Point4, Quat4, Tuple3, Tuple4, Vector3, Vector4, ShaderUtils}
-font partie du paquetage libre \texttt{vecmath} développé par Kenji Hiranabe.
-Alors que d'autres classes seront créées spécialement pour notre projet, ces dernières se nomment : \texttt{Node, Camera, Geometry, Light, Material, Scène, Shape, Renderer, Vertigo\_Viewer}.
+Durant l'élaboration de notre projet nous réutiliserons une partie du paquetage libre \texttt{vecmath} développé par Kenji Hiranabe contenant des classes servant aux calculs matriciels et nécessaires à OpenGL, pour manipuler les objets en 3D (rotations, translations et mise à l'échelle).
+
 
 Enfin, notre \textit{plugin} devra être multi-plateforme et compatible avec Lwjgl et JOGL.
 
@@ -204,7 +224,7 @@ Comme nous pouvons le voir à la figure \ref{schemaVertigo}, Vertigo sera compos
   \caption{Schéma du fonctionnement de Vertigo.}
   \centering
   \label{schemaVertigo}
-    \includegraphics[scale=0.75]{schemaVertigo2.png}
+    \includegraphics[scale=0.75]{schemaVertigo3.png}
 \end{figure}
  
  
@@ -217,11 +237,11 @@ Ce graphe de scène devra être implanté sous forme d'un arbre c'est-à-dire un
 
 Le graphe de scène que nous utiliserons devra comporter : 
 \begin{itemize}
-\item Une ou plusieurs lumière (nommée \texttt{Light}) servant à éclairer les objets avec une couleur, et à réaliser l' ombrage : Cet effet rend l'objet plus claire là où est dirigée la lumière, alors qu'il est plus sombre aux autres endroits ( voir \ref{ombrage}). La lumière peut aussi servir pour afficher les ombres portées.
-\item Un ou plusieurs objets, que nous nommerons \texttt{Shape}. Ce dernier sera composé : Tout d'abord d'une géométrie, contenant les coordonnées x, y, z, des sommets, celles des vecteurs normales, ainsi que les coordonnées de texture. Et puis d'un matériau représentant sa couleur, et son shader. % coordonnées textures = couleurs ?
-\item D'une caméra représentant l'origine ainsi que le point de vue de l'utilisateur. Cette caméra transforme les coordonnées 3D en coordonnées 2D à l'aide d'une projection.
-\item D'une scène, qui contiendra les \texttt{Shapes} ainsi que les \texttt{Lights}.
-\item Un nœud simple dont l'utilité sera décrit plus bas (cette classe sera appelé \texttt{Node}).
+\item Une ou plusieurs lumière(s) (classe \texttt{Light}) servant à éclairer les objets avec une couleur, et à réaliser l' ombrage (Fig. \ref{ombrage}).
+\item Un ou plusieurs objets, instance de la classe \texttt{Shape}, sera composé : Tout d'abord d'une géométrie (classe \texttt{Geometry}, contenant les coordonnées x, y, z, des sommets, celles des vecteurs normales, les couleurs (Rouge, Vert, Bleu, transparence) ainsi que les coordonnées de texture. Et puis d'un matériau (classe \texttt{Material} défini par son \textit{shader}. % coordonnées textures = couleurs ?
+\item Une caméra (classe \texttt{Camera}) permettant de choisir le type de projection (perspective et orthographique) définie par sa position et la direction visée. De plus différents paramètres permettent de modéliser l'optique de la caméra. Cette caméra transforme les coordonnées 3D en coordonnées 2D à l'aide d'une projection.
+\item Une scène (classe \texttt{Scene}), qui contiendra tous les éléments ( instance de \texttt{Shape} et \texttt{Light}) vus par la caméra.
+\item Un élément groupe (classe \texttt{Node} permettant de regrouper plusieurs objets 3D.
 \end{itemize}
 
 
@@ -247,9 +267,9 @@ Un exemple d'un graphe de scène est montré à la figure \ref{graphscene}.
 
 Dans certains cas, il est utile que deux objets partagent le même parent.Par exemple, pour une voiture nous pouvons créer 4 pneus identiques auxquels nous appliquons des translations en fonction de l'endroit où nous voulons les positionner. Ceci permet de factoriser le code.\\
 
-Dans le cas de notre projet Vertigo, si deux \textit{shapes} doivent être liés, nous créerons alors un nouveau nœud qui sera leur parent. Chaque \textit{shapes} contiendra sa propre géométrie et son propre matériel. Plusieurs \textit{shapes} ne pourront pas partager un même matériel comme c'est parfois le cas dans d'autres graphes de scène.
+Dans le cas de notre projet Vertigo, si deux \texttt{Shape} doivent être liés, nous créerons alors un nouveau nœud qui sera leur parent. Chaque \texttt{Shape} contiendra sa propre géométrie et son propre matériel. Plusieurs géométrie ne pourront pas partager un même matériel comme c'est parfois le cas dans d'autres graphes de scène.
 
-Un exemple simple du graphe de scène attendu est illustré à la figure \ref{SchemaGrapheSceneSimple}. Un exemple un peu plus complexe (avec un node) est illustré à la figure \ref{graphescenecomplexe}.
+Un exemple de graphe de scène attendu est illustré à la figure \ref{graphescenecomplexe}. 
 
 \begin{figure}[h!]
   \caption{Exemple d'un graphe de scène avec un node (la flèche signifiant "est le parent de").}
@@ -261,55 +281,65 @@ Un exemple simple du graphe de scène attendu est illustré à la figure \ref{Sc
 
 \subsection{BO : Buffer Objects} 
 \label{VBO}% Les vbo sont un format pour openGL
-Les VBO sont le format dans lequel nous allons recevoir nos données. 
-Les BO contiennent les indices des sommets que l'on désire relier. Par exemple, BO=[1,4,5,10,1] signifie que l'on veut relier le sommet numéro 1 au 4, le 4 au 5, le 5 au 10, et le 10 au 1. 
-% balise LATEX pour n° ?
- L affichage peut être de plusieurs types : points,lignes, ou lignes  brisées, triangles (OpenGL utilise que des triangles).\\
- 
- Les VBO peuvent contenir soit les normales (généralement notée NX,NY et NZ), soit les textures, soit les coordonnées(X,Y,Z), soit les couleurs (au format RGB ou RGBA).
- Les packed VBO peuvent contenir plusieurs de ses éléments entrelacés. Alors que les VBO ne contiennent qu'un seul type élément.
+Les \textit{Buffer Objects} sont le format dans lequel nous allons recevoir nos données graphiques. Parmi ceux-ci on distingue :
+\begin{itemize}
+\item Les \textit{Vertex Buffer Objects} (VBO)
+\item Les \textit{Index Buffer Objects} (IBO)
+\end{itemize}
+Les \textit{Vertex Buffer Objects}  contiennent les coordonnées(X,Y,Z) des sommets définissant l'objet graphique. Ils peuvent aussi contenir  les normales (généralement notée NX,NY et NZ),  les cordonnées de texture, ou les couleurs (au format RGB ou RGBA).
+Les VBOs contiennent soit un seul type de données soit des données entrelacées (Les packed VB).
+ peuvent contenir plusieurs de ses éléments entrelacés. Alors que les VBO ne contiennent qu'un seul type élément.
  
  Exemple avec 3 points représentés chacun par une couleur : \\
  PackedVBO = \textcolor{red} {X,Y,Z,R,G,B,NX,NY,NZ,}\textcolor{dgreen}{X,Y,Z,R,G,B,NX,NY,NZ,}\textcolor{blue}{X,Y,Z,R,G,B,NX,NY,NZ}\\
+ Les VBO 
  % Ici c est un packed VBO pour 3 points. 
  % ça sera bien de faire un exemple plus "parlant" genre avec des couleurs pour chaque point.
  VBO = \textcolor{red}{X,Y,Z,}\textcolor{dgreen}{X,Y,Z,}\textcolor{blue}{X,Y,Z} \\
+
+les indices des sommets que l'on désire relier. Par exemple, BO=[1,4,5,10,1] signifie que l'on veut relier le sommet numéro 1 au 4, le 4 au 5, le 5 au 10, et le 10 au 1. 
+% balise LATEX pour n° ?
+ L affichage peut être de plusieurs types : points,lignes, ou lignes  brisées, triangles (OpenGL utilise que des triangles).\\
  
- Notre programme Vertigo, utilisera ces VBO pour faire le liens entre la partie graphe de scène et la partie OpenGL/Renderer.
+ 
+ 
+ Notre programme Vertigo, utilisera ces VBO pour le rendu des objets graphiques sous OpenGL.
  
  
 
 
-\subsection{Open GL (Renderer)}
+\subsection{Open GL (classe Renderer)}
 
-
-Le \texttt{Renderer} va permettre de générer l'image et le rendu, à partir du graphe de scène. Ce dernier est en communication avec la scène et envoie des données à la carte graphique sous forme de VBO qui sont stockés sur la VRAM \footnote{RAM de la carte graphique}. \\
-Étant donné que la partie graphe de scène ne fait pas appel au code OpenGL, ce n'est donc que dans cette partie que celui-ci se retrouvera. \\
-Le \texttt{Renderer} est également chargé d'appliquer certains procédés comme des effets de transparences, d'ombre (etc.) et dans notre cas plus particulièrement les \texttt{Shaders}.
+Le \texttt{Renderer} va permettre de générer l'image et le rendu, à partir du graphe de scène. Ce dernier est en communication avec la scène et envoie des données à la carte graphique sous forme de BO qui sont stockés sur la VRAM \footnote{RAM de la carte graphique}. \\
+Le code OpenGL sera localisé uniquement dans la partie moteur de rendu (\textbf{package graphics.jogl} et \textbf{graphics.lwjgl}). \\
+Le \texttt{Renderer} est également chargé d'appliquer certains procédés comme des effets de transparences, d'ombre etc. et dans notre cas plus particulièrement les \texttt{Shader}.
 Étant donné que nous avons décidé de rendre le \textit{plugin} compatible sous les librairies (JOGL et Lwjgl), une implémentation sera faite pour chacune des deux.
-Enfin le \texttt{Renderer} va permettre à l'utilisateur d'interagir avec l'objet en instanciant les événements liés à la souris (rotation).
+Enfin le \texttt{Renderer} va permettre à l'utilisateur d'interagir avec l'objet en instanciant les événements liés à la souris et au clavier (rotation).
 
-Trois partie peuvent être distinguées :
+Trois parties peuvent être distinguées  : % figure du renderer à mettre
 \begin{itemize}
-\item Envoie des VBO vers la carte graphique via le renderer
-\item Chargement des shaders (écrit en langage GLSL)
-\item Affichage : évenements (actions de la souris) et matrices de transformations(rotation, translation, echelle).
+\item Initialisation et envoi des BO vers la carte graphique via le moteur de rendu.
+\item Chargement des \texttt{Shader} (écrit en langage GLSL).
+\item Affichage : événements (actions de la souris et du clavier) et matrices de transformations(rotation, translation, échelle).
 \end{itemize}
 
-
 \section{Besoins non fonctionnels}
-Étant donné que nous allons travailler à plusieurs sur les mêmes fichiers, nous avons décidé d'utiliser un logiciel de gestion de version. Nous avons choisi d'utiliser git\cite{git} et de stocker nos fichiers sur le site github\cite{github}.
+Étant donné que nous allons travailler à plusieurs sur les mêmes fichiers, nous avons décidé d'utiliser un logiciel de gestion de version. Nous avons choisi d'utiliser git\cite{git} et de stocker nos fichiers sur le site github\cite{github}. Ces derniers sont accessibles à l'adresse suivante : \textit{https://github.com/jeesay/vertigo.git}
 De plus, afin de programmer plus rapidement, nous avons choisi d'utiliser NetBeans\cite{netbeans}, un IDE\footnote{Integrated Development Environment}, dont la version que nous avons utilisée (7.3) est compatible avec git.
 Afin de rendre notre programme le plus performant possible, la complexité devra être la plus faible possible. 
 \chapter{Implantation} % Je ne sais pas si c est un nouveau chapitre ou si c'est dans ''Analyse des besoins``
 % Peut on commencer par une phrase disant que notre client nous impose une certaine implantation ?
-\section{API publique} 
+
+
+\section{API publique pour le Javascript} 
 L'API publique est accessible au programmateur client en javascript.
-Ce dernier aura accès aux classes Vertigo et Shape ainsi qu'à leur constructeur respectif.
+Ce dernier aura accès aux classes \texttt{Vertigo\_Viewer} et  \texttt{Shape} ainsi qu'à leur constructeur respectif.
 Il aura également accès à certaines méthodes de ces dernières telle que : 
 \\
+L'implémentation sera suffisamment flexible pour rajouter des méthodes publiques en fonction des désirs du client. 
+Pour l'instant : 
+\textbf{Pour la classe Vertigo\_Viewer (héritant de la classe PlugIn d'imageJ) :}
 
-\textbf{Pour la classe Vertigo\_Viewer (héritant de la classe Pluggin d'imageJ) :}
 \begin{itemize}
 \item setTitle(String)
 \item setBackgroundColor(float,float,float)
@@ -325,9 +355,9 @@ Il aura également accès à certaines méthodes de ces dernières telle que :
 \end{itemize}
 % il y aura aussi les classes Geometry et Material avec SetColor dans Material !
 
-\subsection{Partie de haut niveau : graphe de scène}
+\subsection{Implantation du graphe de scène}
 Nous avons prévu d'utiliser un graphe de scène. 
-Afin d'obtenir une image en 3D, nous devons implémenter un graphe non-orienté, que nous nommerons Graphe de scène. Celui- ci sera composé de plusieurs Objets propre à la 3D tel que la Camera (qui doit être la racine du graphe et donc ne pas avoir de parents), les lumières, la scène et les  \textit{shapes}. 
+Afin d'obtenir une image en 3D, nous devons implémenter un graphe non-orienté, que nous nommerons Graphe de scène. Celui- ci sera composé de plusieurs Objets propre à la 3D tel que la Camera (qui doit être la racine du graphe et donc ne pas avoir de parents), les lumières, la scène et les \textit{shapes}. 
 %\newpage
 
 \begin{figure}[h!]
@@ -349,13 +379,13 @@ Afin d'obtenir une image en 3D, nous devons implémenter un graphe non-orienté,
 
 \subsection{Partie graphique de bas-niveau}
 % Recherche à faire là dessus : 
-Renderer + ShaderUtils : classes utilitaires pour le chargement et compilation des \textit{shaders} (\textit{vertex} et \textit{fragment shaders}).
+ShaderUtils : classes utilitaires pour le chargement et compilation des \textit{shaders} (\textit{vertex} et \textit{fragment shaders}).
 Il doit y avoir deux versions de la classe Renderer, ces deux versions seront des sous classes de l'une des deux librairies (JOGL ou Lwjgl).
 Ce renderer va :
 \begin{itemize}
 \item Initialiser un contexte graphique. % c'est ce qui fait la connexion AWT ↔ OpenGL
 \item Initialiser les VBOs par lecture du graphe de scène.
-\item Initialiser les \textit{shaders}. % c'est ce qui transforme les points en pixels
+\item Initialiser les \texttt{Shader}. % c'est ce qui transforme les points en pixels
 \end{itemize}
 Enfin, il contiendra la méthode \textit{display()} responsable de l'affichage de l'image.
 % faudrait mettre le nom de la methode en gras ou en couleur... On verra ça + tard
@@ -377,7 +407,8 @@ Enfin, il contiendra la méthode \textit{display()} responsable de l'affichage d
 % Soit on met en format paysage et il y a un saut de page sauvage qui apparait.
 % Soit on laisse en portait et l image et tout petite et coupée...
 
- Avant de le connecter au logiciel ImageJ, nous afficherons tout d'abord un puis plusieurs objets 3D dont un cube, une pyramide, une sphère etc.  
+ Avant de le connecter au logiciel ImageJ, nous afficherons tout d'abord un cube, de différentes manières (en commençant par les sommets, puis en rajoutant des indexes, une texture, etc.). Puis différents objets simple tel que :
+ une pyramide, une sphère etc. Et enfin, différents objets expérimentaux issus du laboratoire. 
 
 
 \begin{landscape}
@@ -404,4 +435,7 @@ Enfin, il contiendra la méthode \textit{display()} responsable de l'affichage d
 \end{figure}
 
  \end{landscape}
+
+ 
+\lstinputlisting[language=JavaScript]{/home/tomo/Bureau/test1.js}
 \end{document}
