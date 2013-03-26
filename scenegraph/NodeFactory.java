@@ -63,4 +63,4 @@ public class NodeFactory {
         return a_node;
     }
 
-} // End of class ShapeFactory
+} // End of class NodeFactory
