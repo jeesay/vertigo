@@ -29,6 +29,8 @@ import java.io.Serializable;
   * @version specification 1.1, implementation $Revision: 1.8 $, $Date: 1999/10/05 07:03:50 $
   * @author Kenji hiranabe
   */
+
+@SuppressWarnings("serial")
 public class Point3 extends Tuple3 implements Serializable {
 /*
  * $Log: Point3.java,v $

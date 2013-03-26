@@ -53,6 +53,8 @@ import java.io.Serializable;
  * @version specification 1.1, implementation $Revision: 1.13 $, $Date: 1999/10/05 07:03:50 $
  * @author Kenji hiranabe
  */
+
+@SuppressWarnings("serial")
 public class Matrix4 implements Serializable {
 /*
  * $Log: Matrix4.java,v $
