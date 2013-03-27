@@ -356,7 +356,16 @@ Le \texttt{Renderer} est également chargé d'appliquer certains procédés comm
 Étant donné que nous avons décidé de rendre le \textit{plugin} compatible sous les librairies (JOGL et Lwjgl), une implémentation sera faite pour chacune des deux.
 Enfin le \texttt{Renderer} va permettre à l'utilisateur d'interagir avec l'objet en instanciant les événements liés à la souris et au clavier (rotation).
 
-Nous pouvons donc résumer le fonctionnement du moteur de rendu en trois parties : % figure du renderer à mettre
+\begin{figure}[h!]
+  \caption{Schéma de l'action de la classe \texttt{Renderer}.}
+  \hspace{-1cm}
+  \centering
+\includegraphics[scale=0.5]{h-GraphicsPipeline-480.png} 
+ \centering
+\label{verticesFragments}
+\end{figure}
+
+Nous pouvons donc résumer le fonctionnement du moteur de rendu en trois parties : (Fig. \ref{verticesFragments}) % figure du renderer à mettre
 \begin{itemize}
 \item Initialisation et envoi des BO vers la carte graphique via le moteur de rendu.
 \item Chargement des \texttt{Shader} (écrit en langage \textbf{GLSL}, classe \texttt{Shader}).
@@ -435,7 +444,7 @@ Si le temps le permet des données expérimentale provenant du laboratoire d'acc
  \begin{figure}[h!]
   \caption{Diagramme de Gantt}
   \hspace{-4.7cm}
-    \includegraphics[scale=0.55]{diag_gantt.png}
+    \includegraphics[scale=0.55]{diag_gantt2.png}
 \end{figure}
  
  % \begin{figure}[h!]
