@@ -43,6 +43,7 @@ public class Node {
     private ArrayList<Node> children;
     private Matrix4 matrix;
     protected String name;
+    protected NodeFactory factory;
 
     public Node() {
         children = new ArrayList();
@@ -166,5 +167,16 @@ public class Node {
             }
         }
         
+    }
+    /**
+     * Add a new node
+     *
+     * @return Node.
+     */
+    public Node addNewNode(String type){
+        
+        Node newNode= factory.get(type);
+        this.add(newNode);
+        return newNode;
     }
 } // End of class Node
