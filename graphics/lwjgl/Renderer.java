@@ -24,7 +24,7 @@
  *Olivier Catoliquot
  *Clement Delestre
  */
-
+package vertigo.graphics.lwjgl;
 class Renderer  { 
     //public Renderer(){} 
     //singleton
