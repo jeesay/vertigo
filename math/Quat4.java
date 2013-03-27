@@ -24,6 +24,8 @@ import java.io.Serializable;
  * @version specification 1.1, implementation $Revision: 1.9 $, $Date: 1999/10/05 07:03:50 $
  * @author Kenji hiranabe
  */
+
+@SuppressWarnings("serial")
 public class Quat4 extends Tuple4 implements Serializable {
 /*
  * $Log: Quat4.java,v $

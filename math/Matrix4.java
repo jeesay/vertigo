@@ -53,6 +53,8 @@ import java.io.Serializable;
  * @version specification 1.1, implementation $Revision: 1.13 $, $Date: 1999/10/05 07:03:50 $
  * @author Kenji hiranabe
  */
+
+@SuppressWarnings("serial")
 public class Matrix4 implements Serializable {
 /*
  * $Log: Matrix4.java,v $
@@ -958,10 +960,10 @@ public class Matrix4 implements Serializable {
       * @param m1 the matrix to be copied
       */
     public final void set(Matrix4 m1) {
-	m00 = (float)m1.m00; m01 = (float)m1.m01; m02 = (float)m1.m02; m03 = (float)m1.m03;
-	m10 = (float)m1.m10; m11 = (float)m1.m11; m12 = (float)m1.m12; m13 = (float)m1.m13;
-	m20 = (float)m1.m20; m21 = (float)m1.m21; m22 = (float)m1.m22; m23 = (float)m1.m23;
-	m30 = (float)m1.m30; m31 = (float)m1.m31; m32 = (float)m1.m32; m33 = (float)m1.m33;
+	m00 = m1.m00; m01 = m1.m01; m02 = m1.m02; m03 = m1.m03;
+	m10 = m1.m10; m11 = m1.m11; m12 = m1.m12; m13 = m1.m13;
+	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22; m23 = m1.m23;
+	m30 = m1.m30; m31 = m1.m31; m32 = m1.m32; m33 = m1.m33;
     }
 
 
@@ -1139,8 +1141,8 @@ public class Matrix4 implements Serializable {
      * @param angle the angle to rotate about the X axis in radians
      */
     public final void rotX(float angle)  {
-	float c = (float)Math.cos(angle);
-	float s = (float)Math.sin(angle);
+	float c = (float) Math.cos(angle);
+	float s = (float) Math.sin(angle);
 	m00 = 1.0f; m01 = 0.0f; m02 = 0.0f; m03 = 0.0f;
 	m10 = 0.0f; m11 = c;    m12 = -s;   m13 = 0.0f;
 	m20 = 0.0f; m21 = s;    m22 = c;    m23 = 0.0f;
@@ -1153,8 +1155,8 @@ public class Matrix4 implements Serializable {
      * @param angle the angle to rotate about the Y axis in radians
      */
     public final void rotY(float angle)  {
-	float c = (float)Math.cos(angle);
-	float s = (float)Math.sin(angle);
+	float c = (float) Math.cos(angle);
+	float s = (float) Math.sin(angle);
 	m00 = c;    m01 = 0.0f; m02 = s;    m03 = 0.0f;
 	m10 = 0.0f; m11 = 1.0f; m12 = 0.0f; m13 = 0.0f;
 	m20 = -s;   m21 = 0.0f; m22 = c;    m23 = 0.0f;
@@ -1167,8 +1169,8 @@ public class Matrix4 implements Serializable {
      * @param angle the angle to rotate about the Z axis in radians
      */
     public final void rotZ(float angle)  {
-	float c = (float)Math.cos(angle);
-	float s = (float)Math.sin(angle);
+	float c = (float) Math.cos(angle);
+	float s = (float) Math.sin(angle);
 	m00 = c;    m01 = -s;   m02 = 0.0f; m03 = 0.0f;
 	m10 = s;    m11 = c;    m12 = 0.0f; m13 = 0.0f;
 	m20 = 0.0f; m21 = 0.0f; m22 = 1.0f; m23 = 0.0f;
@@ -1625,7 +1627,7 @@ public class Matrix4 implements Serializable {
 	// Not complete but fast and reasonable.
 	// See comment in Matrix3d.
 
-	float s = (float)Math.sqrt(
+	float s = (float) Math.sqrt(
 	    (
 	     m00*m00 + m10*m10 + m20*m20 +
 	     m01*m01 + m11*m11 + m21*m21 +
@@ -1661,7 +1663,7 @@ public class Matrix4 implements Serializable {
 	// Not complete but fast and reasonable.
 	// See comment in Matrix3d.
 
-	float s = (float)Math.sqrt(
+	float s = (float) Math.sqrt(
 	    (
 	     m00*m00 + m10*m10 + m20*m20 +
 	     m01*m01 + m11*m11 + m21*m21 +
@@ -1700,52 +1702,52 @@ public class Matrix4 implements Serializable {
 	m20 = m1.m20; m21 = m1.m21; m22 = m1.m22;
     }
 
-    private void setFromQuat(double x, double y, double z, double w) {
-	double n = x*x + y*y + z*z + w*w;
-	double s = (n > 0.0) ? (2.0/n) : 0.0;
+    private void setFromQuat(float x, float y, float z, float w) {
+	float n = x*x + y*y + z*z + w*w;
+	float s = (n > 0.0f) ? (2.0f/n) : 0.0f;
 
-	double xs = x*s,  ys = y*s,  zs = z*s;
-	double wx = w*xs, wy = w*ys, wz = w*zs;
-	double xx = x*xs, xy = x*ys, xz = x*zs;
-	double yy = y*ys, yz = y*zs, zz = z*zs;
+	float xs = x*s,  ys = y*s,  zs = z*s;
+	float wx = w*xs, wy = w*ys, wz = w*zs;
+	float xx = x*xs, xy = x*ys, xz = x*zs;
+	float yy = y*ys, yz = y*zs, zz = z*zs;
 
 	setIdentity();
-	m00 = (float)(1.0 - (yy + zz));	m01 = (float)(xy - wz);         m02 = (float)(xz + wy);
-	m10 = (float)(xy + wz);         m11 = (float)(1.0 - (xx + zz)); m12 = (float)(yz - wx);
-	m20 = (float)(xz - wy);         m21 = (float)(yz + wx);         m22 = (float)(1.0 - (xx + yy));
+	m00 = (1.0f - (yy + zz));	m01 = (xy - wz);         m02 = (xz + wy);
+	m10 = (xy + wz);         m11 = (1.0f - (xx + zz)); m12 = (yz - wx);
+	m20 = (xz - wy);         m21 = (yz + wx);         m22 = (1.0f - (xx + yy));
     }
 
-    private void setFromAxisAngle(double x, double y, double z, double angle) {
+    private void setFromAxisAngle(float x, float y, float z, float angle) {
 	// Taken from Rick's which is taken from Wertz. pg. 412
 	// Bug Fixed and changed into right-handed by hiranabe
-	double n = Math.sqrt(x*x + y*y + z*z);
+	float n = (float) Math.sqrt(x*x + y*y + z*z);
 	// zero-div may occur
 	n = 1/n;
 	x *= n;
 	y *= n;
 	z *= n;
-	double c = Math.cos(angle);
-	double s = Math.sin(angle);
-	double omc = 1.0 - c;
+	float c = (float) Math.cos(angle);
+	float s = (float) Math.sin(angle);
+	float omc = 1.0f - c;
 
-	m00 = (float)(c + x*x*omc);
-	m11 = (float)(c + y*y*omc);
-	m22 = (float)(c + z*z*omc);
+	m00 = (c + x*x*omc);
+	m11 = (c + y*y*omc);
+	m22 = (c + z*z*omc);
 
-	double tmp1 = x*y*omc;
-	double tmp2 = z*s;
-	m01 = (float)(tmp1 - tmp2);
-	m10 = (float)(tmp1 + tmp2);
+	float tmp1 = x*y*omc;
+	float tmp2 = z*s;
+	m01 = (tmp1 - tmp2);
+	m10 = (tmp1 + tmp2);
 
 	tmp1 = x*z*omc;
 	tmp2 = y*s;
-	m02 = (float)(tmp1 + tmp2);
-	m20 = (float)(tmp1 - tmp2);
+	m02 = (tmp1 + tmp2);
+	m20 = (tmp1 - tmp2);
 
 	tmp1 = y*z*omc;
 	tmp2 = x*s;
-	m12 = (float)(tmp1 - tmp2);
-	m21 = (float)(tmp1 + tmp2);
+	m12 = (tmp1 - tmp2);
+	m21 = (tmp1 + tmp2);
     }
 
 } // End of class Matrix4
