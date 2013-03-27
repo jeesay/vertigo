@@ -28,7 +28,8 @@ public final class ShaderUtils {
     // loads the shaders
     // in this example we assume that the shader is a file located in the applications JAR file.
     //
-/****
+/****  TEST de PUSH
+ * 
     public static String[] loadShader(String name) {
         StringBuilder sb = new StringBuilder();
         System.out.println(name);
