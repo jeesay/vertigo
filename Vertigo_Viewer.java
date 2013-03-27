@@ -24,7 +24,7 @@
 * Olivier Catoliquot
 * Clement Delestre
 */
-package vertigo;
+
 
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
@@ -45,6 +45,11 @@ public class Vertigo_Viewer implements PlugIn {
     private Camera camera_;
     private Renderer renderer;
 
+    public Vertigo_Viewer() {
+        default_scenegraph();
+    }
+    
+    @Override
     public void run (String options) {
 test();
     }
@@ -123,6 +128,12 @@ test();
        
 	
 	
+    }
+
+    private void default_scenegraph() {
+        scene_ = new Scene();
+        Light light=new Light();
+        scene_.add(light);
     }
 
 }// end of class Vertigo_Viewer
