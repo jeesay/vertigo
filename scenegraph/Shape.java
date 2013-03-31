@@ -28,8 +28,8 @@
 package vertigo.scenegraph;
 
 public class Shape extends Node {
-    Geometry geo;
-    Material material;
+    protected Geometry geo;
+    protected Material material;
 
     public Shape(){
 	super();
