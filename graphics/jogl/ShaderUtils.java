@@ -37,7 +37,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import ij.IJ;
 
-
+import vertigo.graphics.ShaderProg;
 import javax.media.opengl.GL3;
 
 public class ShaderUtils {

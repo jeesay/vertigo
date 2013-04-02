@@ -1,6 +1,3 @@
-
-package vertigo.math;
-
 /*
    Copyright (C) 1997,1998,1999
    Kenji Hiranabe, Eiwa System Management, Inc.
@@ -18,6 +15,7 @@ package vertigo.math;
    purpose.  It is provided "AS IS" with NO WARRANTY.
 */
 
+package vertigo.math;
 import java.io.Serializable;
 
 /**

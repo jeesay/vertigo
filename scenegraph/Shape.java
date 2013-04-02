@@ -28,8 +28,8 @@
 package vertigo.scenegraph;
 
 public class Shape extends Node {
-    Geometry geo;
-    Material material;
+    protected Geometry geo;
+    protected Material material;
 
     public Shape(){
 	super();
@@ -37,7 +37,7 @@ public class Shape extends Node {
         material = new Material();
     }
     
-    public void addGeometry(String type, float[] data) {
+    public void setGeometry(String type, float[] data) {
     	// check if the string 'type' contains comma -> packedGeometry otherwise single Geometry
     	if (isPacked(type) ) 
     		geo.setPackedGeometry(type,data);
@@ -65,8 +65,12 @@ public class Shape extends Node {
     
     private boolean isPacked(String type) {
     	// TODO
-    	return false;
+            boolean coma=false;
+         coma=type.matches(".*,.*");
+    	return coma;
     }
     
-    
+    public void setDrawingStyle(String style){
+        //TODO
+    }
 } // End of class Shape

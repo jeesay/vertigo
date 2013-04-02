@@ -1,8 +1,14 @@
 /*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package vertigo.math;
+
+/*
  * $Id:$
  *
- * crazybio_viewer: 3D Viewer Plugin for ImageJ.
- * Copyright (C) 2013  Jean-Christophe Taveau.
+ * VolTIJ, VOLume viewing Tools for ImageJ.
+ * Copyright (C) 2009  Jean-Christophe Taveau.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,27 +26,20 @@
  * 02110-1301  USA, or see the FSF site: http://www.fsf.org.
  *
  * Authors :
- * Florin Buga
- * Olivier Catoliquot
- * Clement Delestre
+ *  Michael Vacher
+ *  Mickael Escudero
+ *  Ibouniyamine Nabihoudine
+ *  Frederic Romagné
  */
 
-package vertigo.scenegraph;
-public class Light extends Node {
-public static int count = 0; 
-    public Light (){
-	super();
-        count++;
-        name="Light_n"+count;
-    }
 
-    public void add(Node anode){
-	System.out.println("Light must not have any children");
-    }
-    public int getNumberCamera(){
-        return count;
-    }
-    public void setType(String type){
-        //TODO
-    }
-} //end of class Light
+
+public class Point2 {
+
+   public float x,  y;
+
+   public Point2(float x, float y) {
+      this.x = x;
+      this.y = y;
+   }
+}

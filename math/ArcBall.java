@@ -137,7 +137,7 @@ public class ArcBall  {
         //Copy parameter into temp point
         Point2 tempPoint = new Point2(point.x, point.y);
 
-        setBounds((int) this.getParent().getFloatProperty("viewportWidth"), (int) this.getParent().getFloatProperty("viewportHeight"));
+        // TODO setBounds((int) this.getParent().getFloatProperty("viewportWidth"), (int) this.getParent().getFloatProperty("viewportHeight"));
 
         //Adjust point coords and scale down to range of [-1 ... 1]
         tempPoint.x = (tempPoint.x * this.adjustWidth) - 1.0f;

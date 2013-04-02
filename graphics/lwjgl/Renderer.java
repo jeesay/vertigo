@@ -24,8 +24,15 @@
  *Olivier Catoliquot
  *Clement Delestre
  */
+package vertigo.graphics.lwjgl;
+
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.LWJGLException;
+
 
 class Renderer  { 
+
     //public Renderer(){} 
     //singleton
     public void initShader(){
@@ -36,8 +43,20 @@ class Renderer  {
     }
 
     public void display(){
-
-	//boucle for(Shape)
-
+        try {
+            Display.setDisplayMode(new DisplayMode(800,600));
+            Display.create();
+        } catch (LWJGLException e){
+            e.printStackTrace();
+            System.exit(0);
+        }
+        while (!Display.isCloseRequested()){
+            Display.update();
+        }
+        Display.destroy();
     }
+    public void main(String[]argv) {
+        new Renderer().display();
+    }
+   	//boucle for(Shape)
 }

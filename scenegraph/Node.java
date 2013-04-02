@@ -28,13 +28,13 @@ package vertigo.scenegraph;
 
 import java.util.ArrayList;
 import vertigo.math.Matrix4;
+import vertigo.math.Vector3;
 import java.util.Iterator;
 
 public class Node {
 
     /**
      * Classe Node
-     *
      * @author Florin Buga Olivier Catoliquot Clement Delestre
      * @version 1.0
      *
@@ -43,6 +43,7 @@ public class Node {
     private ArrayList<Node> children;
     private Matrix4 matrix;
     protected String name;
+    protected NodeFactory factory;
 
     public static int MATRIX = 0x1;
     public static int VOB = 0x2;
@@ -60,8 +61,7 @@ public class Node {
     }
 
     /**
-     * Sets Node name
-     *
+     * Set Node name
      * @param String
      */
     public void setName(String name) {
@@ -70,7 +70,6 @@ public class Node {
 
     /**
      * Get Node name
-     *
      * @return String
      */
     public String getName() {
@@ -78,8 +77,7 @@ public class Node {
     }
 
     /**
-     * Sets node's Parent
-     *
+     * Set node's Parent
      * @param Node
      */
     public void setParent(Node a_node) {
@@ -88,7 +86,6 @@ public class Node {
 
     /**
      * Method for add one child.
-     *
      * @param Node anode
      */
     public void add(Node a_node) {
@@ -98,7 +95,6 @@ public class Node {
 
     /**
      * Remove one child.
-     *
      * @param Node anode
      */
     public void remove(Node a_node) {
@@ -107,7 +103,6 @@ public class Node {
 
     /**
      * Get the Node's children.
-     *
      * @param Node anode
      * @return ArrayList
      */
@@ -173,5 +168,46 @@ public class Node {
             }
         }
         
+    }
+    /**
+     * Add a new node
+     *
+     * @return Node.
+     */
+    public Node addNewNode(String type){
+        Node newNode= factory.get(type);
+        this.add(newNode);
+        return newNode;
+    }
+     /**
+     * Set Position
+     *
+     * @param tx,ty,tz as floats
+     */
+    public void setPosition(float tx,float ty, float tz){
+        //equivalent to setTranslation
+        //TODO with Matrix4
+        matrix.setTranslation(new Vector3(tx,ty,tz));        
+    }
+     /**
+     * Set Direction
+     *
+     * @param x,y,z as floats
+     */
+    public void setDirection(float x,float y, float z){
+        //TODO with Matrix4 (look at)
+    }
+     /**
+     * Set the scale
+     *
+     * @param scale as floats
+     */
+    public void setScale(float s){
+        //TODO
+        matrix.setScale(s);
+    }
+   
+    public boolean check(){
+        return true; // TODO
     }
 } // End of class Node

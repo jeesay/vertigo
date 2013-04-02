@@ -49,7 +49,7 @@ public class IBO extends BO {
     }
 
     public int getSize() {
-        return getSize(this.type);
+        return buffer.capacity();
     }
 
 } // End of class IBO
