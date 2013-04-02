@@ -70,5 +70,7 @@ public class Shape extends Node {
     	return coma;
     }
     
-    
+    public void setDrawingStyle(String style){
+        //TODO
+    }
 } // End of class Shape

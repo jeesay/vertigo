@@ -26,16 +26,20 @@
  */
 package vertigo.scenegraph;
 
+import java.util.Arrays;
+import java.util.List;
 import vertigo.math.Matrix4;
+import ij.IJ;
 
 public class Camera extends Node {
 
     private Matrix4 proj_matrix;
-
+private static List<String> output = Arrays.asList("Screen","Image");
     public Camera() {
         super();
         proj_matrix = new Matrix4();
         name = "Camera";
+        this.setOutput("Screen");
     }
 
     public void setParent(Node anode) {
@@ -54,12 +58,22 @@ public class Camera extends Node {
 
     public void set(String type, float[] params) {
         //params, float or int ?
+        // params = eyes distance, convergence
         // TODO
     }
 
     public void setOutput(String type) {
         // screen or image. Default=screen
         //TODO
+        int index = output.indexOf(type);
+        switch (index) {
+            case 0: //SCREEN TODO 
+                break;
+            case 1 : // IMAGE TODO
+                break;
+            default :
+                IJ.log("Valeur incorrecte. Veuillez entrer Screen ou Image.");
+        }
     }
 
     /**
