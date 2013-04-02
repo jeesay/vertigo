@@ -44,6 +44,13 @@ public class Node {
     private Matrix4 matrix;
     protected String name;
 
+    public static int MATRIX = 0x1;
+    public static int VOB = 0x2;
+    public static int SHADER = 0x4;
+    public static int NORMAL = 0x8;
+    public static int COLOR = 0xA;
+
+
     public Node() {
         children = new ArrayList();
         Node parent = null;
