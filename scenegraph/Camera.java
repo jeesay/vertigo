@@ -55,7 +55,14 @@ private static List<String> output = Arrays.asList("Screen","Image");
     public void setType(String type) {
         // TO DO
     }
-
+public void setProjection(String type){
+    
+}
+public void setProjection(String type, float[] params){
+    //params, float or int ?
+        // params = fov,aspect,far,near
+        // TODO
+}
     public void set(String type, float[] params) {
         //params, float or int ?
         // params = eyes distance, convergence
