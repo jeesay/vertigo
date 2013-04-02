@@ -31,33 +31,40 @@ import vertigo.math.Matrix4;
 import vertigo.math.Vector3;
 import java.util.Iterator;
 
-public class Node {
-
     /**
-     * Classe Node
-     * @author Florin Buga Olivier Catoliquot Clement Delestre
-     * @version 1.0
+     * Class Node
+     * @author Florin Buga
+     * @author Olivier Catoliquot
+     * @author Clement Delestre
+     * @version 0.1
      *
      */
+public class Node {
+
     private Node parent;
     private ArrayList<Node> children;
     private Matrix4 matrix;
+    private Matrix4 ModelView;
+    private byte dirty_;
     protected String name;
-    protected NodeFactory factory;
+
 
     public static int MATRIX = 0x1;
-    public static int VOB = 0x2;
+    public static int GEOMETRY = 0x2;
     public static int SHADER = 0x4;
     public static int NORMAL = 0x8;
     public static int COLOR = 0xA;
 
-
+    /**
+     * Constructor
+     */
     public Node() {
         children = new ArrayList();
         Node parent = null;
         matrix = new Matrix4();
         matrix.setIdentity();
         name = "node";
+        dirty_ = 0xff;
     }
 
     /**
@@ -91,6 +98,20 @@ public class Node {
     public void add(Node a_node) {
         children.add(a_node);
         a_node.setParent(this);
+    }
+
+    /**
+     * Add a new node of type 'type'
+     *
+     * @param String type of node added to the scene graph.
+     * Allowed types are: Branch, Camera, Cube, Light, Node, Shape, Transform
+     * @return a node of g‪ivent type.
+     */
+    public Node addNewNode(String type){
+        Node newNode= NodeFactory.get(type);
+        this.add(newNode);
+        newNode.setParent(this);
+        return newNode;
     }
 
     /**
@@ -137,7 +158,100 @@ public class Node {
     public int size() {
         return children.size();
     }
-/**
+
+    /**
+     * Set Position
+     *
+     * @param tx,ty,tz as floats
+     */
+    public void setPosition(float tx, float ty, float tz){
+        //equivalent to setTranslation
+        //TODO with Matrix4
+        matrix.setTranslation(new Vector3(tx,ty,tz));
+    }
+
+    /**
+     * Set Direction
+     *
+     * @param x,y,z as floats
+     */
+    public void setDirection(float x,float y, float z){
+        //TODO with Matrix4 (look at)
+    }
+
+    /**
+     * Set the scale
+     *
+     * @param scale as floats
+     */
+    public void setScale(float s){
+        //TODO
+        matrix.setScale(s);
+    }
+   
+    /**
+     * Get status of this node
+     *
+     * @return Flag giving the overall status of this node
+     */
+    protected boolean isDirty(){
+        return ( (dirty_ & 0xff) == 0xff);
+    }
+
+    /**
+     * Get status of this node
+     *
+     * @param Only check the status of a given properties: MATRIX, VBO, SHADER
+     * @return Flag giving the status of this node
+     */
+    protected boolean isDirty(int flag){
+        return ( (dirty_ & flag) == flag);
+    }
+
+    /**
+     * Set status of this node
+     *
+     * @param Only check the status of a given properties: MATRIX, VBO, SHADER
+     * @return Flag giving the status of this node
+     */
+    protected boolean setDirty(int flag, boolean value){
+        if (value)
+            dirty_ = dirty_ | flag;
+        else
+            dirty_ = dirty_ & ~flag;
+    }
+
+    /**
+     * Set status of this node and children
+     *
+     * @param Only check the status of a given properties: MATRIX, VBO, SHADER
+     * @return Flag giving the status of this node
+     */
+    protected boolean setAllDirty(int flag, boolean value){
+        if (value)
+            dirty_ = dirty_ | flag;
+        else
+            dirty_ = dirty_ & ~flag;
+        for (Node n : children)
+            n.setAllDirty(flag,value);
+    }
+
+
+    public boolean check(){
+        return true; // TODO
+    }
+
+    protected void accept(Visitor visitor) {
+        // In node, the visitor must be accepted by children to
+        // propagate its action.
+        visitor.visit(this);
+        for (Node child : getChildren()) {
+            child.accept(visitor);
+        }
+    }
+
+
+   /**
      * Get the root.
      *
      * @return Node.
@@ -169,45 +283,6 @@ public class Node {
         }
         
     }
-    /**
-     * Add a new node
-     *
-     * @return Node.
-     */
-    public Node addNewNode(String type){
-        Node newNode= factory.get(type);
-        this.add(newNode);
-        return newNode;
-    }
-     /**
-     * Set Position
-     *
-     * @param tx,ty,tz as floats
-     */
-    public void setPosition(float tx,float ty, float tz){
-        //equivalent to setTranslation
-        //TODO with Matrix4
-        matrix.setTranslation(new Vector3(tx,ty,tz));        
-    }
-     /**
-     * Set Direction
-     *
-     * @param x,y,z as floats
-     */
-    public void setDirection(float x,float y, float z){
-        //TODO with Matrix4 (look at)
-    }
-     /**
-     * Set the scale
-     *
-     * @param scale as floats
-     */
-    public void setScale(float s){
-        //TODO
-        matrix.setScale(s);
-    }
-   
-    public boolean check(){
-        return true; // TODO
-    }
+
+
 } // End of class Node
