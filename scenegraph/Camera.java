@@ -34,7 +34,9 @@ import ij.IJ;
 public class Camera extends Node {
 
     private Matrix4 proj_matrix;
-private static List<String> output = Arrays.asList("Screen","Image");
+    private static List<String> output = Arrays.asList("Screen", "Image");
+    private static List<String> types = Arrays.asList("Perspective", "Orthographic");
+
     public Camera() {
         super();
         proj_matrix = new Matrix4();
@@ -42,33 +44,91 @@ private static List<String> output = Arrays.asList("Screen","Image");
         this.setOutput("Screen");
     }
 
+    /**
+     * Set the Camera's parent
+     *
+     * @param a node
+     */
     public void setParent(Node anode) {
         System.out.println("Scene must not have any parents...");
     }
 
+    /**
+     * Set the Camera's perspective
+     *
+     * @param fovy,aspect, zNear, zFar
+     */
     public void setPerspective(float fovy, float aspect, float zNear, float zFar) {
     }
 
+    /**
+     * Set the stereoscopic
+     */
     public void setStereoscopic() {
     }
 
+    /**
+     * Set the Camera's type ("Mono" or "Stereo")
+     *
+     * @param type as String
+     */
     public void setType(String type) {
         // TO DO
     }
-public void setProjection(String type){
-    
-}
-public void setProjection(String type, float[] params){
-    //params, float or int ?
+
+    /**
+     * Set the Camera's projection
+     *
+     * @param type as String
+     */
+    public void setProjection(String type) {
+        int index = types.indexOf(name);
+        switch (index) {
+            case 0: //TODO
+                break;
+            case 1: // TODO
+                break;
+            default:
+                IJ.log("Enter \"Perspective\" or \"Orthographic\"");
+        }
+    }
+
+    /**
+     * Set the Camera's projection
+     *
+     * @param type as String and parametres as float[]
+     */
+    public void setProjection(String type, float[] params) {
         // params = fov,aspect,far,near
         // TODO
-}
+          int index = types.indexOf(name);
+        switch (index) {
+            case 0: //TODO 
+                perspective(params[0],params[1],params[2],params[3]);
+                break;
+            case 1: // TODO
+               ortho(params[0],params[1],params[2],params[3],params[4],params[5]);
+                break;
+            default:
+                IJ.log("Enter \"Perspective\" or \"Orthographic\"");
+        }
+    }
+
+    /**
+     * Set the Camera's type
+     *
+     * @param type as String parametres as float[]
+     */
     public void set(String type, float[] params) {
-        //params, float or int ?
         // params = eyes distance, convergence
         // TODO
     }
 
+    /**
+     * Set the Camera's output "Screen" or "Image" ("Screen" by default)
+     *
+     * @param type as String
+     */
     public void setOutput(String type) {
         // screen or image. Default=screen
         //TODO
@@ -76,9 +136,9 @@ public void setProjection(String type, float[] params){
         switch (index) {
             case 0: //SCREEN TODO 
                 break;
-            case 1 : // IMAGE TODO
+            case 1: // IMAGE TODO
                 break;
-            default :
+            default:
                 IJ.log("Valeur incorrecte. Veuillez entrer Screen ou Image.");
         }
     }

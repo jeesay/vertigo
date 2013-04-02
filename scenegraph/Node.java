@@ -28,13 +28,13 @@ package vertigo.scenegraph;
 
 import java.util.ArrayList;
 import vertigo.math.Matrix4;
+import vertigo.math.Vector3;
 import java.util.Iterator;
 
 public class Node {
 
     /**
      * Classe Node
-     *
      * @author Florin Buga Olivier Catoliquot Clement Delestre
      * @version 1.0
      *
@@ -54,8 +54,7 @@ public class Node {
     }
 
     /**
-     * Sets Node name
-     *
+     * Set Node name
      * @param String
      */
     public void setName(String name) {
@@ -64,7 +63,6 @@ public class Node {
 
     /**
      * Get Node name
-     *
      * @return String
      */
     public String getName() {
@@ -72,8 +70,7 @@ public class Node {
     }
 
     /**
-     * Sets node's Parent
-     *
+     * Set node's Parent
      * @param Node
      */
     public void setParent(Node a_node) {
@@ -82,7 +79,6 @@ public class Node {
 
     /**
      * Method for add one child.
-     *
      * @param Node anode
      */
     public void add(Node a_node) {
@@ -92,7 +88,6 @@ public class Node {
 
     /**
      * Remove one child.
-     *
      * @param Node anode
      */
     public void remove(Node a_node) {
@@ -101,7 +96,6 @@ public class Node {
 
     /**
      * Get the Node's children.
-     *
      * @param Node anode
      * @return ArrayList
      */
@@ -178,18 +172,34 @@ public class Node {
         this.add(newNode);
         return newNode;
     }
-    public void setPosition(int x,int y, int z){
+     /**
+     * Set Position
+     *
+     * @param tx,ty,tz as floats
+     */
+    public void setPosition(float tx,float ty, float tz){
+        //equivalent to setTranslation
         //TODO with Matrix4
+        matrix.setTranslation(new Vector3(tx,ty,tz));        
     }
-    public void setDirection(int x,int y, int z){
-        //TODO with Matrix4
+     /**
+     * Set Direction
+     *
+     * @param x,y,z as floats
+     */
+    public void setDirection(float x,float y, float z){
+        //TODO with Matrix4 (look at)
     }
-    public void setScale(int sx,int sy, int sz){
+     /**
+     * Set the scale
+     *
+     * @param scale as floats
+     */
+    public void setScale(float s){
         //TODO
+        matrix.setScale(s);
     }
-    public void setTranslation(int x,int y,int z){
-        
-    }
+   
     public boolean check(){
         return true; // TODO
     }
