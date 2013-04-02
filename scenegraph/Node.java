@@ -174,9 +174,23 @@ public class Node {
      * @return Node.
      */
     public Node addNewNode(String type){
-        
         Node newNode= factory.get(type);
         this.add(newNode);
         return newNode;
+    }
+    public void setPosition(int x,int y, int z){
+        //TODO with Matrix4
+    }
+    public void setDirection(int x,int y, int z){
+        //TODO with Matrix4
+    }
+    public void setScale(int sx,int sy, int sz){
+        //TODO
+    }
+    public void setTranslation(int x,int y,int z){
+        
+    }
+    public boolean check(){
+        return true; // TODO
     }
 } // End of class Node

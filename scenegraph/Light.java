@@ -40,5 +40,7 @@ public static int count = 0;
     public int getNumberCamera(){
         return count;
     }
-
+    public void setType(String type){
+        //TODO
+    }
 } //end of class Light
