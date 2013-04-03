@@ -38,21 +38,37 @@ public class Shape extends Node {
     }
     
     public void setGeometry(String type, float[] data) {
-    	// check if the string 'type' contains comma -> packedGeometry otherwise single Geometry
-    	if (isPacked(type) ) 
-    		geo.setPackedGeometry(type,data);
-    	else
-    		geo.setGeometry(type,data);
-    	
+    	geo.setGeometry(type,data);
+        if (type.equals("V3F") )
+            bbox.expand(data);
+    }
+    
+    public void setGeometry(String[] types, float[] data) {
+        if (types.length == 1 && types[0].equals("V3F") ) {
+    		geo.setGeometry(types[0],data);
+        	bbox.expand(data);
+        }
+        else {
+    	    geo.setGeometry(types,data);
+            int offset = 0; // TODO
+            int step = 0; // TODO
+            for (int i=offset;i< data.length;i+=step)
+        	bbox.expand(data[i],data[i+1],data[i+2]);
+        }
     }
     
     public void setIndexedGeometry(String type, float[] data, int[] indices) {
-    	// check if the string 'type' contains comma -> packedGeometry otherwise single Geometry
-    	if (isPacked(type) ) 
-    		geo.setPackedGeometry(type,data);
-    	else
-    		geo.setGeometry(type,data);
-		geo.setIndices(indices);    	
+    	setGeometry(type,data);
+	setIndices(indices);
+    }
+    
+    public void setIndexedGeometry(String[] types, float[] data, int[] indices) {
+    	setGeometry(types,data);
+	setIndices(indices);
+    }
+    
+    public void setIndices(int[] indices) {
+	geo.setIndices(indices);
     }
     
     public void setColor(float red, float green, float blue, float alpha) {
