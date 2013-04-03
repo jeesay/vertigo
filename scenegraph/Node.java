@@ -27,6 +27,7 @@
 package vertigo.scenegraph;
 
 import java.util.ArrayList;
+import vertigo.graphics.AABB;
 import vertigo.math.Matrix4;
 import vertigo.math.Vector3;
 import java.util.Iterator;
@@ -45,6 +46,7 @@ public class Node {
     private ArrayList<Node> children;
     private Matrix4 matrix;
     private Matrix4 ModelView;
+    private AABB bbox;
     private byte dirty_;
     protected String name;
 
@@ -52,7 +54,7 @@ public class Node {
     public static int MATRIX = 0x1;
     public static int GEOMETRY = 0x2;
     public static int SHADER = 0x4;
-    public static int NORMAL = 0x8;
+    public static int AABB = 0x8;
     public static int COLOR = 0xA;
 
     /**
@@ -63,6 +65,7 @@ public class Node {
         Node parent = null;
         matrix = new Matrix4();
         matrix.setIdentity();
+        bbox = new AABB();
         name = "node";
         dirty_ = 0xff;
     }
