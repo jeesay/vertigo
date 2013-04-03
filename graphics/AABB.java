@@ -74,7 +74,7 @@ public class AABB {
      * Get a bounding sphere enclosing this bounding box
      * @return an array of 4 floats containing XYZ-coordinates of the center and the sphere radius, respectively.
      */
-    public Vector4 getBoundingShere() {
+    public float[] getBoundingShere() {
         return new float[] {
             (min_x + max_x)/2.0f,
             (min_y + max_y)/2.0f, 
@@ -163,7 +163,7 @@ public class AABB {
     }
 
     public Vector3 getMax() {
-      return new Vector3(max_x,maxx_y,max_z);
+      return new Vector3(max_x,max_y,max_z);
     }
 
     public float getWidth() {
