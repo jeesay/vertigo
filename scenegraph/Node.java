@@ -163,14 +163,36 @@ public class Node {
     }
 
     /**
+     * Get the Bounding Box
+     *
+     * @return Node.
+     */
+    public AABB getBoundingBox() {
+        if (bbox.isEmpty() ) {
+            for (Node child : getChildren() )
+                bbox.expand(child.getBoundingBox() );
+            setDirty(AABB,false);
+        }
+
+        return bbox;
+    }
+
+    /**
+     * Set Translation
+     *
+     * @param tx,ty,tz as floats
+     */
+    public void setTranslation(float tx, float ty, float tz){
+        matrix.setTranslation(new Vector3(tx,ty,tz));
+    }
+
+    /**
      * Set Position
      *
      * @param tx,ty,tz as floats
      */
     public void setPosition(float tx, float ty, float tz){
-        //equivalent to setTranslation
-        //TODO with Matrix4
-        matrix.setTranslation(new Vector3(tx,ty,tz));
+        setTranslation(tx,ty,tz);
     }
 
     /**
@@ -197,7 +219,7 @@ public class Node {
      *
      * @return Flag giving the overall status of this node
      */
-    protected boolean isDirty(){
+    public boolean isDirty(){
         return ( (dirty_ & 0xff) == 0xff);
     }
 
@@ -207,7 +229,7 @@ public class Node {
      * @param Only check the status of a given properties: MATRIX, VBO, SHADER
      * @return Flag giving the status of this node
      */
-    protected boolean isDirty(int flag){
+    public boolean isDirty(int flag){
         return ( (dirty_ & flag) == flag);
     }
 
@@ -217,7 +239,7 @@ public class Node {
      * @param Only check the status of a given properties: MATRIX, VBO, SHADER
      * @return Flag giving the status of this node
      */
-    protected boolean setDirty(int flag, boolean value){
+    public boolean setDirty(int flag, boolean value){
         if (value)
             dirty_ = dirty_ | flag;
         else
@@ -230,7 +252,7 @@ public class Node {
      * @param Only check the status of a given properties: MATRIX, VBO, SHADER
      * @return Flag giving the status of this node
      */
-    protected boolean setAllDirty(int flag, boolean value){
+    public boolean setAllDirty(int flag, boolean value){
         if (value)
             dirty_ = dirty_ | flag;
         else
@@ -244,7 +266,7 @@ public class Node {
         return true; // TODO
     }
 
-    protected void accept(Visitor visitor) {
+    public void accept(Visitor visitor) {
         // In node, the visitor must be accepted by children to
         // propagate its action.
         visitor.visit(this);
