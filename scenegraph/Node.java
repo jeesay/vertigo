@@ -65,9 +65,10 @@ public class Node {
         Node parent = null;
         matrix = new Matrix4();
         matrix.setIdentity();
-        bbox = new AABB();
+        //bbox = new AABB();
         name = "node";
         //dirty_ = 0xff;
+        //need to comments for compile. Need to compile for tests.
     }
 
     /**
@@ -317,7 +318,7 @@ public class Node {
    }
    public void traverseDownT(Node a_node, int loop){
        String arrow="";
-       for (int i=0;i<=loop;i++){
+       for (int i=0;i<loop;i++){
            arrow+="-";
        }
        arrow+="->";
