@@ -1,13 +1,50 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * $Id:$
+ *
+ * VolTIJ, VOLume viewing Tools for ImageJ.
+ * Copyright (C) 2009  Jean-Christophe Taveau.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301  USA, or see the FSF site: http://www.fsf.org.
+ *
+ * Authors :
+ *  Michael Vacher
+ *  Mickael Escudero
+ *  Ibouniyamine Nabihoudine
+ *  Frederic Romagné
  */
+
+
+/*
+   Copyright (C) 1997,1998,1999
+   Kenji Hiranabe, Eiwa System Management, Inc.
+
+   This program is free software.
+   Implemented by Kenji Hiranabe(hiranabe@esm.co.jp),
+   conforming to the Java(TM) 3D API specification by Sun Microsystems.
+
+   Permission to use, copy, modify, distribute and sell this software
+   and its documentation for any purpose is hereby granted without fee,
+   provided that the above copyright notice appear in all copies and
+   that both that copyright notice and this permission notice appear
+   in supporting documentation. Kenji Hiranabe and Eiwa System Management,Inc.
+   makes no representations about the suitability of this software for any
+   purpose.  It is provided "AS IS" with NO WARRANTY.
+*/
 package vertigo.math;
 
-/**
- *
- * @author tomo
- */
 
 import java.io.Serializable;
 
