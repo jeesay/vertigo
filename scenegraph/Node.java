@@ -67,7 +67,7 @@ public class Node {
         matrix.setIdentity();
         bbox = new AABB();
         name = "node";
-        dirty_ = 0xff;
+        //dirty_ = 0xff;
     }
 
     /**
@@ -167,6 +167,7 @@ public class Node {
      *
      * @return Node.
      */
+    /*
     public AABB getBoundingBox() {
         if (bbox.isEmpty() ) {
             for (Node child : getChildren() )
@@ -176,7 +177,7 @@ public class Node {
 
         return bbox;
     }
-
+*/
     /**
      * Set Translation
      *
@@ -239,19 +240,21 @@ public class Node {
      * @param Only check the status of a given properties: MATRIX, VBO, SHADER
      * @return Flag giving the status of this node
      */
+    /*
     public boolean setDirty(int flag, boolean value){
         if (value)
             dirty_ = dirty_ | flag;
         else
             dirty_ = dirty_ & ~flag;
     }
-
+*/
     /**
      * Set status of this node and children
      *
      * @param Only check the status of a given properties: MATRIX, VBO, SHADER
      * @return Flag giving the status of this node
      */
+    /*
     public boolean setAllDirty(int flag, boolean value){
         if (value)
             dirty_ = dirty_ | flag;
@@ -260,7 +263,7 @@ public class Node {
         for (Node n : children)
             n.setAllDirty(flag,value);
     }
-
+*/
 
     public boolean check(){
         return true; // TODO
@@ -308,6 +311,26 @@ public class Node {
         }
         
     }
+   public void traverseDownT(){
+       this.traverseDownT(this,0);
+     
+   }
+   public void traverseDownT(Node a_node, int loop){
+       String arrow="";
+       for (int i=0;i<=loop;i++){
+           arrow+="-";
+       }
+       arrow+="->";
+       System.out.println(arrow+" "+a_node.getName());
+       if (!a_node.children.isEmpty()){
+            loop++;
+             for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+                Node nodetemp = it.next();
+                nodetemp.traverseDownT(nodetemp,loop);
+            }
+           
+       }
+   }
 
 
 } // End of class Node
