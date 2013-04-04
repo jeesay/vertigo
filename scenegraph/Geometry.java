@@ -1,30 +1,26 @@
 /**
  * $Id:$
  *
- * crazybio_viewer: 3D Viewer Plugin for ImageJ.
- * Copyright (C) 2013  Jean-Christophe Taveau.
+ * Vertigo: 3D Viewer Plugin for ImageJ. Copyright (C) 2013
+ * Jean-Christophe Taveau.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301  USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
+ * site: http://www.fsf.org.
  *
- * Authors :
- * Florin Buga
- * Olivier Catoliquot
- * Clement Delestre
+ * Authors : Florin Buga Olivier Catoliquot Clement Delestre
  */
-
 package vertigo.scenegraph;
 
 import java.nio.FloatBuffer;
@@ -39,43 +35,47 @@ import vertigo.graphics.IBO;
 public class Geometry {
 
     private ArrayList<BO> buffers;
-    
-    public Geometry(){
+
+    public Geometry() {
         buffers = new ArrayList<BO>();
     }
-    
-    
-        /**
+
+    /**
      * Sets the geometry
+     *
      * @param type - Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
-     * @param primitives - an array containing the data for each vertex (coordinates, normal, colors,etc.).
+     * @param primitives - an array containing the data for each vertex
+     * (coordinates, normal, colors,etc.).
      */
     public void setVertices(String type, float[] data) {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
         VBO vbo = new VBO();
-        vbo.setFloatBuffer(type,buf);
+        vbo.setFloatBuffer(type, buf);
         buffers.add(vbo);
     }
 
-
     /**
      * Sets the whole geometry in one single buffer. Ex: X Y Z R G B X Y Z R ...
-     * May contain various types of data: XYZ-coordinates, Normals, Colors, UV-TexCoords,etc.
-     * @param types -  Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
-     * @param primitives - an array containing the data for each vertex (coordinates, normal, colors,etc.).
-     * @param contents - a String containing the various data type present in the primitives array. 
-     * Ex: "[VEC3F,COL3F,NORM3F,TEX2F]" corresponds to Vertex, Color, Normal and finally TexCoords data for each vertex.
+     * May contain various types of data: XYZ-coordinates, Normals, Colors,
+     * UV-TexCoords,etc.
+     *
+     * @param types - Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
+     * @param primitives - an array containing the data for each vertex
+     * (coordinates, normal, colors,etc.).
+     * @param contents - a String containing the various data type present in
+     * the primitives array. Ex: "[VEC3F,COL3F,NORM3F,TEX2F]" corresponds to
+     * Vertex, Color, Normal and finally TexCoords data for each vertex.
      */
     public void setPackedVertices(String[] types, float[] data) {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
         PackedVBO vbo = new PackedVBO();
-        vbo.setFloatBuffer(types,buf);
+        vbo.setFloatBuffer(types, buf);
         buffers.add(vbo);
-   }
+    }
 
     public void setIndices(int[] indexes) {
         IntBuffer buf = BufferTools.newIntBuffer(indexes.length);
@@ -85,16 +85,16 @@ public class Geometry {
         ibo.setIntBuffer(buf);
         buffers.add(ibo);
     }
-    
-    public void  setPackedGeometry (String _s, float[] f){
-        
-        
-    }
-      public void  setGeometry (String _s, float[] f){
-        
-        
-    }
-            
-            
 
+    public void setPackedGeometry(String type, float[] f) {
+    }
+
+    public void setGeometry(String type, float[] f) {
+    }
+
+    public void setGeometry(String[] types, float[] f) {
+        for (String type : types) {
+            setGeometry(type, f);
+        }
+    }
 } // end of class Geometry
