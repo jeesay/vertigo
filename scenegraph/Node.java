@@ -68,6 +68,7 @@ public class Node {
         //bbox = new AABB();
         name = "node";
         //dirty_ = 0xff;
+        //need to comments for compile. Need to compile for tests.
     }
 
     /**
