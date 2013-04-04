@@ -265,7 +265,7 @@ public class Node {
     public boolean check(){
         return true; // TODO
     }
-
+/*
     public void accept(Visitor visitor) {
         // In node, the visitor must be accepted by children to
         // propagate its action.
@@ -274,7 +274,7 @@ public class Node {
             child.accept(visitor);
         }
     }
-
+*/
 
    /**
      * Get the root.
