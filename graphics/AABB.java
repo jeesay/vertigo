@@ -27,6 +27,7 @@
 package vertigo.graphics;
 
 import vertigo.math.Vector3;
+import vertigo.math.Vector4;
 
 /**
  * Axis-Aligned Bounding Box
@@ -53,7 +54,7 @@ public class AABB {
 
     public AABB(float x0,float y0,float z0,float x1,float y1,float z1) {
         expand(x0,y0,z0);
-        expand(x1,y2,z3);
+        expand(x1,y1,z1);
     }
 
     public AABB(float[] points) {
@@ -74,15 +75,16 @@ public class AABB {
      * Get a bounding sphere enclosing this bounding box
      * @return an array of 4 floats containing XYZ-coordinates of the center and the sphere radius, respectively.
      */
-    public float[] getBoundingShere() {
+    public float[] getBoundingShere4f() {
         return new float[] {
             (min_x + max_x)/2.0f,
             (min_y + max_y)/2.0f, 
             (min_z + max_z)/2.0f,
-            Math.sqrt(
+            (float) Math.sqrt(
                 (min_x - max_x)*(min_x - max_x)
               + (min_y - max_y)*(min_y - max_y)
-              + (min_z - max_z)*(min_z - max_z) };
+              + (min_z - max_z)*(min_z - max_z) )
+        };
     }
 
     /**
@@ -94,17 +96,18 @@ public class AABB {
             (min_x + max_x)/2.0f,
             (min_y + max_y)/2.0f, 
             (min_z + max_z)/2.0f,
-            Math.sqrt(
+            (float) Math.sqrt(
                 (min_x - max_x)*(min_x - max_x)
               + (min_y - max_y)*(min_y - max_y)
-              + (min_z - max_z)*(min_z - max_z) );
+              + (min_z - max_z)*(min_z - max_z) )
+        );
     }
 
     /**
      * Get radius of a bounding sphere enclosing this bounding box
      * @return array of float containing X-, Y- and Z-coordinates, respectively
      */    public float getRadius() {
-        return Math.sqrt(
+        return (float) Math.sqrt(
                 (min_x - max_x)*(min_x - max_x)
               + (min_y - max_y)*(min_y - max_y)
               + (min_z - max_z)*(min_z - max_z) );
@@ -114,7 +117,7 @@ public class AABB {
      * Get center of a bounding sphere enclosing this bounding box
      * @return array of float containing X-, Y- and Z-coordinates, respectively
      */
-    public float[] getCenter() {
+    public float[] getCenter3f() {
         return new float[]{ (min_x + max_x)/2.0f,(min_y + max_y)/2.0f, (min_z + max_z)/2.0f };
     }
 
@@ -150,7 +153,7 @@ public class AABB {
       return max_x;
     }
 
-    public float[] getMin() {
+    public float[] getMin3f() {
       return new float[]{min_x,min_y,min_z};
     }
 
@@ -158,7 +161,7 @@ public class AABB {
       return new Vector3(min_x,min_y,min_z);
     }
 
-    public float[] getMax() {
+    public float[] getMax3f() {
       return new float[]{max_x,max_y,max_z};
     }
 
@@ -178,7 +181,7 @@ public class AABB {
       return Math.abs(min_z - max_z);
     }
 
-    public void expand(float x, float y, float z) {
+    public final void expand(float x, float y, float z) {
         min_x = Math.min(x,min_x);
         max_x = Math.max(x,max_x);
         min_y = Math.min(y,min_y);
@@ -188,7 +191,7 @@ public class AABB {
         empty_ = false;
     }
 
-    public void expand(float[] points) {
+    public final void expand(float[] points) {
         for (int i=0; i < points.length; i+=3)
             expand(points[i],points[i+1],points[i+2]);
     }
