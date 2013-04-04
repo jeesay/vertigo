@@ -136,7 +136,9 @@ public final class ShaderUtils {
                 progID = attachVFShaders(prog);
             } catch (Exception ex) {
                 System.out.println("Exception attachShaders");
-                Logger.getLogger(Renderer.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(LWJGL_Renderer.class.getName()).log(Level.SEVERE, null, ex);
+                // Renderer or LWJGL_Renderer ?
+    
             }
             prog.setHandle(progID);
 
