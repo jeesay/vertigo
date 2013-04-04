@@ -80,7 +80,7 @@ test();
 * Displays the window and triggers the OpenGL rendering in an infinite loop.
 */
     public void show() {
-        renderer = (Renderer) new vertigo.graphics.jogl.Renderer(getScene());
+        renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer(getScene());
         renderer.display();
     }
 
@@ -123,8 +123,8 @@ test();
        // add a cam
        Camera cam = new Camera();
 	cam.add(scene);
-        cam.traverseUp(); // cam is the new root
-      
+      //  cam.traverseUp(); // cam is the new root
+      cam.traverseDownT();
        
 	
 	
