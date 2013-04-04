@@ -27,14 +27,18 @@
 
 package vertigo.scenegraph;
 
+
+
 public class Shape extends Node {
     protected Geometry geo;
     protected Material material;
-
+public static int count = 0; 
     public Shape(){
 	super();
         geo = new Geometry();
         material = new Material();
+        name="Shape_n"+count;
+        count++;
     }
     
     public void setGeometry(String type, float[] data) {

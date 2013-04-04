@@ -28,6 +28,7 @@
 
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
+import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Light;
 
 import ij.IJ;
@@ -107,24 +108,43 @@ test();
 
 
     private static void test () {
-        // create a scene, add a light, test getName method
+       
 	Scene scene = new Scene();
         Light light=new Light();
         scene.add(light);
-        System.out.println("La scène se nomme : "+scene.getName());
-        //test traverseUp and traverseDown methods
-        scene.traverseUp();
+        // test getName and default Name
+        System.out.println("La scène se nomme : "+scene.getName()); 
+       
        light.traverseDown();
        
        // add the second light
        Light two=new Light();
        scene.add(two);
-       scene.traverseDown();
-       // add a cam
+  
        Camera cam = new Camera();
 	cam.add(scene);
-      //  cam.traverseUp(); // cam is the new root
-      cam.traverseDownT();
+        Shape first_shape = new Shape();
+        scene.add(first_shape);
+     
+        
+         Shape parent_shape = new Shape();
+         parent_shape.setName("parent_shape");
+          Shape son_shape = new Shape();
+           son_shape.setName("son_shape");
+           Shape daughter_shape = new Shape();
+           daughter_shape.setName("daughter_shape");
+           // add son & daughter to parent
+          parent_shape.add(son_shape);
+          parent_shape.add(daughter_shape);
+          
+          Shape s=new Shape();
+          Shape ac=new Shape();
+           ac.setName("Another child.");
+           s.add(ac);
+           scene.add(s);
+          
+          scene.add(parent_shape);
+      cam.traverseDownT(); // traverseDownT is better than traverseDown
        
 	
 	
