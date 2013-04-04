@@ -28,8 +28,11 @@ package vertigo.graphics.lwjgl;
 
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.LWJGLException;
 import vertigo.graphics.Renderer;
+
 
 class LWJGL_Renderer implements Renderer  { 
 
@@ -44,7 +47,7 @@ class LWJGL_Renderer implements Renderer  {
 
     public void display(){
         try {
-            Display.setDisplayMode(new DisplayMode(800,600));
+            Display.setDisplayMode(new DisplayMode(400,300));
             Display.create();
         } catch (LWJGLException e){
             e.printStackTrace();
@@ -55,8 +58,31 @@ class LWJGL_Renderer implements Renderer  {
         }
         Display.destroy();
     }
-    public void main(String[]argv) {
-        new LWJGL_Renderer().display();
+     public void pollInput() {
+		
+        if (Mouse.isButtonDown(0)) {
+	    int x = Mouse.getX();
+	    int y = Mouse.getY();
+			
+	    System.out.println("CLICK SOURIS @ X: " + x + " Y: " + y);
+	}
+		
+	if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+	    System.out.println("BARRE D'ESPACE EST ENFONCE");
+	}
+		
+	while (Keyboard.next()) {
+	    if (Keyboard.getEventKeyState()) {
+	        if (Keyboard.getEventKey() == Keyboard.KEY_A) {
+		    System.out.println("Q Key Pressed");
+		}
+                
+	    } else {
+	        if (Keyboard.getEventKey() == Keyboard.KEY_A) {
+		    System.out.println("Q Key Released");
+	        }
+	    }
+	}
     }
    	//boucle for(Shape)
 }
