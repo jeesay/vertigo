@@ -96,4 +96,19 @@ public class Text_Renderer implements Renderer {
         // Activate Shader, VBOs, etc.
         // Draw stuff
     }
+
+    @Override
+    public void setDimension(int w, int h) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setTitle(String title) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setBackgroundColor(int red, int green, int blue) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 } // End of class Text_Renderer
