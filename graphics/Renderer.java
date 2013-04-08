@@ -34,4 +34,9 @@ public interface Renderer {
    
     public void display();
     
+    public void setDimension(int w,int h);
+    
+    public void setTitle(String title);
+    
+    public void setBackgroundColor(int red, int green, int blue);
 }
