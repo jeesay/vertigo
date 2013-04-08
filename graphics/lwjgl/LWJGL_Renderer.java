@@ -25,6 +25,7 @@
  *Clement Delestre
  */
 package vertigo.graphics.lwjgl;
+import vertigo.scenegraph.Scene;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,11 +39,7 @@ import org.lwjgl.opengl.PixelFormat;
 import vertigo.graphics.Renderer;
 
 
-class LWJGL_Renderer implements Renderer  {
-    public static void main(String[] args) {
-        LWJGL_Renderer lwjgl_Renderer;
-        lwjgl_Renderer = new LWJGL_Renderer();
-	}
+public class LWJGL_Renderer implements Renderer  {
     private int width = 320;
     private int height = 240;
     private float red;
@@ -75,12 +72,14 @@ class LWJGL_Renderer implements Renderer  {
             Display.setTitle(window_title);
             Display.setInitialBackground (red,green,blue);
             Display.create();
+            
         } catch (LWJGLException e){
             e.printStackTrace();
             System.exit(0);
         }
         while (!Display.isCloseRequested()){
             Display.update();
+            pollInput();
         }
         Display.destroy();
     }
@@ -95,6 +94,10 @@ class LWJGL_Renderer implements Renderer  {
 		
 	if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 	    System.out.println("BARRE D'ESPACE EST ENFONCE");
+	}
+        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+	    Display.destroy();
+            
 	}
 		
 	while (Keyboard.next()) {
