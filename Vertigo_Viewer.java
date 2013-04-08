@@ -50,6 +50,8 @@ public class Vertigo_Viewer implements PlugIn {
     private Scene scene_;
     private Camera camera_;
     private Renderer renderer;
+    private World world_;
+    
 
     public Vertigo_Viewer() {
         default_scenegraph();
@@ -92,7 +94,16 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     /**
-     * Gets the root of the scene graph.
+     * Gets the world of the scene graph corresponding to the root.
+     *     
+*/
+    public World getWorld() {
+        return world_;
+    }
+
+   /**
+     * Gets the scene of the scene graph.
+     * Convenient method equivalent to getWorld().get("Stage").get("Scene");
      *     
 */
     public Scene getScene() {
@@ -183,13 +194,36 @@ public class Vertigo_Viewer implements PlugIn {
         } else {
             System.out.println("lighting");
         }
+            
 
-
+        Node newnode=w.getNode("BackStage");
+        System.out.println("Le nom du newnode est "+newnode.getName());
     }
 
     private void default_scenegraph() {
+        
+        /**
+         * world
+         * L--backstage
+         *    L--viewing
+         *       L
+         */
+        world_ = new World();
+        camera_=new Camera();
         scene_ = new Scene();
-        Light light = new Light();
-        scene_.add(light);
+        
+        BackStage bs=new BackStage();
+        Stage stage = new Stage();
+         world_.add(stage);
+        world_.add(bs);
+        Viewing vw= new Viewing();
+        vw.add(new Camera("camera"));
+        bs.add(vw);
+        Lighting lights=new Lighting();
+        bs.add(lights);
+        lights.add(new Light("sun"));
+        lights.add(new Light("spot"));
+   
+       
     }
 }// end of class Vertigo_Viewer
