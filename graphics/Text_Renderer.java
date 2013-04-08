@@ -73,7 +73,7 @@ public class Text_Renderer implements Renderer {
         }
 
         for (Node child : n.getChildren()) {
-            processNode(n);
+            processNode(child);
         }
     }
 
