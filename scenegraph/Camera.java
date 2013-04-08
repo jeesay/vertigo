@@ -43,7 +43,11 @@ public class Camera extends Node {
         name = "Camera";
         this.setOutput("Screen");
     }
-
+public Camera(String name){
+    super(name);
+    proj_matrix = new Matrix4();
+     this.setOutput("Screen");
+}
     /**
      * Set the Camera's parent
      *
