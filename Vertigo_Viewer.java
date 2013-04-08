@@ -30,6 +30,10 @@ import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Light;
+import vertigo.scenegraph.World;
+import vertigo.scenegraph.Stage;
+import vertigo.scenegraph.BackStage;
+import vertigo.scenegraph.Node;
 
 import ij.IJ;
 import ij.plugin.PlugIn;
@@ -146,6 +150,25 @@ test();
           scene.add(parent_shape);
       cam.traverseDownT(); // traverseDownT is better than traverseDown
        
+      // World's test
+      World w=new World();
+      w.setName("World");
+      BackStage bs=new BackStage();
+      bs.setName("BackStage");
+      Stage stage=new Stage();
+      stage.setName("Stage");
+      
+      w.add(stage); // Add stage before backstage
+       w.add(bs);
+      
+      w.traverseDownT(); 
+     Node test = w.getChild(0); //get the first child
+     if (test instanceof Stage){
+         System.out.println("stage");
+     }
+     else{
+         System.out.println("backstage");
+     }
 	
 	
     }
