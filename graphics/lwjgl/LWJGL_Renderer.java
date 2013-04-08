@@ -26,18 +26,41 @@
  */
 package vertigo.graphics.lwjgl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.ContextAttribs;
+import org.lwjgl.opengl.PixelFormat;
 import vertigo.graphics.Renderer;
 
 
-class LWJGL_Renderer implements Renderer  { 
-
+class LWJGL_Renderer implements Renderer  {
+    public static void main(String[] args) {
+        LWJGL_Renderer lwjgl_Renderer;
+        lwjgl_Renderer = new LWJGL_Renderer();
+	}
+    private int width = 320;
+    private int height = 240;
+    private float red;
+    private float green;
+    private float blue;
+    private String window_title = "Vertigo lwjgl";
+       
     //public LWJGL_Renderer(){} 
     //singleton
+    public LWJGL_Renderer() {
+        this.display();
+        while (!Display.isCloseRequested()) {	
+			// Force a maximum FPS of about 60
+			Display.sync(60);
+			// Let the CPU synchronize with the GPU if GPU is tagging behind
+			Display.update();
+		}
+    }
     public void initShader(){
 	
     }
@@ -45,9 +68,12 @@ class LWJGL_Renderer implements Renderer  {
 	
     }
 
+    @Override
     public void display(){
         try {
-            Display.setDisplayMode(new DisplayMode(400,300));
+            Display.setDisplayMode(new DisplayMode(width,height));
+            Display.setTitle(window_title);
+            Display.setInitialBackground (red,green,blue);
             Display.create();
         } catch (LWJGLException e){
             e.printStackTrace();
@@ -58,7 +84,7 @@ class LWJGL_Renderer implements Renderer  {
         }
         Display.destroy();
     }
-     public void pollInput() {
+    public void pollInput() {
 		
         if (Mouse.isButtonDown(0)) {
 	    int x = Mouse.getX();
@@ -85,4 +111,20 @@ class LWJGL_Renderer implements Renderer  {
 	}
     }
    	//boucle for(Shape)
+    @Override
+    public void setDimension(int w, int h) {
+        width=w;
+        height=h;
+    }
+    @Override
+    public void setTitle(String title) {
+        window_title=title;
+    }
+
+    @Override
+    public void setBackgroundColor(int red, int green, int blue) {
+        this.red = red / 255.0f;
+        this.green = green / 255.0f;
+        this.blue = blue / 255.0f;
+    }
 }
