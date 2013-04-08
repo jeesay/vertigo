@@ -34,4 +34,7 @@ public class Viewing extends Node {
     public Viewing(){
         super();
     }
+    public Viewing(String name){
+        super(name);
+    }
 }

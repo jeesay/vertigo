@@ -33,6 +33,9 @@ public static int count = 0;
         count++;
         name="Light_n"+count;
     }
+    public Light(String name){
+        super(name);
+    }
 
     public void add(Node anode){
 	System.out.println("Light must not have any children");
