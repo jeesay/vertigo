@@ -44,7 +44,7 @@ import java.util.Iterator;
 public class Node {
 
     private Node parent;
-    private ArrayList<Node> children;
+    protected ArrayList<Node> children;
     private Matrix4 matrix;
     private Matrix4 modelMatrix;
     protected AABB bbox;
