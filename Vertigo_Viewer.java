@@ -118,6 +118,7 @@ public class Vertigo_Viewer implements PlugIn {
         }
         
         //renderer.setDimension(height, width);
+        // or renderer.createWindow(height,width); ?
         renderer.display(); // avec les couleurs svp
         renderer.init(getWorld());
         //init avec getWorld tester si OpenGL3 ou pas
