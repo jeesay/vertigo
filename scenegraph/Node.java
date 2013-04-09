@@ -44,7 +44,7 @@ import java.util.Iterator;
 public class Node {
 
     private Node parent;
-    private ArrayList<Node> children;
+    protected ArrayList<Node> children;
     private Matrix4 matrix;
     private Matrix4 modelMatrix;
     protected AABB bbox;
@@ -61,17 +61,13 @@ public class Node {
      * Constructor
      */
     public Node() {
-        children = new ArrayList();
-        Node parent = null;
-        matrix = new Matrix4();
-        matrix.setIdentity();
-        bbox = new AABB();
-        name = "node";
-        dirty_ = (byte) 0xff;
-        drawable_ = false;
-        //need to comments for compile. Need to compile for tests.
+        default_create();
     }
 
+    public Node(String name){
+        default_create();
+        this.name=name; 
+    }
     /**
      * Set Node name
      *
@@ -394,5 +390,31 @@ public class Node {
 
     public boolean isDrawable() {
         return drawable_;
+    }
+
+    private void default_create() {
+       children = new ArrayList();
+       parent = null;
+        matrix = new Matrix4();
+        matrix.setIdentity();
+        bbox = new AABB();
+        name = "node";
+        dirty_ = (byte) 0xff;
+        drawable_ = false;
+    }
+    public Node getNode(String _name){
+        if (  _name.equals(name)){
+               return this;
+        }
+        else if (!children.isEmpty()) {
+            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+                Node nodetemp = it.next();
+                Node gn=nodetemp.getNode(_name);
+                if (gn !=null){ //gn for getNode
+                    return gn;
+                }
+            }
+         }
+        return null;
     }
 } // End of class Node

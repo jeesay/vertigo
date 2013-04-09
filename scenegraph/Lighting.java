@@ -1,7 +1,7 @@
 /*
  * $Id:$
  *
- * crazybio_viewer: 3D Viewer Plugin for ImageJ.
+ * Vertigo: 3D Viewer Plugin for ImageJ.
  * Copyright (C) 2013  Jean-Christophe Taveau.
  *
  * This library is free software; you can redistribute it and/or
@@ -24,26 +24,14 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-
 package vertigo.scenegraph;
-public class Light extends Node {
-public static int count = 0; 
-    public Light (){
-	super();
-        count++;
-        name="Light_n"+count;
-    }
-    public Light(String name){
-        super(name);
-    }
 
-    public void add(Node anode){
-	System.out.println("Light must not have any children");
+/**
+ *
+ * @author Clement DELESTRE
+ */
+public class Lighting extends Node {
+    public  Lighting(){
+        super();
     }
-    public int getNumberCamera(){
-        return count;
-    }
-    public void setType(String type){
-        //TODO
-    }
-} //end of class Light
+}
