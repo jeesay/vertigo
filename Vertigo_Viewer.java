@@ -111,14 +111,15 @@ public class Vertigo_Viewer implements PlugIn {
             }
         }
         try {
-            renderer.createWindow();
+            renderer.createWindow(width,height); // contexte graphique ? opengl3?
         } 
         catch (NullPointerException nullp){
             IJ.log("Can't create a new window.");
         }
         
-        
-        renderer.display();
+        //renderer.setDimension(height, width);
+        renderer.display(); // avec les couleurs svp
+        renderer.init(getWorld());
         //init avec getWorld tester si OpenGL3 ou pas
 
     }

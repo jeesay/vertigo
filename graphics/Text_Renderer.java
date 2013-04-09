@@ -62,7 +62,7 @@ public class Text_Renderer implements Renderer {
     public void display() {
         //processNode(scene);
         //afficher arborescence
-        
+        /*
          world.setName("world");
          
         BackStage bs = new BackStage();
@@ -85,7 +85,7 @@ public class Text_Renderer implements Renderer {
 
         Node newnode = world.getNode("backstage");
         System.out.println("Le nom du newnode est " + newnode.getName());
-        
+        */
     }
 
     private void processNode(Node n) {
@@ -151,7 +151,7 @@ public class Text_Renderer implements Renderer {
     }
 
     @Override
-    public void createWindow() {
+    public void createWindow(int w,int h) {
         IJ.log("Le text Renderer a crée une fenêtre");
         
     }
