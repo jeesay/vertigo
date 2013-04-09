@@ -48,14 +48,7 @@ public Camera(String name){
     proj_matrix = new Matrix4();
      this.setOutput("Screen");
 }
-    /**
-     * Set the Camera's parent
-     *
-     * @param a node
-     */
-    public void setParent(Node anode) {
-        System.out.println("Scene must not have any parents...");
-    }
+  
 
     /**
      * Set the Camera's perspective
