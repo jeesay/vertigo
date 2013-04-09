@@ -143,6 +143,20 @@ public class Camera extends Node {
         }
     }
 
+    public void lookAt(String node_name) {
+        Vector3 up = new Vector3(0.0f,1.0f,0.0f);
+        Point3 cg = getNode(node_name).getBoundingBox().getCenter();
+        lookAt(pos,cg,up);
+    }
+
+    public void process() {
+        if (isDirty(GEOMETRY) )
+           processGeometry();
+        else if isDirty(MATRIX) )
+            node.accept(new MatrixVisitor() );
+    }
+
+
     /**
      *
      * Creates a perspective projection transform that mimics a standard,
@@ -174,7 +188,7 @@ public class Camera extends Node {
      *
      *
      */
-    public void frustum(float left, float right, float bottom, float top, float near, float far) {
+    private void frustum(float left, float right, float bottom, float top, float near, float far) {
         float rl = right - left;
         float tb = top - bottom;
         float fn = far - near;
@@ -221,7 +235,7 @@ public class Camera extends Node {
      * clip plane).
      * @param zFar the distance to the frustum's far clipping plane.
      */
-    public void perspective(float fovy, float aspect, float zNear, float zFar) {
+    private void perspective(float fovy, float aspect, float zNear, float zFar) {
         float tan = (float) Math.tan(fovy / 2.0f);
         float top = zNear * tan;
         float right = top * aspect;
@@ -249,7 +263,7 @@ public class Camera extends Node {
      * value -near is the location of the near clip plane)
      * @param far - the distance to the frustum's far clipping plane.
      */
-    public void ortho(float left, float right, float bottom, float top, float near, float far) {
+    private void ortho(float left, float right, float bottom, float top, float near, float far) {
         float rl = right - left;
         float tb = top - bottom;
         float fn = far - near;
@@ -275,4 +289,67 @@ public class Camera extends Node {
         proj_matrix.m33 = 1.0f;
 
     }
+
+    /**
+     * Helping function that specifies the position and orientation of a view
+     * matrix.
+     * @param eye - the location of the eye
+     * @param center - a point in the virtual world where the eye is looking
+     * @param up - an up vector specifying the frustum's up direction
+     *
+     **/
+    private void lookAt(Point3 eye, Point3 center, Vector3 up) {
+        // find orthogonal 3 unit vectors u, v, n
+        //
+        // n ... center -> eye
+        // u ... x+ (right)
+        // v ... y+ (up)
+
+        Vector3 n = new Vector3(eye);  // n = (eye - center)/||n||
+        n.sub(center);
+        n.normalize();
+
+        Vector3 u = new Vector3(up);  // u = up x n
+        u.cross(up,n);
+        u.normalize();
+
+        Vector3 v = new Vector3();    // v = n x u
+        v.cross(n, u);
+
+        /*
+         *       [  u  ]
+         *   R = [  v  ]
+         *       [  n  ]
+         *
+         *   M = [                     ]
+         *       [    R      - R center]
+         *       [                     ]
+         *       [ 0  0  0           1 ]
+         */
+        matrix.m00 = u.x;
+        matrix.m01 = u.y;
+        matrix.m02 = u.z;
+        matrix.m03 = -(u.x * eye.x + u.y * eye.y + u.z * eye.z);
+
+        matrix.m10 = v.x;
+        matrix.m11 = v.y;
+        matrix.m12 = v.z;
+        matrix.m13 = -(v.x * eye.x + v.y * eye.y + v.z * eye.z);
+
+        matrix.m20 = n.x;
+        matrix.m21 = n.y;
+        matrix.m22 = n.z;
+        matrix.m23 = -(n.x * eye.x + n.y * eye.y + n.z * eye.z);
+
+        matrix.m30 = 0;
+        matrix.m31 = 0;
+        matrix.m32 = 0;
+        matrix.m33 = 1;
+        resetType();
+
+        assert ((matType & AFFINE) != 0
+                && (matType & RIGID) != 0
+                && (matType & CONGRUENT) != 0);
+    }
+
 } // End of class Camera
