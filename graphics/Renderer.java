@@ -26,12 +26,19 @@
 */
 package vertigo.graphics;
 
+import vertigo.scenegraph.World;
+
 /**
  *
- * @author tomo
+ * @author Clement Delestre
  */
+
 public interface Renderer {
    
+    public void createWindow();
+    
+    public void init(World _world);
+    
     public void display();
     
     public void setDimension(int w,int h);
