@@ -44,6 +44,8 @@ import vertigo.graphics.Renderer;
 public class Vertigo_Viewer implements PlugIn {
 
     private String title_;
+    private int width;
+    private int height;
     private float red;
     private float green;
     private float blue;
@@ -83,7 +85,11 @@ public class Vertigo_Viewer implements PlugIn {
         this.green = green / 255.0f;
         this.blue = blue / 255.0f;
     }
-
+    
+    public void setDimension(int w, int h) {
+        width=w;
+        height=h;
+    }
     /**
      * Displays the window and triggers the OpenGL rendering in an infinite
      * loop.
@@ -91,7 +97,7 @@ public class Vertigo_Viewer implements PlugIn {
     public void show() {
         try {
             renderer = (Renderer) new vertigo.graphics.lwjgl.LWJGL_Renderer();
-            //renderer.display();
+            renderer.display();
         } catch (ExceptionInInitializerError e) {
             try {
                 renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer();
