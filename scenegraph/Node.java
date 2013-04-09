@@ -136,7 +136,7 @@ public class Node {
      * Get the Node's children.
      *
      * @param Node anode
-     * @return ArrayList
+     * @return ArrayList<Node>
      */
     public ArrayList<Node> getChildren() {
         return children;
@@ -146,7 +146,7 @@ public class Node {
      * Get a node's child.
      *
      * @param index
-     * @return ArrayList
+     * @return Node
      */
     public Node getChild(int index) {
         return children.get(index);
@@ -159,6 +159,22 @@ public class Node {
      */
     public Node getParent() {
         return parent;
+    }
+
+    /**
+     * Get a Node from the scenegraph of a given name.
+     *
+     * @return Node.
+     */
+    public Node getNode(String node_name) {
+        if (this.getName(node_name).equals(node_name) )
+           return this;
+        else
+            for (Node child : getChildren()) {
+                if ( child.getNode(node_name) != null)
+                    return child;
+            }
+        return null;
     }
 
     /**
@@ -182,6 +198,11 @@ public class Node {
         return bbox;
     }
 
+    /**
+     * Force recomputation of the bounding box
+     *
+     * @return Node.
+     */
     public void updateBoundingBox() {
         for (Node child : getChildren()) {
             bbox.expand(child.getBoundingBox());
