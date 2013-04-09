@@ -143,10 +143,10 @@ public class Vertigo_Viewer implements PlugIn {
     public static void main(String[] args) {
         System.out.println("main");
         test();
-
         }
 
 
+    
 
     private static void test() {
 
@@ -227,9 +227,12 @@ public class Vertigo_Viewer implements PlugIn {
     private void default_scenegraph() {
 
         /**
+
          * world 
          * L--backstage 
          *      L--viewing L
+
+
          */
         world_ = new World();
         camera_ = new Camera();
