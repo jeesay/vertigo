@@ -26,6 +26,8 @@
  */
 package vertigo.scenegraph;
 
+import vertigo.graphics.Visitor;
+
 public class Shape extends Node {
 
     protected Geometry geo;
@@ -102,4 +104,12 @@ public class Shape extends Node {
         //TODO
         // need a factory ?
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Node child : getChildren() )
+            child.accept(visitor);
+    }
+
 } // End of class Shape

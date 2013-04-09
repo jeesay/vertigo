@@ -28,6 +28,7 @@ package vertigo.scenegraph;
 
 import java.util.ArrayList;
 import vertigo.graphics.AABB;
+import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
 import vertigo.math.Vector3;
 import java.util.Iterator;
@@ -41,11 +42,11 @@ import java.util.Iterator;
  * @version 0.1
  *
  */
-public class Node {
+public abstract class Node {
 
     private Node parent;
     protected ArrayList<Node> children;
-    private Matrix4 matrix;
+    protected Matrix4 matrix;
     private Matrix4 modelMatrix;
     protected AABB bbox;
     private byte dirty_;
@@ -163,7 +164,7 @@ public class Node {
      * @return Node.
      */
     public Node getNode(String node_name) {
-        if (this.getName(node_name).equals(node_name) )
+        if (this.getName().equals(node_name) )
            return this;
         else
             for (Node child : getChildren()) {
@@ -185,7 +186,7 @@ public class Node {
     /**
      * Get the Bounding Box
      *
-     * @return Node.
+     * @return AABB.
      */
     public AABB getBoundingBox() {
         if (bbox.isEmpty() || isDirty(Node.AABB)) {
@@ -197,7 +198,6 @@ public class Node {
     /**
      * Force recomputation of the bounding box
      *
-     * @return Node.
      */
     public void updateBoundingBox() {
         for (Node child : getChildren()) {
@@ -321,16 +321,10 @@ public class Node {
     public boolean check() {
         return true; // TODO
     }
-    /*
-     public void accept(Visitor visitor) {
-     // In node, the visitor must be accepted by children to
-     // propagate its action.
-     visitor.visit(this);
-     for (Node child : getChildren()) {
-     child.accept(visitor);
-     }
-     }
-     */
+
+
+    public abstract void accept(Visitor visitor);
+
 
     /**
      * Get the root.
@@ -393,8 +387,8 @@ public class Node {
     }
 
     private void default_create() {
-       children = new ArrayList();
-       parent = null;
+        children = new ArrayList<Node>();
+        parent = null;
         matrix = new Matrix4();
         matrix.setIdentity();
         bbox = new AABB();
@@ -402,6 +396,8 @@ public class Node {
         dirty_ = (byte) 0xff;
         drawable_ = false;
     }
+
+/****
     public Node getNode(String _name){
         if (  _name.equals(name)){
                return this;
@@ -417,4 +413,7 @@ public class Node {
          }
         return null;
     }
+
+*****/
+
 } // End of class Node

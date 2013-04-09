@@ -28,7 +28,10 @@ package vertigo.scenegraph;
 
 import java.util.Arrays;
 import java.util.List;
+import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
+import vertigo.math.Point3;
+import vertigo.math.Vector3;
 import ij.IJ;
 
 public class Camera extends Node {
@@ -43,10 +46,11 @@ public class Camera extends Node {
         name = "Camera";
         this.setOutput("Screen");
     }
-public Camera(String name){
-    super(name);
-    proj_matrix = new Matrix4();
-     this.setOutput("Screen");
+
+    public Camera(String name){
+        super(name);
+        proj_matrix = new Matrix4();
+        this.setOutput("Screen");
 }
   
 
@@ -143,16 +147,25 @@ public Camera(String name){
     public void lookAt(String node_name) {
         Vector3 up = new Vector3(0.0f,1.0f,0.0f);
         Point3 cg = getNode(node_name).getBoundingBox().getCenter();
-        lookAt(pos,cg,up);
+        Point3 pos = new Point3(0.0f,0.0f,0.0f); // TODO
+        look_at(pos,cg,up);
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Node child : getChildren() )
+            child.accept(visitor);
+    }
+
+/***
     public void process() {
-        if (isDirty(GEOMETRY) )
+        if (isDirty(Node.GEOMETRY) )
            processGeometry();
-        else if isDirty(MATRIX) )
+        else if isDirty(Node.MATRIX) )
             node.accept(new MatrixVisitor() );
     }
-
+***/
 
     /**
      *
@@ -295,7 +308,7 @@ public Camera(String name){
      * @param up - an up vector specifying the frustum's up direction
      *
      **/
-    private void lookAt(Point3 eye, Point3 center, Vector3 up) {
+    private void look_at(Point3 eye, Point3 center, Vector3 up) {
         // find orthogonal 3 unit vectors u, v, n
         //
         // n ... center -> eye
@@ -342,11 +355,8 @@ public Camera(String name){
         matrix.m31 = 0;
         matrix.m32 = 0;
         matrix.m33 = 1;
-        resetType();
+        // matrix.resetType();
 
-        assert ((matType & AFFINE) != 0
-                && (matType & RIGID) != 0
-                && (matType & CONGRUENT) != 0);
     }
 
 } // End of class Camera

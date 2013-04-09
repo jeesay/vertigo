@@ -26,6 +26,8 @@
  */
 package vertigo.scenegraph;
 
+import vertigo.graphics.Visitor;
+
 /**
  *
  * @author Clement DELESTRE
@@ -33,5 +35,12 @@ package vertigo.scenegraph;
 public class Stage extends Node {
     public Stage(){
         super();
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Node child : getChildren() )
+            child.accept(visitor);
     }
 }

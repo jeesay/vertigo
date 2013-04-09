@@ -26,6 +26,9 @@
  */
 
 package vertigo.scenegraph;
+
+import vertigo.graphics.Visitor;
+
 public class Light extends Node {
 public static int count = 0; 
     public Light (){
@@ -45,5 +48,12 @@ public static int count = 0;
     }
     public void setType(String type){
         //TODO
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Node child : getChildren() )
+            child.accept(visitor);
     }
 } //end of class Light

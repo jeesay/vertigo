@@ -26,11 +26,19 @@
  */
 package vertigo.scenegraph;
 
+import vertigo.graphics.Visitor;
+
 public class Scene extends Node {
 
     public Scene (){
 	super();
-         name="Scene";
+         name="scene";
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Node child : getChildren() )
+            child.accept(visitor);
+    }
 } // end of class Scene

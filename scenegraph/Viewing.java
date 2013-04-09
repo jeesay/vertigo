@@ -26,6 +26,8 @@
  */
 package vertigo.scenegraph;
 
+import vertigo.graphics.Visitor;
+
 /**
  *
  * @author tomo
@@ -36,5 +38,12 @@ public class Viewing extends Node {
     }
     public Viewing(String name){
         super(name);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Node child : getChildren() )
+            child.accept(visitor);
     }
 }

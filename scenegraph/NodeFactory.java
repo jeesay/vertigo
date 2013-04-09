@@ -58,7 +58,7 @@ public class NodeFactory {
             break;
 
         default:
-            return null;
+            // Do nothing
         }
         return a_node;
     }
