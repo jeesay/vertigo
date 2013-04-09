@@ -51,7 +51,6 @@ public class Vertigo_Viewer implements PlugIn {
     private Camera camera_;
     private Renderer renderer;
     private World world_;
-    
 
     public Vertigo_Viewer() {
         default_scenegraph();
@@ -59,7 +58,8 @@ public class Vertigo_Viewer implements PlugIn {
 
     @Override
     public void run(String options) {
-        test();
+        //test();
+        show();
     }
 
     /**
@@ -89,8 +89,29 @@ public class Vertigo_Viewer implements PlugIn {
      * loop.
      */
     public void show() {
-        renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer(getScene());
-        renderer.display();
+        try {
+            renderer = (Renderer) new vertigo.graphics.lwjgl.LWJGL_Renderer();
+            //renderer.display();
+        } catch (ExceptionInInitializerError e) {
+            try {
+                renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer();
+            } catch (ExceptionInInitializerError ei) {
+                // try & catch for tests
+                try {
+                    renderer = (Renderer) new vertigo.graphics.Text_Renderer();
+                } catch (ExceptionInInitializerError eie) {
+                    IJ.log("Please download JOGL or LWJGL.");
+                }
+            }
+        }
+        try {
+            renderer.createWindow();
+        } 
+        catch (NullPointerException nullp){
+            IJ.log("Can't create a new window.");
+        }
+        //init avec getWorld tester si OpenGL3 ou pas
+
     }
 
     /**
@@ -101,9 +122,9 @@ public class Vertigo_Viewer implements PlugIn {
         return world_;
     }
 
-   /**
-     * Gets the scene of the scene graph.
-     * Convenient method equivalent to getWorld().get("Stage").get("Scene");
+    /**
+     * Gets the scene of the scene graph. Convenient method equivalent to
+     * getWorld().get("Stage").get("Scene");
      *     
 */
     public Scene getScene() {
@@ -122,6 +143,7 @@ public class Vertigo_Viewer implements PlugIn {
     public static void main(String[] args) {
         System.out.println("main");
         test();
+
     }
 
     private static void test() {
@@ -194,36 +216,33 @@ public class Vertigo_Viewer implements PlugIn {
         } else {
             System.out.println("lighting");
         }
-            
 
-        Node newnode=w.getNode("BackStage");
-        System.out.println("Le nom du newnode est "+newnode.getName());
+
+        Node newnode = w.getNode("BackStage");
+        System.out.println("Le nom du newnode est " + newnode.getName());
     }
 
     private void default_scenegraph() {
-        
+
         /**
-         * world
-         * L--backstage
-         *    L--viewing
-         *       L
+         * world L--backstage L--viewing L
          */
         world_ = new World();
-        camera_=new Camera();
+        camera_ = new Camera();
         scene_ = new Scene();
-        
-        BackStage bs=new BackStage();
+
+        BackStage bs = new BackStage();
         Stage stage = new Stage();
-         world_.add(stage);
+        world_.add(stage);
         world_.add(bs);
-        Viewing vw= new Viewing();
+        Viewing vw = new Viewing();
         vw.add(new Camera("camera"));
         bs.add(vw);
-        Lighting lights=new Lighting();
+        Lighting lights = new Lighting();
         bs.add(lights);
         lights.add(new Light("sun"));
         lights.add(new Light("spot"));
-   
-       
+
+
     }
 }// end of class Vertigo_Viewer
