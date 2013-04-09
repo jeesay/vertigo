@@ -97,7 +97,7 @@ public class Vertigo_Viewer implements PlugIn {
     public void show() {
         try {
             renderer = (Renderer) new vertigo.graphics.lwjgl.LWJGL_Renderer();
-            renderer.display();
+            
         } catch (ExceptionInInitializerError e) {
             try {
                 renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer();
@@ -116,6 +116,9 @@ public class Vertigo_Viewer implements PlugIn {
         catch (NullPointerException nullp){
             IJ.log("Can't create a new window.");
         }
+        
+        
+        renderer.display();
         //init avec getWorld tester si OpenGL3 ou pas
 
     }
