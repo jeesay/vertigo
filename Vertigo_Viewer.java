@@ -148,6 +148,7 @@ public class Vertigo_Viewer implements PlugIn {
 
     
 
+
     private static void test() {
 
         Scene scene = new Scene();
@@ -231,8 +232,6 @@ public class Vertigo_Viewer implements PlugIn {
          * world 
          * L--backstage 
          *      L--viewing L
-
-
          */
         world_ = new World();
         camera_ = new Camera();
