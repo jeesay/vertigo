@@ -118,11 +118,11 @@ public class Vertigo_Viewer implements PlugIn {
     public Camera getCamera() {
         return camera_;
     }
-
+  
     public static void main(String[] args) {
         System.out.println("main");
         test();
-    }
+        }
 
     private static void test() {
 
