@@ -31,6 +31,7 @@ import ij.IJ;
 import java.util.List;
 import java.util.Arrays;
 
+import vertigo.scenegraph.shapes.Cube;
 
 public class NodeFactory {
 
@@ -46,7 +47,7 @@ public class NodeFactory {
         IJ.log("get node "+name + " "+ index);
         switch (index) {
         case 0: // Cube
-            // TODO
+            a_node = new Cube("Wire");
             break;
 
         case 2: // Light
