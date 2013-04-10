@@ -39,8 +39,15 @@ public class Shape extends Node {
         drawable_ = true;
         geo = new Geometry();
         material = new Material();
-        name = "Shape_n" + count;
+        name = "shape_" + count;
         count++;
+    }
+
+    public Shape(String name) {
+        super(name);
+        drawable_ = true;
+        geo = new Geometry();
+        material = new Material();
     }
 
     public void setGeometry(String type, float[] data) {
@@ -108,8 +115,6 @@ public class Shape extends Node {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-        for (Node child : getChildren() )
-            child.accept(visitor);
     }
 
 } // End of class Shape
