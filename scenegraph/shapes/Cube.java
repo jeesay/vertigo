@@ -26,6 +26,8 @@
  */
 package vertigo.scenegraph.shapes;
 
+import vertigo.scenegraph.Shape;
+
 /**
  * Predefined shape: the cube WIRECUBE, FLATCUBE, CUBE
  *
@@ -35,58 +37,59 @@ package vertigo.scenegraph.shapes;
 public class Cube extends Shape {
 
     private int type;
+    private float w_, h_, d_;
 
-    private float[] wirevertices = {  
+    private float[] wireVertices = {  
         // Front face
-        -1.0, -1.0,  1.0,
-         1.0, -1.0,  1.0,
-         1.0,  1.0,  1.0,
-        -1.0,  1.0,  1.0,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
    
          // Back face
-        -1.0, -1.0, -1.0,
-        -1.0,  1.0, -1.0,
-         1.0,  1.0, -1.0,
-         1.0, -1.0, -1.0
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f
     };
-    private int[] wireindices = {0,1,2,3,0,4,5,1,5,6,2,6,7,3,7,4};
+    private int[] wireIndices = {0,1,2,3,0,4,5,1,5,6,2,6,7,3,7,4};
 
     private float[] flatvertices = {
   // Front face: white
-  -1.0, -1.0,  1.0, 1.0,  1.0,  1.0,  1.0,
-   1.0, -1.0,  1.0, 1.0,  1.0,  1.0,  1.0,
-   1.0,  1.0,  1.0, 1.0,  1.0,  1.0,  1.0,
-  -1.0,  1.0,  1.0, 1.0,  1.0,  1.0,  1.0,
+  -1.0f, -1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
+   1.0f, -1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
+   1.0f,  1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
+  -1.0f,  1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
    
   // Back face: red
-  -1.0, -1.0, -1.0, 1.0,  0.0,  0.0,  1.0,
-  -1.0,  1.0, -1.0, 1.0,  0.0,  0.0,  1.0,
-   1.0,  1.0, -1.0, 1.0,  0.0,  0.0,  1.0,
-   1.0, -1.0, -1.0, 1.0,  0.0,  0.0,  1.0,
+  -1.0f, -1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
+  -1.0f,  1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
+   1.0f,  1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
+   1.0f, -1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
    
   // Top face: green
-  -1.0,  1.0, -1.0, 0.0,  1.0,  0.0,  1.0,
-  -1.0,  1.0,  1.0, 0.0,  1.0,  0.0,  1.0,
-   1.0,  1.0,  1.0, 0.0,  1.0,  0.0,  1.0,
-   1.0,  1.0, -1.0, 0.0,  1.0,  0.0,  1.0,
+  -1.0f,  1.0f, -1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
+  -1.0f,  1.0f,  1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
+   1.0f,  1.0f,  1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
+   1.0f,  1.0f, -1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
    
   // Bottom face: blue
-  -1.0, -1.0, -1.0, 0.0,  0.0,  1.0,  1.0,
-   1.0, -1.0, -1.0, 0.0,  0.0,  1.0,  1.0,
-   1.0, -1.0,  1.0, 0.0,  0.0,  1.0,  1.0,
-  -1.0, -1.0,  1.0, 0.0,  0.0,  1.0,  1.0,
+  -1.0f, -1.0f, -1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
+   1.0f, -1.0f, -1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
+   1.0f, -1.0f,  1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
+  -1.0f, -1.0f,  1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
    
   // Right face: yellow
-   1.0, -1.0, -1.0, 1.0,  1.0,  0.0,  1.0,
-   1.0,  1.0, -1.0, 1.0,  1.0,  0.0,  1.0,
-   1.0,  1.0,  1.0, 1.0,  1.0,  0.0,  1.0,
-   1.0, -1.0,  1.0, 1.0,  1.0,  0.0,  1.0,
+   1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
+   1.0f,  1.0f, -1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
+   1.0f,  1.0f,  1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
+   1.0f, -1.0f,  1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
    
   // Left face: purple
-  -1.0, -1.0, -1.0, 1.0,  0.0,  1.0,  1.0,
-  -1.0, -1.0,  1.0, 1.0,  0.0,  1.0,  1.0,
-  -1.0,  1.0,  1.0, 1.0,  0.0,  1.0,  1.0,
-  -1.0,  1.0, -1.0, 1.0,  0.0,  1.0,  1.0
+  -1.0f, -1.0f, -1.0f, 1.0f,  0.0f,  1.0f,  1.0f,
+  -1.0f, -1.0f,  1.0f, 1.0f,  0.0f,  1.0f,  1.0f,
+  -1.0f,  1.0f,  1.0f, 1.0f,  0.0f,  1.0f,  1.0f,
+  -1.0f,  1.0f, -1.0f, 1.0f,  0.0f,  1.0f,  1.0f
     };
 
     float[] flatIndices = {
@@ -103,19 +106,32 @@ public class Cube extends Shape {
     public static final int FLAT = 1;
     public static final int CUBE = 2;
 
-
-
     public Cube() {
         super();
-        name = "cube";
+        this.name = "cube";
         type = WIRE;
-        w_ = 1.0f
+        w_ = 1.0f;
         h_ = 1.0f;
         d_ = 1.0f;
 }
 
-    public setType(int type) {
-        switch type {
+    public Cube(String name) {
+        super(name);
+        if (name.equals("Wire") )
+            type = WIRE;
+        else if  (name.equals("Flat") )
+            type = FLAT;
+        else if  (name.equals("Cube") )
+            type = CUBE;
+        else
+            type = WIRE;
+        w_ = 1.0f;
+        h_ = 1.0f;
+        d_ = 1.0f;
+}
+
+    public void setType(int type) {
+        switch (type) {
         case WIRE:
             create_wirecube(); 
             break;
@@ -137,6 +153,16 @@ public class Cube extends Shape {
     }
 
     private void create_wirecube() {
+        // 1- modify dimension
+        if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
+            for (int i =0; i<wireVertices.length;i+=3) {
+               wireVertices[i  ] *= w_;
+               wireVertices[i+1] *= h_;
+               wireVertices[i+2] *= d_;
+            }
+        }
+        // 2- create geometry
+        // 3- create material
     }
 
     private void create_flatcube() {
