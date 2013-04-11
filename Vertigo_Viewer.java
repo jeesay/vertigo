@@ -44,11 +44,11 @@ import vertigo.graphics.Renderer;
 public class Vertigo_Viewer implements PlugIn {
 
     private String title_;
-    private int width;
-    private int height;
-    private float red;
-    private float green;
-    private float blue;
+    private int window_width;
+    private int window_height;
+    private int red;
+    private int green;
+    private int blue;
     private Scene scene_;
     private Camera camera_;
     private Renderer renderer;
@@ -56,6 +56,9 @@ public class Vertigo_Viewer implements PlugIn {
 
     public Vertigo_Viewer() {
         default_scenegraph();
+        window_width=512;
+        window_height=512;
+        title_="Vertigo";
     }
 
     @Override
@@ -81,14 +84,14 @@ public class Vertigo_Viewer implements PlugIn {
      * @param blue integer value between 0 and 255 for the red component
      */
     public void setBackgroundColor(int red, int green, int blue) {
-        this.red = red / 255.0f;
-        this.green = green / 255.0f;
-        this.blue = blue / 255.0f;
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
     
     public void setDimension(int w, int h) {
-        width=w;
-        height=h;
+        window_width=w;
+        window_height=h;
     }
     /**
      * Displays the window and triggers the OpenGL rendering in an infinite
@@ -96,11 +99,13 @@ public class Vertigo_Viewer implements PlugIn {
      */
     public void show() {
         try {
+            System.out.println("Le renderer est crée");
             renderer = (Renderer) new vertigo.graphics.lwjgl.LWJGL_Renderer();
+            System.out.println("Le renderer est crée");
             
         } catch (ExceptionInInitializerError e) {
             try {
-                renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer();
+//                renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer();
             } catch (ExceptionInInitializerError ei) {
                 // try & catch for tests
                 try {
@@ -111,16 +116,17 @@ public class Vertigo_Viewer implements PlugIn {
             }
         }
         try {
-            renderer.createWindow(width,height); // contexte graphique ? opengl3?
+            renderer.setBackgroundColor(red, green, blue);
+            renderer.createWindow(title_,window_width,window_height); // contexte graphique ? opengl3?
         } 
         catch (NullPointerException nullp){
             IJ.log("Can't create a new window.");
         }
         
-        //renderer.setDimension(height, width);
-        // or renderer.createWindow(height,width); ?
+        //renderer.setDimension(window_height, window_width);
+        // or renderer.createWindow(window_height,window_width); ?
         renderer.display(); // avec les couleurs svp
-        renderer.init(getWorld());
+        //renderer.init(getWorld());
         //init avec getWorld tester si OpenGL3 ou pas
 
     }

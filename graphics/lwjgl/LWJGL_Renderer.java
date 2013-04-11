@@ -130,7 +130,7 @@ public class LWJGL_Renderer implements Renderer {
     private void createContext() {
         /**
          * ****
-         * Frame frame = new Frame(""); frame.setLayout(new BorderLayout());
+         * Frame frame = new Frame("title_"); frame.setLayout(new BorderLayout());
          * final Canvas canvas = new Canvas();
          *
          * canvas.addComponentListener(new ComponentAdapter() {
@@ -151,7 +151,7 @@ public class LWJGL_Renderer implements Renderer {
          * try { Display.setParent(canvas); Display.setVSyncEnabled(true);
          *
          * frame.setPreferredSize(new Dimension(1024, 786));
-         * frame.setMinimumSize(new Dimension(800, 600)); frame.pack();
+         * frame.setMinimumSize(new Dimension(250, 250)); frame.pack();
          * frame.setVisible(true); Display.create();
          *
          * LWJGLRenderer renderer = new LWJGLRenderer();

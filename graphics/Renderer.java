@@ -35,7 +35,7 @@ import vertigo.scenegraph.World;
 
 public interface Renderer {
    
-    public void createWindow();
+    public void createWindow(String title,int w,int h);
     
     public void init(World _world);
     
