@@ -56,9 +56,9 @@ public class Vertigo_Viewer implements PlugIn {
 
     public Vertigo_Viewer() {
         default_scenegraph();
-        window_width=512;
-        window_height=512;
-        title_="Vertigo";
+        window_width = 512;
+        window_height = 512;
+        title_ = "Vertigo";
     }
 
     @Override
@@ -88,11 +88,12 @@ public class Vertigo_Viewer implements PlugIn {
         this.green = green;
         this.blue = blue;
     }
-    
+
     public void setDimension(int w, int h) {
-        window_width=w;
-        window_height=h;
+        window_width = w;
+        window_height = h;
     }
+
     /**
      * Displays the window and triggers the OpenGL rendering in an infinite
      * loop.
@@ -100,16 +101,16 @@ public class Vertigo_Viewer implements PlugIn {
     public void show() {
         try {
             System.out.println("Le renderer est crée");
-            renderer = (Renderer) new vertigo.graphics.lwjgl.LWJGL_Renderer();
+            renderer = new vertigo.graphics.lwjgl.LWJGL_Renderer();
             System.out.println("Le renderer est crée");
-            
+
         } catch (ExceptionInInitializerError e) {
             try {
 //                renderer = (Renderer) new vertigo.graphics.jogl.JOGL_Renderer();
             } catch (ExceptionInInitializerError ei) {
                 // try & catch for tests
                 try {
-                    renderer = (Renderer) new vertigo.graphics.Text_Renderer();
+                    renderer = new vertigo.graphics.text.Text_Renderer();
                 } catch (ExceptionInInitializerError eie) {
                     IJ.log("Please download JOGL or LWJGL.");
                 }
@@ -117,18 +118,44 @@ public class Vertigo_Viewer implements PlugIn {
         }
         try {
             renderer.setBackgroundColor(red, green, blue);
-            renderer.createWindow(title_,window_width,window_height); // contexte graphique ? opengl3?
-        } 
-        catch (NullPointerException nullp){
+            renderer.setDimension(window_width, window_height);
+            renderer.setTitle(title_);
+            renderer.createWindow(); // contexte graphique ? opengl3?
+        } catch (NullPointerException nullp) {
             IJ.log("Can't create a new window.");
         }
-        
+
         //renderer.setDimension(window_height, window_width);
         // or renderer.createWindow(window_height,window_width); ?
         renderer.display(); // avec les couleurs svp
         //renderer.init(getWorld());
         //init avec getWorld tester si OpenGL3 ou pas
 
+    }
+
+    /**
+     * Run the rendering engine for display 
+     * @param name of the rendering engine 
+     */
+    public void show(String render) {
+         if (render.equals("G2D")) {
+             
+         }
+         else if (render.equals("LWJGL")) {
+             
+         }
+         else if (render.equals("JOGL")) {
+             
+         }
+         else if (render.equals("TEXT")) {
+            renderer = new vertigo.graphics.text.Text_Renderer();
+            renderer.setBackgroundColor(red, green, blue);
+            renderer.setDimension(window_width, window_height);
+            renderer.setTitle(title_);
+            renderer.init(getWorld());
+            renderer.createWindow(); 
+            renderer.display();
+        }
     }
 
     /**
@@ -156,15 +183,11 @@ public class Vertigo_Viewer implements PlugIn {
     public Camera getCamera() {
         return camera_;
     }
-  
+
     public static void main(String[] args) {
         System.out.println("main");
         test();
-        }
-
-
-    
-
+    }
 
     private static void test() {
 
@@ -245,10 +268,8 @@ public class Vertigo_Viewer implements PlugIn {
     private void default_scenegraph() {
 
         /**
-
-         * world 
-         * L--backstage 
-         *      L--viewing L
+         *
+         * world L--backstage L--viewing L
          */
         world_ = new World();
         camera_ = new Camera();
