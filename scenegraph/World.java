@@ -34,6 +34,7 @@ import vertigo.graphics.Visitor;
 public class World extends Node {
     public World(){
         super();
+        name="world";
     }
      
     @Override
