@@ -35,11 +35,11 @@ public class Material {
     private ShaderProg shader;
     
     public Material() {
-        shader = null;
+        shader = ShaderFactory.get("default");
     }
 
     public void setShaderMaterial(String shaderName) {
-        shader = ShaderFactory.getShader(shaderName);
+        shader = ShaderFactory.get(shaderName);
     }
     
     public void setColor(float red, float green, float blue) {

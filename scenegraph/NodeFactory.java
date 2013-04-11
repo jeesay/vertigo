@@ -24,7 +24,6 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-
 package vertigo.scenegraph;
 
 import ij.IJ;
@@ -35,33 +34,96 @@ import vertigo.scenegraph.shapes.Cube;
 
 public class NodeFactory {
 
-    private static List<String> list = Arrays.asList("Cube","Group", "Light", "Shape");
+    /**
+     * index description BackStage", // 0: Camera", // 0: Cube", // 0:
+     * FlatCube", // 0: "FlatPyramid", // 0: "FlatTetrahedron", // 0: "Group",
+     * // 0: "Light", // 0: "Lighting", // 0: "Pyramid", "Scene", // 0: "Shape",
+     * // 0: "Sphere", // 0: "Stage", // 0: "Tetrahedron", // 0: "Torus", // 0:
+     * "Transform", // 0: "Viewing", // 0: "WireCube", // 0: "WirePyramid", //
+     * 0: "WireSphere", // 0: "WireTorus"
+     */
+    private static List<String> list = Arrays.asList(
+            "BackStage", // 0: 
+            "Camera", // 0: 
+            "Cube", // 0: 
+            "FlatCube", // 0: 
+            "FlatPyramid", // 0: 
+            "FlatTetrahedron", // 0: 
+            "Group", // 0: 
+            "Light", // 0: 
+            "Lighting", // 0: 
+            "Pyramid",
+            "Scene", // 0: 
+            "Shape", // 0: 
+            "Sphere", // 0: 
+            "Stage", // 0: 
+            "Tetrahedron", // 0: 
+            "Torus", // 0: 
+            "Transform", // 0: 
+            "Viewing", // 0: 
+            "WireCube", // 0: 
+            "WirePyramid", // 0: 
+            "WireSphere", // 0: 
+            "WireTorus");               // 0: 
 
-   /**
-    *
-    * @author Jean-Christophe Taveau
-    */
+    /**
+     *
+     * @author Jean-Christophe Taveau
+     */
     public static Node get(String name) {
-        int index = list.indexOf(name); 
+        int index = calcIndex(name);
         Node a_node = null;
-        IJ.log("get node "+name + " "+ index);
+        IJ.log("get node " + name + " " + index);
         switch (index) {
-        case 0: // Cube
-            a_node = new Cube("Wire");
-            break;
-
-        case 2: // Light
-          a_node = new Light();
-            break;
-
-        case 3: // Shape
-            a_node = new Shape();
-            break;
-
-        default:
-            // Do nothing
+            case 869: // BackStage
+                break;
+            case 585: // Camera
+                break;
+            case 383: // Cube
+                a_node = new Cube("Cube");
+                break;
+            case 774: // FlatCube
+                a_node = new Cube("Flat");
+                break;
+            case 1117: // FlatPyramid
+            case 1543: // FlatTetrahedron
+            case 525: // Group
+            case 504: // Light
+                a_node = new Light();
+                break;
+            case 822: // Lighting
+            case 726: // Pyramid
+            case 494: // Scene
+            case 497: // Shape
+                a_node = new Shape();
+                break;
+            case 615: // Sphere
+            case 500: // Stage
+            case 1152: // Tetrahedron
+            case 541: // Torus
+            case 956: // Transform
+            case 729: // Viewing
+            case 790: // WireCube
+                a_node = new Cube("Wire");
+                break;
+            case 1133: // WirePyramid
+            case 1022: // WireSphere
+            case 948: // WireTorus
+            default:
+                // Do nothing
+                IJ.showMessage("Error Node ", name + "is unknown");
         }
         return a_node;
     }
 
+    /**
+     * Calc index by summing all the Unicode values in the string 'name'
+     *
+     * @param name
+     * @return index
+     */
+    private static int calcIndex(String name) {
+        int index = 0;
+        return index;
+    }
 } // End of class NodeFactory

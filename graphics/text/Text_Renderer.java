@@ -24,30 +24,30 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-package vertigo.graphics;
+package vertigo.graphics.text;
 
 import ij.IJ;
-import vertigo.scenegraph.BackStage;
+import vertigo.graphics.Renderer;
 import vertigo.scenegraph.Camera;
-import vertigo.scenegraph.Lighting;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Scene;
-import vertigo.scenegraph.Stage;
-import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 
 /**
  * Text Renderer used for debugging
- * 
- * @author  Florin Buga, Olivier Catoliquot, Clement Delestre
- * 
- * 
+ *
+ * @author Florin Buga, Olivier Catoliquot, Clement Delestre
+ *
+ *
  */
 public class Text_Renderer implements Renderer {
 
-    private   Scene scene=new Scene();
-    private   Camera camera=new Camera();
-    private World world=new World();
+    private Scene scene = new Scene();
+    private Camera camera = new Camera();
+    private World world = new World();
+    private String title;
+    private int window_width;
+    private int window_height;
 
     public Text_Renderer(Camera cam, Scene scene) {
         this.scene = scene;
@@ -55,37 +55,12 @@ public class Text_Renderer implements Renderer {
     }
 
     public Text_Renderer() {
-        IJ.log("Un text renderer a été crée");
+        IJ.log("Renderer: TEXT");
     }
 
     @Override
     public void display() {
-        //processNode(scene);
-        //afficher arborescence
-        /*
-         world.setName("world");
-         
-        BackStage bs = new BackStage();
-        bs.setName("backstage");
-        Stage stage = new Stage();
-        stage.setName("stage");
-        Viewing viewing = new Viewing();
-        Lighting lighting = new Lighting();
-        
-        bs.add(lighting);
-        bs.add(viewing);
-        
-        world.add(bs);
-        world.add(stage);
-        world.add(viewing);
-        world.add(lighting);
-        
-        world.traverseDownT();
-      
-
-        Node newnode = world.getNode("backstage");
-        System.out.println("Le nom du newnode est " + newnode.getName());
-        */
+       world.accept(new PrintVisitor());
     }
 
     private void processNode(Node n) {
@@ -137,11 +112,14 @@ public class Text_Renderer implements Renderer {
 
     @Override
     public void setDimension(int w, int h) {
+        window_width=w;
+                window_height=h;
         //Do Nothing
     }
 
     @Override
     public void setTitle(String title) {
+        this.title=title;
         //Do Nothing
     }
 
@@ -151,14 +129,14 @@ public class Text_Renderer implements Renderer {
     }
 
     @Override
-    public void createWindow(int w,int h) {
-        IJ.log("Le text Renderer a crée une fenêtre");
-        
+    public void createWindow() {
+        IJ.log("Window: " + title + " [" + window_width + "," + window_height + "]");
+
     }
 
     @Override
     public void init(World world) {
-        this.world=world;
+        this.world = world;
         world.traverseDownT();
     }
 } // End of class Text_Renderer

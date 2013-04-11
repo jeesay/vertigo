@@ -43,7 +43,7 @@ public class Geometry {
     /**
      * Sets the geometry
      *
-     * @param type - Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
+     * @param type - Data type: V3F,C3F,T2F,T3F, N3F,etc.
      * @param primitives - an array containing the data for each vertex
      * (coordinates, normal, colors,etc.).
      */

@@ -24,9 +24,10 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-package vertigo.graphics;
+package vertigo.graphics.text;
 
 import ij.IJ;
+import vertigo.graphics.Visitor;
 
 import vertigo.scenegraph.BackStage;
 import vertigo.scenegraph.Camera;
@@ -43,18 +44,22 @@ public class PrintVisitor implements Visitor {
 
     private int level;
 
+    @Override
     public void visit(BackStage obj) {
         IJ.log(computeLevel(obj) +"BackStage: " +obj.getName() );
     }
 
+    @Override
     public void visit(Camera obj) {
         IJ.log(computeLevel(obj) +"Camera: " +obj.getName() );
     }
 
+    @Override
     public void visit(Light obj) {
         IJ.log(computeLevel(obj) +"Light: " +obj.getName() );
     }
 
+    @Override
     public void visit(Lighting obj) {
         IJ.log(computeLevel(obj) +"Lighting: " +obj.getName() );
     }
@@ -63,22 +68,27 @@ public class PrintVisitor implements Visitor {
         IJ.log(computeLevel(obj) +"Node: " +obj.getName() );
     }
 
+    @Override
     public void visit(Scene obj) {
         IJ.log(computeLevel(obj) +"Scene: " +obj.getName() );
     }
 
+    @Override
     public void visit(Shape obj) {
         IJ.log(computeLevel(obj) +"Shape: " +obj.getName() );
     }
 
+    @Override
     public void visit(Stage obj) {
         IJ.log(computeLevel(obj) +"Stage: " +obj.getName() );
     }
 
+    @Override
     public void visit(Viewing obj) {
         IJ.log(computeLevel(obj) +"Viewing: " +obj.getName() );
     }
 
+    @Override
     public void visit(World obj) {
         IJ.log(computeLevel(obj) +" World: " +obj.getName() );
     }

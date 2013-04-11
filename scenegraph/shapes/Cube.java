@@ -162,13 +162,36 @@ public class Cube extends Shape {
             }
         }
         // 2- create geometry
+        geo.setGeometry("V3F",wireVertices);
+        geo.setIndices(wireIndices);
         // 3- create material
+        // use default
+      
     }
 
     private void create_flatcube() {
+           if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
+            for (int i =0; i<flatvertices.length;i+=3) {
+               flatvertices[i  ] *= w_;
+               flatvertices[i+1] *= h_;
+               flatvertices[i+2] *= d_;
+            }
+        }
+           // 2- create geometry
+           geo.setGeometry(new String[]{"V3F","C4F"},flatvertices);
+           // 3- create material
+           material.setShaderMaterial("flat");
     }
 
     private void create_cube() {
+           if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
+            for (int i =0; i<wireVertices.length;i+=3) {
+               wireVertices[i  ] *= w_;
+               wireVertices[i+1] *= h_;
+               wireVertices[i+2] *= d_;
+            }
+        }
+           geo.setGeometry("CUBE",wireVertices);
     }
 
 
