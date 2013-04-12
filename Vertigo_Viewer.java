@@ -54,6 +54,8 @@ public class Vertigo_Viewer implements PlugIn {
     private Renderer renderer;
     private World world_;
 
+    public static final String VERTIGO_VERSION = "0.01";
+
     public Vertigo_Viewer() {
         default_scenegraph();
         window_width = 512;
@@ -64,7 +66,11 @@ public class Vertigo_Viewer implements PlugIn {
     @Override
     public void run(String options) {
         //test();
-        show();
+        IJ.showMessage("About VERTIGO",
+            "<html>"+
+            "This plugin only works via scripts in JavaScript.<br />"+
+            "See the tutorials in http://crazybiocomputing.blogspot.com/p/plugins.html.</html>"
+        );
     }
 
     /**
@@ -280,7 +286,7 @@ public class Vertigo_Viewer implements PlugIn {
         world_.add(stage);
         world_.add(bs);
         Viewing vw = new Viewing();
-        vw.add(new Camera("camera"));
+        vw.add(camera_);
         bs.add(vw);
         Lighting lights = new Lighting();
         bs.add(lights);
