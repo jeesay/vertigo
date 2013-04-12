@@ -287,7 +287,9 @@ public class Vertigo_Viewer implements PlugIn {
 
         BackStage bs = new BackStage();
         Stage stage = new Stage();
+
         world_.add(stage);
+        stage.add(scene_);
         world_.add(bs);
         Viewing vw = new Viewing();
         vw.add(camera_);
