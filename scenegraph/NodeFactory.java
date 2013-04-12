@@ -35,38 +35,6 @@ import vertigo.scenegraph.shapes.Cube;
 public class NodeFactory {
 
     /**
-     * index description BackStage", // 0: Camera", // 0: Cube", // 0:
-     * FlatCube", // 0: "FlatPyramid", // 0: "FlatTetrahedron", // 0: "Group",
-     * // 0: "Light", // 0: "Lighting", // 0: "Pyramid", "Scene", // 0: "Shape",
-     * // 0: "Sphere", // 0: "Stage", // 0: "Tetrahedron", // 0: "Torus", // 0:
-     * "Transform", // 0: "Viewing", // 0: "WireCube", // 0: "WirePyramid", //
-     * 0: "WireSphere", // 0: "WireTorus"
-     */
-    private static List<String> list = Arrays.asList(
-            "BackStage", // 0: 
-            "Camera", // 0: 
-            "Cube", // 0: 
-            "FlatCube", // 0: 
-            "FlatPyramid", // 0: 
-            "FlatTetrahedron", // 0: 
-            "Group", // 0: 
-            "Light", // 0: 
-            "Lighting", // 0: 
-            "Pyramid",
-            "Scene", // 0: 
-            "Shape", // 0: 
-            "Sphere", // 0: 
-            "Stage", // 0: 
-            "Tetrahedron", // 0: 
-            "Torus", // 0: 
-            "Transform", // 0: 
-            "Viewing", // 0: 
-            "WireCube", // 0: 
-            "WirePyramid", // 0: 
-            "WireSphere", // 0: 
-            "WireTorus");               // 0: 
-
-    /**
      *
      * @author Jean-Christophe Taveau
      */
@@ -111,7 +79,7 @@ public class NodeFactory {
             case 948: // WireTorus
             default:
                 // Do nothing
-                IJ.showMessage("Error Node ", name + "is unknown");
+                IJ.showMessage("Error Node ", name + " is unknown");
         }
         return a_node;
     }
@@ -124,6 +92,9 @@ public class NodeFactory {
      */
     private static int calcIndex(String name) {
         int index = 0;
+        for (int i=0; i< name.length();i++) index += (int) name.charAt(i);
         return index;
     }
+
 } // End of class NodeFactory
+
