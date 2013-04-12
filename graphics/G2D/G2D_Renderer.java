@@ -31,37 +31,68 @@ import java.util.logging.Logger;
 import java.awt.Color;
 import javax.swing.JFrame;
 
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.ContextAttribs;
+import org.lwjgl.opengl.PixelFormat;
+
 import vertigo.graphics.Renderer;
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.World;
 
-    /**
-     * Renderer using default java.awt.Graphics without graphics hardware acceleration
-     *
-     * @author Jean-Christophe Taveau
-     */
 public class G2D_Renderer implements Renderer {
 
+    private int width = 320;
+    private int height = 240;
+    private float red;
+    private float green;
+    private float blue;
+    private static final String WIN_TITLE = "Vertigo G2D - ";
+    private String window_title = "";
+    private World world;
+    private JFrame frame;
+    private G2D_Panel panel;
+       
 
-    @Override
-    public void createWindow() {
-
+    /**
+     * Constructor
+     **/
+    public G2D_Renderer() {
+        // Do nothing ?
     }
 
     @Override
-    public void init(World _world) {
+    public void createWindow() {
+        frame = new JFrame(WIN_TITLE+window_title);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(width, height);
+        frame.setLocationRelativeTo(null);
+        panel = new G2D_Panel();
+        panel.setWorld(world);
+        panel.setBackground(new Color(red,green,blue));
+        frame.setContentPane(panel);
+        frame.setVisible(true);
+    }
 
+    @Override
+    public void init(World world) {
+        this.world = world;
     }
 
 
     @Override
     public void display(){
-
+        // do nothing
+        // display is done in the G2D_Panel
     }
 
     @Override
     public void setDimension(int w, int h) {
-
+        width=w;
+        height=h;
     }
 
     @Override
@@ -71,7 +102,9 @@ public class G2D_Renderer implements Renderer {
 
     @Override
     public void setBackgroundColor(int red, int green, int blue) {
-
+        this.red = red / 255.0f;
+        this.green = green / 255.0f;
+        this.blue = blue / 255.0f;
     }
 
 }

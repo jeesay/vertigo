@@ -32,6 +32,7 @@ public class Shape extends Node {
 
     protected Geometry geo;
     protected Material material;
+    private String style_;
     public static int count = 0;
 
     public Shape() {
@@ -50,8 +51,12 @@ public class Shape extends Node {
         material = new Material();
     }
 
+    public Geometry getGeometry() {
+        return geo;
+    }
+
     public void setGeometry(String type, float[] data) {
-        geo.setGeometry(type, data);
+        geo.setVertices(type, data);
         if (type.equals("V3F")) {
             bbox.expand(data);
             setDirty(Node.AABB,false);
@@ -61,10 +66,10 @@ public class Shape extends Node {
 
     public void setGeometry(String[] types, float[] data) {
         if (types.length == 1 && types[0].equals("V3F")) {
-            geo.setGeometry(types[0], data);
+            geo.setVertices(types[0], data);
             bbox.expand(data);
         } else {
-            geo.setGeometry(types, data);
+            geo.setVertices(types, data);
             int offset = 0; // TODO
             int step = 0; // TODO
             for (int i = offset; i < data.length; i += step) {
@@ -103,8 +108,24 @@ public class Shape extends Node {
         return coma;
     }
 
+    /**
+     * Get the drawing style
+     *
+     * @return style - Available styles: POINTS, LINES, LINESTRIP, TRIANGLES
+     *
+     */
+    public String getDrawingStyle() {
+        return style_;
+    }
+
+    /**
+     * Sets the drawing style
+     *
+     * @param style - Available styles: POINTS, LINES, LINESTRIP, TRIANGLES
+     *
+     */
     public void setDrawingStyle(String style) {
-        //TODO
+        style_ = style;
     }
 
     public void setGraphicsType(String type) {

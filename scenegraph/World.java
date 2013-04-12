@@ -27,16 +27,29 @@
 package vertigo.scenegraph;
 
 import vertigo.graphics.Visitor;
+import vertigo.scenegraph.Camera;
+
 /**
  *
  * @author Clement DELESTRE
  */
 public class World extends Node {
+
+    private Camera cam_;
+
     public World(){
         super();
         name="world";
     }
      
+    public Camera getCamera() {
+        if (cam_ == null) {
+            cam_ = (Camera) getNode("camera");
+        }
+        return cam_;
+    }
+
+
     @Override
     public void add(Node a_node) {
         if (a_node instanceof BackStage){

@@ -53,7 +53,6 @@ public static int count = 0;
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-        for (Node child : getChildren() )
-            child.accept(visitor);
     }
+
 } //end of class Light

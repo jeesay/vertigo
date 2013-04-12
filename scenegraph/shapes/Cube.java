@@ -117,14 +117,24 @@ public class Cube extends Shape {
 
     public Cube(String name) {
         super(name);
-        if (name.equals("Wire") )
-            type = WIRE;
-        else if  (name.equals("Flat") )
-            type = FLAT;
-        else if  (name.equals("Cube") )
-            type = CUBE;
-        else
-            type = WIRE;
+        if (name.equals("Wire") ) {
+            setDrawingStyle("LINES");
+            setType(WIRE);
+        }
+        else if  (name.equals("Flat") ) {
+            setDrawingStyle("TRIANGLES");
+            create_flatcube(); 
+            setType(FLAT);
+        }
+        else if  (name.equals("Cube") ) {
+            setDrawingStyle("TRIANGLES");
+            create_cube(); 
+            setType(CUBE);
+        }
+        else{
+            setDrawingStyle("POINTS");
+            setType(WIRE);
+        }
         w_ = 1.0f;
         h_ = 1.0f;
         d_ = 1.0f;
@@ -155,14 +165,18 @@ public class Cube extends Shape {
     private void create_wirecube() {
         // 1- modify dimension
         if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
+/**
             for (int i =0; i<wireVertices.length;i+=3) {
                wireVertices[i  ] *= w_;
                wireVertices[i+1] *= h_;
                wireVertices[i+2] *= d_;
             }
+**/
         }
+            for (int i =0; i<wireVertices.length;i+=3) 
+               System.out.println(wireVertices[i  ] +" "+wireVertices[i+1] +" "+wireVertices[i+2]);
         // 2- create geometry
-        geo.setGeometry("V3F",wireVertices);
+        geo.setVertices("V3F",wireVertices);
         geo.setIndices(wireIndices);
         // 3- create material
         // use default
@@ -178,7 +192,7 @@ public class Cube extends Shape {
             }
         }
            // 2- create geometry
-           geo.setGeometry(new String[]{"V3F","C4F"},flatvertices);
+           geo.setVertices(new String[]{"V3F","C4F"},flatvertices);
            // 3- create material
            material.setShaderMaterial("flat");
     }
@@ -191,7 +205,7 @@ public class Cube extends Shape {
                wireVertices[i+2] *= d_;
             }
         }
-           geo.setGeometry("CUBE",wireVertices);
+           geo.setVertices("V3F",wireVertices);
     }
 
 

@@ -46,7 +46,9 @@ public abstract class Node {
 
     private Node parent;
     protected ArrayList<Node> children;
+    // Local matrix
     protected Matrix4 matrix;
+    // World coordinate matrix
     private Matrix4 modelMatrix;
     protected AABB bbox;
     private byte dirty_;
@@ -56,7 +58,8 @@ public abstract class Node {
     public static byte AABB = 0x2;
     public static byte VBO = 0x4;
     public static byte SHADER = 0x8;
-    public static byte COLOR = 0xA;
+    public static byte COLOR = 0x10;
+    public static byte PROJMATRIX = 0x20;
 
     /**
      * Constructor
@@ -159,18 +162,22 @@ public abstract class Node {
     }
 
     /**
-     * Get a Node from the scenegraph of a given name.
+     * Get a node from the scenegraph of a given name.
      *
+     * @params node_name : Node name.
      * @return Node.
      */
     public Node getNode(String node_name) {
         if (this.getName().equals(node_name) )
            return this;
-        else
+        else {
+            Node n=null;
             for (Node child : getChildren()) {
-                if ( child.getNode(node_name) != null)
-                    return child;
+                n = child.getNode(node_name);
+                if ( n != null)
+                    return n;
             }
+        }
         return null;
     }
 
@@ -389,8 +396,11 @@ public abstract class Node {
     private void default_create() {
         children = new ArrayList<Node>();
         parent = null;
+        // Init matrix
         matrix = new Matrix4();
         matrix.setIdentity();
+        modelMatrix = new Matrix4();
+        modelMatrix.setIdentity();
         bbox = new AABB();
         name = "node";
         dirty_ = (byte) 0xff;
@@ -403,8 +413,7 @@ public abstract class Node {
                return this;
         }
         else if (!children.isEmpty()) {
-            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-                Node nodetemp = it.next();
+            for (Node nodetemp :  children) {
                 Node gn=nodetemp.getNode(_name);
                 if (gn !=null){ //gn for getNode
                     return gn;

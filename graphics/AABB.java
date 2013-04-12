@@ -26,8 +26,8 @@
 
 package vertigo.graphics;
 
-import vertigo.math.Vector3;
-import vertigo.math.Vector4;
+import vertigo.math.Point3;
+import vertigo.math.Point4;
 
 /**
  * Axis-Aligned Bounding Box
@@ -61,12 +61,12 @@ public class AABB {
         expand(points);
     }
 
-    public AABB(Vector3 v0, Vector3 v1) {
+    public AABB(Point3 v0, Point3 v1) {
         expand(v0.x,v0.y,v0.z);
         expand(v1.x,v1.y,v1.z);
     }
 
-    public AABB(Vector3 v0, float w, float h, float d) {
+    public AABB(Point3 v0, float w, float h, float d) {
         expand(v0.x,v0.y,v0.z);
         expand(v0.x+w,v0.y+h,v0.z+d);
     }
@@ -89,10 +89,10 @@ public class AABB {
 
     /**
      * Get a bounding sphere enclosing this bounding box
-     * @return a Vector4 containing XYZ-coordinates of the center and the sphere radius, respectively.
+     * @return a Point4 containing XYZ-coordinates of the center and the sphere radius, respectively.
      */
-    public Vector4 getBoundingShere() {
-        return new Vector4(
+    public Point4 getBoundingShere() {
+        return new Point4(
             (min_x + max_x)/2.0f,
             (min_y + max_y)/2.0f, 
             (min_z + max_z)/2.0f,
@@ -123,10 +123,10 @@ public class AABB {
 
     /**
      * Get center of this bounding box
-     * @return Vector3
+     * @return Point3
      */
-    public Vector3 getCenter() {
-        return new Vector3( (min_x + max_x)/2.0f,(min_y + max_y)/2.0f, (min_z + max_z)/2.0f );
+    public Point3 getCenter() {
+        return new Point3( (min_x + max_x)/2.0f,(min_y + max_y)/2.0f, (min_z + max_z)/2.0f );
     }
 
     public float getMinX() {
@@ -157,16 +157,16 @@ public class AABB {
       return new float[]{min_x,min_y,min_z};
     }
 
-    public Vector3 getMin() {
-      return new Vector3(min_x,min_y,min_z);
+    public Point3 getMin() {
+      return new Point3(min_x,min_y,min_z);
     }
 
     public float[] getMax3f() {
       return new float[]{max_x,max_y,max_z};
     }
 
-    public Vector3 getMax() {
-      return new Vector3(max_x,max_y,max_z);
+    public Point3 getMax() {
+      return new Point3(max_x,max_y,max_z);
     }
 
     public float getWidth() {
@@ -196,7 +196,7 @@ public class AABB {
             expand(points[i],points[i+1],points[i+2]);
     }
 
-    public void expand(Vector3 v) {
+    public void expand(Point3 v) {
         expand(v.x,v.y,v.z);
     }
 
