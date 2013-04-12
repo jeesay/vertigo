@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
+import vertigo.math.Point2;
 import vertigo.math.Point3;
 import vertigo.math.Vector3;
 import ij.IJ;
@@ -37,19 +38,42 @@ import ij.IJ;
 public class Camera extends Node {
 
     private Matrix4 proj_matrix;
+    private int vp_width;
+    private int vp_height;
+    private float fovy;
+    private float aspect;
+    private float znear;
+    private float zfar;
+    private int proj_type = 0;
+
+    private final static int PERSPECTIVE = 0;
+    private final static int ORTHOGRAPHIC = 1;
+
+
     private static List<String> output = Arrays.asList("Screen", "Image");
     private static List<String> types = Arrays.asList("Perspective", "Orthographic");
 
     public Camera() {
         super();
         proj_matrix = new Matrix4();
-        name = "Camera";
+        proj_type = PERSPECTIVE;
+        fovy = (float) (45.0 * Math.PI / 180.0);
+        aspect = 1.0f;
+        znear = 0.1f;
+        zfar = 100.0f;
+        name = "camera";
         this.setOutput("Screen");
     }
 
     public Camera(String name){
         super(name);
         proj_matrix = new Matrix4();
+        proj_type = PERSPECTIVE;
+        fovy = (float) (45.0 * Math.PI / 180.0);
+        aspect = 1.0f;
+        znear = 0.1f;
+        zfar = 100.0f;
+        name = "camera";
         this.setOutput("Screen");
 }
   
@@ -60,6 +84,10 @@ public class Camera extends Node {
      * @param fovy,aspect, zNear, zFar
      */
     public void setPerspective(float fovy, float aspect, float zNear, float zFar) {
+        this.fovy = fovy;
+        this.aspect = aspect;
+        this.znear = zNear;
+        this.zfar = zFar;
     }
 
     /**
@@ -73,8 +101,48 @@ public class Camera extends Node {
      *
      * @param type as String
      */
+    public Point2 getViewport() {
+        return new Point2(vp_width,vp_height);
+    }
+
+    /**
+     * Set the Camera's type ("Mono" or "Stereo")
+     *
+     * @param type as String
+     */
+    public void setViewport(int width, int height) {
+        vp_width = width;
+        vp_height = height;
+        aspect = (float) vp_width / (float) vp_height;
+        setDirty(Node.PROJMATRIX,true);
+    }
+
+    /**
+     * Set the Camera's type ("Mono" or "Stereo")
+     *
+     * @param type as String
+     */
     public void setType(String type) {
         // TO DO
+    }
+
+    /**
+     * Get the View matrix
+     *
+     */
+    public Matrix4 getViewMatrix() {
+        return matrix;
+    }
+
+    /**
+     * Get the  projection matrix
+     *
+     */
+    public Matrix4 getProjection() {
+        if (isDirty(Node.PROJMATRIX)) {
+            updateProjMatrix();
+        }
+        return proj_matrix;
     }
 
     /**
@@ -85,9 +153,9 @@ public class Camera extends Node {
     public void setProjection(String type) {
         int index = types.indexOf(name);
         switch (index) {
-            case 0: //TODO
+            case PERSPECTIVE: //TODO
                 break;
-            case 1: // TODO
+            case ORTHOGRAPHIC: // TODO
                 break;
             default:
                 IJ.log("Enter \"Perspective\" or \"Orthographic\"");
@@ -104,14 +172,17 @@ public class Camera extends Node {
         // TODO
           int index = types.indexOf(name);
         switch (index) {
-            case 0: //TODO 
-                perspective(params[0],params[1],params[2],params[3]);
+            case PERSPECTIVE: 
+                fovy   = params[0];
+                aspect = params[1];
+                znear  = params[2];
+                zfar   = params[3];
                 break;
             case 1: // TODO
                ortho(params[0],params[1],params[2],params[3],params[4],params[5]);
                 break;
             default:
-                IJ.log("Enter \"Perspective\" or \"Orthographic\"");
+                IJ.showMessage("Vertigo ERROR","Enter \"Perspective\" or \"Orthographic\"");
         }
     }
 
@@ -140,13 +211,18 @@ public class Camera extends Node {
             case 1: // IMAGE TODO
                 break;
             default:
-                IJ.log("Valeur incorrecte. Veuillez entrer Screen ou Image.");
+                IJ.showMessage("Vertigo ERROR","Wrong type");
         }
     }
 
     public void lookAt(String node_name) {
+        Point3 cg;
+        if (node_name.equals("origin") )
+            cg = new Point3(0.0f,0.0f,0.0f);
+        else
+            cg = getNode(node_name).getBoundingBox().getCenter();
+
         Vector3 up = new Vector3(0.0f,1.0f,0.0f);
-        Point3 cg = getNode(node_name).getBoundingBox().getCenter();
         Point3 pos = new Point3(0.0f,0.0f,0.0f); // TODO
         look_at(pos,cg,up);
     }
@@ -154,18 +230,8 @@ public class Camera extends Node {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-        for (Node child : getChildren() )
-            child.accept(visitor);
     }
 
-/***
-    public void process() {
-        if (isDirty(Node.GEOMETRY) )
-           processGeometry();
-        else if isDirty(Node.MATRIX) )
-            node.accept(new MatrixVisitor() );
-    }
-***/
 
     /**
      *
@@ -358,5 +424,19 @@ public class Camera extends Node {
         // matrix.resetType();
 
     }
+
+    private void updateProjMatrix() {
+        switch (proj_type) {
+            case PERSPECTIVE:
+                perspective(fovy,aspect,znear, zfar); 
+                setDirty(Node.PROJMATRIX,false);
+                break;
+            case ORTHOGRAPHIC: // ortho TODO
+                break;
+            default:
+                IJ.showMessage("Wrong type");
+        }
+
+   }
 
 } // End of class Camera

@@ -68,7 +68,7 @@ public class Geometry {
      * the primitives array. Ex: "[VEC3F,COL3F,NORM3F,TEX2F]" corresponds to
      * Vertex, Color, Normal and finally TexCoords data for each vertex.
      */
-    public void setPackedVertices(String[] types, float[] data) {
+    public void setVertices(String[] types, float[] data) {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
@@ -86,15 +86,10 @@ public class Geometry {
         buffers.add(ibo);
     }
 
-    public void setPackedGeometry(String type, float[] f) {
+    public BO getBO(int index) {
+        // HACK: if (buffers.isEmpty() ) {System.out.println("Geom. buffer is empty");return null;}
+        // HACK: for (BO bo : buffers) System.out.println("Geom. buffer "+bo);
+        return buffers.get(index);
     }
 
-    public void setGeometry(String type, float[] f) {
-    }
-
-    public void setGeometry(String[] types, float[] f) {
-        for (String type : types) {
-            setGeometry(type, f);
-        }
-    }
 } // end of class Geometry
