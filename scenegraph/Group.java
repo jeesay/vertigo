@@ -11,7 +11,10 @@ import vertigo.graphics.Visitor;
  * @author Clement DELESTRE
  */
 public class Group extends Node {
-
+  public  Group(){
+        super();
+        name="group";
+    }
     @Override
     public void accept(Visitor visitor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

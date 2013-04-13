@@ -11,5 +11,9 @@ import vertigo.scenegraph.Shape;
  * @author Clement DELESTRE
  */
 public class Sphere extends Shape {
-    
+
+    public Sphere() {
+        super();
+        name = "sphere";
+    }
 }

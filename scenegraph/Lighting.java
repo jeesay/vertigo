@@ -35,6 +35,7 @@ import vertigo.graphics.Visitor;
 public class Lighting extends Node {
     public  Lighting(){
         super();
+        name="lighting";
     }
 
     @Override

@@ -14,6 +14,7 @@ public class Transform extends Node {
 
     
     public Transform (){
+        super();
         name="transform";
     }
     @Override

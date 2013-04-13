@@ -11,5 +11,9 @@ import vertigo.scenegraph.Shape;
  * @author Clement DELESTRE
  */
 public class Torus extends Shape {
-    
+
+    public Torus() {
+        super();
+        name = "torus";
+    }
 }

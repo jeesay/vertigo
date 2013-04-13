@@ -10,6 +10,10 @@ import vertigo.scenegraph.Shape;
  *
  * @author Clement DELESTRE
  */
-public class Pyramid extends Shape{
-    
+public class Pyramid extends Shape {
+
+    public Pyramid() {
+        super();
+        name = "pyramid";
+    }
 }
