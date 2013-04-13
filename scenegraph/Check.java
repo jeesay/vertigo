@@ -26,11 +26,16 @@
  */
 package vertigo.scenegraph;
 
+import ij.IJ;
+import java.util.ArrayList;
+import java.util.Iterator;
+import vertigo.graphics.Visitor;
+
 /**
  *
  * @author Clement DELESTRE
  */
-public class Check {
+public class Check implements Visitor {
 
     public boolean checkCam(World w) {
         int camnumber = 0;
@@ -52,8 +57,7 @@ public class Check {
         int len = s.size();
         for (int i = 0; i < len - 1; i++) {
             Node node = s.getChild(i);
-            if (node instanceof Shape) {
-            } else {
+            if (!(node instanceof Shape)) {
                 error++;
             }
         }
@@ -68,8 +72,7 @@ public class Check {
         int len = v.size();
         for (int i = 0; i < len - 1; i++) {
             Node node = v.getChild(i);
-            if (node instanceof Camera) {
-            } else {
+            if (!(node instanceof Camera)) {
                 error++;
             }
         }
@@ -81,17 +84,72 @@ public class Check {
 
     public boolean checkLighting(Lighting l) {
         int error = 0;
-        int len = l.size();
-        for (int i = 0; i < len - 1; i++) {
-            Node node = l.getChild(i);
-            if (node instanceof Light) {
-            } else {
-                error++;
-            }
+        ArrayList<Node> children = l.getChildren();
+        for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+            Node nodetemp = it.next();
+            error += checkLightingR(nodetemp, error);
         }
         if (error == 0) {
             return true;
         }
         return false;
+    }
+
+    public int checkLightingR(Node n, int error) {
+        if (!(n instanceof Light)) {
+            error++;
+            IJ.log("The object " + n.getName() + " is misplaced.");
+        }
+        ArrayList<Node> children = n.getChildren();
+        for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+            Node nodetemp = it.next();
+            error += checkLightingR(nodetemp, error);
+        }
+        return error;
+    }
+
+    @Override
+    public void visit(BackStage obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Camera obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Light obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Lighting obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Scene obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Shape obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Stage obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(Viewing obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void visit(World obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 } // end of class Check

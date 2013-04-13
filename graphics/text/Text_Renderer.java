@@ -42,6 +42,7 @@ import vertigo.scenegraph.World;
  */
 public class Text_Renderer implements Renderer {
 
+    public static int handle = 99;
     private Scene scene = new Scene();
     private Camera camera = new Camera();
     private World world = new World();
@@ -57,10 +58,13 @@ public class Text_Renderer implements Renderer {
     public Text_Renderer() {
         IJ.log("Renderer: TEXT");
     }
-
+    public int glGenBufffer(int[] vbo){
+            handle++;
+            return handle;
+    }
     @Override
     public void display() {
-       world.accept(new PrintVisitor());
+        world.accept(new PrintVisitor());
     }
 
     private void processNode(Node n) {
@@ -112,14 +116,14 @@ public class Text_Renderer implements Renderer {
 
     @Override
     public void setDimension(int w, int h) {
-        window_width=w;
-                window_height=h;
+        window_width = w;
+        window_height = h;
         //Do Nothing
     }
 
     @Override
     public void setTitle(String title) {
-        this.title=title;
+        this.title = title;
         //Do Nothing
     }
 
