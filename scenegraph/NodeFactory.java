@@ -31,6 +31,10 @@ import java.util.List;
 import java.util.Arrays;
 
 import vertigo.scenegraph.shapes.Cube;
+import vertigo.scenegraph.shapes.Pyramid;
+import vertigo.scenegraph.shapes.Sphere;
+import vertigo.scenegraph.shapes.Tetrahedron;
+import vertigo.scenegraph.shapes.Torus;
 
 public class NodeFactory {
 
@@ -44,8 +48,10 @@ public class NodeFactory {
         IJ.log("get node " + name + " " + index);
         switch (index) {
             case 869: // BackStage
+                a_node=new BackStage();
                 break;
             case 585: // Camera
+                a_node=new Camera("Camera");
                 break;
             case 383: // Cube
                 a_node = new Cube("Cube");
@@ -56,21 +62,41 @@ public class NodeFactory {
             case 1117: // FlatPyramid
             case 1543: // FlatTetrahedron
             case 525: // Group
+                a_node=new Group();
+                break;
             case 504: // Light
                 a_node = new Light();
                 break;
             case 822: // Lighting
+                a_node=new Lighting();
+                break;
             case 726: // Pyramid
+                a_node=new Pyramid();
+                break;
             case 494: // Scene
+                a_node=new Scene();
+                break;
             case 497: // Shape
                 a_node = new Shape();
                 break;
             case 615: // Sphere
+                a_node=new Sphere();
+                 break;
             case 500: // Stage
+                a_node=new Stage();
+                  break;
             case 1152: // Tetrahedron
+                a_node=new Tetrahedron();
+                break;
             case 541: // Torus
+                a_node=new Torus();
+                break;
             case 956: // Transform
+                 a_node=new Transform();
+                break;
             case 729: // Viewing
+                 a_node=new Viewing();
+                break;
             case 790: // WireCube
                 a_node = new Cube("Wire");
                 break;
