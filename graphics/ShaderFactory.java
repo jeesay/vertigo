@@ -24,28 +24,22 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-
 package vertigo.graphics;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ShaderFactory{
-    
-    /**
-     * index description
-     * 0     default: only one color
-     * 1     flat   : colors but no shade
-     * 2     phong  : phong algorithm - colors with shade
+public class ShaderFactory {
+ /**
+     *
+     * @author Jean-Christophe Taveau
      */
-    private static List<String> shaders = Arrays.asList("default","flat","phong");
-    
-    public static ShaderProg get(String name){ 
+
+    public static ShaderProg get(String name) {
+        int index = calcIndex(name);
         ShaderProg shader;
-        int index = shaders.indexOf(name);
         switch (index) {
-            case 0:
-                // TODO - only one instance
+            case 741: // default
                 shader = new ShaderProg("default");
                 shader.loadVertexShader();
                 shader.loadFragmentShader();
@@ -54,11 +48,41 @@ public class ShaderFactory{
                 shader.addUniform("uProjMatrix");
                 shader.addAttribute("aVertexPosition");
                 break;
-            default:
-                // TODO
+            case 423: // flat
+                shader = new ShaderProg("flat");
+                shader.loadVertexShader();
+                shader.loadFragmentShader();
+                shader.addUniform("uModelMatrix");
+                shader.addUniform("uViewMatrix");
+                shader.addUniform("uProjMatrix");
+                shader.addAttribute("aVertexPosition");
+                break;
+            case 540: // phong
+                shader = new ShaderProg("phong");
+                shader.loadVertexShader();
+                shader.loadFragmentShader();
+                shader.addUniform("uModelMatrix");
+                shader.addUniform("uViewMatrix");
+                shader.addUniform("uProjMatrix");
+                shader.addAttribute("aVertexPosition");
+                break;
+            default: // Do nothing  
                 shader = new ShaderProg();
         }
         return shader;
     }
-    
+
+    /**
+     * Calc index by summing all the Unicode values in the string 'name'
+     *
+     * @param name
+     * @return index
+     */
+    private static int calcIndex(String name) {
+        int index = 0;
+        for (int i = 0; i < name.length(); i++) {
+            index += (int) name.charAt(i);
+        }
+        return index;
+    }
 }// end of class ShaderFactory

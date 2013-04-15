@@ -35,6 +35,7 @@ import vertigo.graphics.Visitor;
 public class Stage extends Node {
     public Stage(){
         super();
+        name="stage";
     }
 
     @Override

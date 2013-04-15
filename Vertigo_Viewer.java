@@ -39,6 +39,8 @@ import vertigo.scenegraph.Viewing;
 import ij.IJ;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
+import java.util.ArrayList;
+import java.util.Iterator;
 import vertigo.graphics.Renderer;
 
 public class Vertigo_Viewer implements PlugIn {
@@ -53,24 +55,25 @@ public class Vertigo_Viewer implements PlugIn {
     private Camera camera_;
     private Renderer renderer;
     private World world_;
-
     public static final String VERTIGO_VERSION = "0.01";
 
     public Vertigo_Viewer() {
-        default_scenegraph();
+        // default_scenegraph();
         window_width = 512;
         window_height = 512;
         title_ = "Vertigo";
+        world_ = new World();
+        scene_ = new Scene();
+        camera_ = new Camera();
     }
 
     @Override
     public void run(String options) {
         //test();
         IJ.showMessage("About VERTIGO",
-            "<html>"+
-            "This plugin only works via scripts in JavaScript.<br />"+
-            "See the tutorials in http://crazybiocomputing.blogspot.com/p/plugins.html.</html>"
-        );
+                "<html>"
+                + "This plugin only works via scripts in JavaScript.<br />"
+                + "See the tutorials in http://crazybiocomputing.blogspot.com/p/plugins.html.</html>");
     }
 
     /**
@@ -107,16 +110,19 @@ public class Vertigo_Viewer implements PlugIn {
     public void show() {
         try {
             System.out.println("LWJGL Renderer created");
-//            renderer = new vertigo.graphics.lwjgl.LWJGL_Renderer();
+            renderer = new vertigo.graphics.lwjgl.LWJGL_Renderer();
+            show("LWJGL");
         } catch (ExceptionInInitializerError e) {
             try {
-//                renderer = new vertigo.graphics.jogl.JOGL_Renderer();
+                renderer = new vertigo.graphics.jogl.JOGL_Renderer();
+                show("JOGL");
             } catch (ExceptionInInitializerError ei) {
                 // try & catch for tests
                 try {
                     renderer = new vertigo.graphics.text.Text_Renderer();
+                    show("TEXT");
                 } catch (ExceptionInInitializerError eie) {
-                    IJ.showMessage("Vertigo ERROR","Please download JOGL or LWJGL.");
+                    IJ.showMessage("Vertigo ERROR", "Please download JOGL or LWJGL.");
                 }
             }
         }
@@ -126,7 +132,7 @@ public class Vertigo_Viewer implements PlugIn {
             renderer.setTitle(title_);
             renderer.createWindow(); // contexte graphique ? opengl3?
         } catch (NullPointerException nullp) {
-            IJ.showMessage("Vertigo ERROR","Can't create a graphics window.");
+            IJ.showMessage("Vertigo ERROR", "Can't create a graphics window.");
         }
 
         //renderer.setDimension(window_height, window_width);
@@ -138,32 +144,42 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     /**
-     * Run the rendering engine for display 
-     * @param name of the rendering engine 
+     * Run the rendering engine for display
+     *
+     * @param name of the rendering engine
      */
     public void show(String render) {
-         if (render.equals("G2D")) {
+        if (render.equals("G2D")) {
             renderer = new vertigo.graphics.G2D.G2D_Renderer();
             renderer.setBackgroundColor(red, green, blue);
             renderer.setDimension(window_width, window_height);
             renderer.setTitle(title_);
             renderer.init(getWorld());
-            renderer.createWindow(); 
+            renderer.createWindow();
             renderer.display();
-         }
-         else if (render.equals("LWJGL")) {
-             
-         }
-         else if (render.equals("JOGL")) {
-             
-         }
-         else if (render.equals("TEXT")) {
+        } else if (render.equals("LWJGL")) {
+            renderer = new vertigo.graphics.lwjgl.LWJGL_Renderer();
+            renderer.setBackgroundColor(red, green, blue);
+            renderer.setDimension(window_width, window_height);
+            renderer.setTitle(title_);
+            renderer.init(getWorld());
+            renderer.createWindow();
+            renderer.display();
+        } else if (render.equals("JOGL")) {
+            renderer = new vertigo.graphics.jogl.JOGL_Renderer();
+            renderer.setBackgroundColor(red, green, blue);
+            renderer.setDimension(window_width, window_height);
+            renderer.setTitle(title_);
+            renderer.init(getWorld());
+            renderer.createWindow();
+            renderer.display();
+        } else if (render.equals("TEXT")) {
             renderer = new vertigo.graphics.text.Text_Renderer();
             renderer.setBackgroundColor(red, green, blue);
             renderer.setDimension(window_width, window_height);
             renderer.setTitle(title_);
             renderer.init(getWorld());
-            renderer.createWindow(); 
+            renderer.createWindow();
             renderer.display();
         }
     }
@@ -277,7 +293,6 @@ public class Vertigo_Viewer implements PlugIn {
 ******/
     }
 
-
     private void default_scenegraph() {
 
         /**
@@ -302,6 +317,34 @@ public class Vertigo_Viewer implements PlugIn {
         lights.add(new Light("sun"));
         lights.add(new Light("spot"));
 
+    }
 
+    public Node getNode(String name) {
+        Node a_node = searchName(world_, name);
+        if (a_node == null) {
+            IJ.log("The " + name + " node was not found");
+        }
+        return a_node;
+    }
+
+    private Node searchName(Node a_node, String name) {
+        if (a_node.getName().equals(name)) {
+            IJ.log("this is " + a_node.getName());
+            return a_node;
+        } else {
+            ArrayList children = a_node.getChildren();
+            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
+                Node nodetemp = it.next();
+                a_node = searchName(nodetemp, name);
+                if (a_node!=null){
+                    return a_node;
+                }
+                /*if (a_node.getName().equals(name)) {
+                    IJ.log("This is " + a_node.getName());
+                    return a_node;
+                }*/
+            }
+        }
+        return null;
     }
 }// end of class Vertigo_Viewer

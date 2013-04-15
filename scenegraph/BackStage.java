@@ -35,6 +35,7 @@ import vertigo.graphics.Visitor;
 public class BackStage extends Node {
     public BackStage(){
             super();
+            name="backstage";
     }
       public void add(Node a_node) {
         if (a_node instanceof Viewing){

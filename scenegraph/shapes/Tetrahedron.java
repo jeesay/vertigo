@@ -24,24 +24,18 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-package vertigo.scenegraph;
+package vertigo.scenegraph.shapes;
 
-import vertigo.graphics.Visitor;
+import vertigo.scenegraph.Shape;
 
 /**
  *
- * @author Clement DELESTRE
+ * @author clement Delestre
  */
-public class Lighting extends Node {
-    public  Lighting(){
-        super();
-        name="lighting";
-    }
+public class Tetrahedron extends Shape {
 
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visit(this);
-        for (Node child : getChildren() )
-            child.accept(visitor);
+    public Tetrahedron() {
+        super();
+        name = "Tetrahedron";
     }
 }
