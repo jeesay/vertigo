@@ -51,14 +51,14 @@ public class Transform extends Node {
      * Constructor
      */
     public Transform() {
+        super();
         // Init matrix
         matrix = new Matrix4();
         matrix.setIdentity();
     }
 
     public Transform(String name){
-        default_create();
-        this.name=name; 
+        super(name);
         // Init matrix
         matrix = new Matrix4();
         matrix.setIdentity();
