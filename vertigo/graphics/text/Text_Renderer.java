@@ -95,7 +95,7 @@ public class Text_Renderer implements Renderer {
     }
 
     private void updateMatrix(Node n) {
-        n.getMatrix().mul(n.getParent().getModelMatrix());
+        n.getModelMatrix().mul(n.getParent().getModelMatrix());
         n.setDirty(Node.MATRIX, false);
     }
 
