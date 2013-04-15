@@ -58,13 +58,10 @@ public class Vertigo_Viewer implements PlugIn {
     public static final String VERTIGO_VERSION = "0.01";
 
     public Vertigo_Viewer() {
-        // default_scenegraph();
+        default_scenegraph();
         window_width = 512;
         window_height = 512;
         title_ = "Vertigo";
-        world_ = new World();
-        scene_ = new Scene();
-        camera_ = new Camera();
     }
 
     @Override
@@ -185,9 +182,9 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     /**
-     * Gets the world of the scene graph corresponding to the root.
+     * Gets the world (aka root) of the scene graph.
      *     
-*/
+     */
     public World getWorld() {
         return world_;
     }
@@ -196,7 +193,7 @@ public class Vertigo_Viewer implements PlugIn {
      * Gets the scene of the scene graph. Convenient method equivalent to
      * getWorld().get("Stage").get("Scene");
      *     
-*/
+     */
     public Scene getScene() {
         return scene_;
     }
@@ -205,7 +202,7 @@ public class Vertigo_Viewer implements PlugIn {
      * Gets the Camera for *this* (default) scene graph. This is a convenient
      * method equivalent to `getScene().getCamera()'.
      *     
-*/
+     */
     public Camera getCamera() {
         return camera_;
     }
