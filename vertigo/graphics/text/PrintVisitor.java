@@ -110,10 +110,7 @@ public class PrintVisitor implements Visitor {
             } while ( !(n instanceof World));
             level+="+-";
             return level;
-        }
-       
+        }  
     }
-
-
-}
+} // end of class PrintVisitor
 

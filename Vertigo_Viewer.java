@@ -171,7 +171,7 @@ public class Vertigo_Viewer implements PlugIn {
             renderer.createWindow();
             renderer.display();
         } else if (render.equals("TEXT")) {
-            renderer = new vertigo.graphics.text.Text_Renderer();
+            renderer = new vertigo.graphics.text.Text_Renderer(camera_,scene_);
             renderer.setBackgroundColor(red, green, blue);
             renderer.setDimension(window_width, window_height);
             renderer.setTitle(title_);

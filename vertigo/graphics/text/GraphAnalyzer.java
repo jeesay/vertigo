@@ -30,14 +30,26 @@ import ij.IJ;
 import java.util.ArrayList;
 import java.util.Iterator;
 import vertigo.graphics.Visitor;
+import vertigo.scenegraph.BackStage;
+import vertigo.scenegraph.Camera;
+import vertigo.scenegraph.Light;
+import vertigo.scenegraph.Lighting;
+import vertigo.scenegraph.Scene;
+import vertigo.scenegraph.Shape;
+import vertigo.scenegraph.Stage;
+import vertigo.scenegraph.Transform;
+import vertigo.scenegraph.Viewing;
+import vertigo.scenegraph.World;
 
 /**
  *
  * @author Clement DELESTRE
  */
 public class GraphAnalyzer implements Visitor {
-
+private static int num_cam=0;
+private static int num_light=0;
     public GraphAnalyzer() {
+        
         // TODO
     }
 
@@ -48,12 +60,16 @@ public class GraphAnalyzer implements Visitor {
 
     @Override
     public void visit(Camera obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        num_cam++;
+        if (num_cam > 1){
+            IJ.log("ERROR : Camera must be single.");
+        }
+        IJ.log("Nombre de camera "+num_cam);
     }
 
     @Override
     public void visit(Light obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+       num_light++;
     }
 
     @Override
@@ -162,6 +178,11 @@ public class GraphAnalyzer implements Visitor {
         }
         return error;
     }
+
+   
+
+   
+
 
 } // End of class GraphAnalyzer
 
