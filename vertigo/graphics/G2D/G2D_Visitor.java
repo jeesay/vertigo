@@ -45,6 +45,7 @@ import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Stage;
+import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 
