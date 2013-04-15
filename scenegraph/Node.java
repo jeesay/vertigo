@@ -46,8 +46,6 @@ public abstract class Node {
 
     private Node parent;
     protected ArrayList<Node> children;
-    // Local matrix
-    protected Matrix4 matrix;
     // World coordinate matrix
     private Matrix4 modelMatrix;
     protected AABB bbox;
@@ -213,51 +211,6 @@ public abstract class Node {
         setDirty(AABB, false);
     }
 
-    /**
-     * Set Translation
-     *
-     * @param tx,ty,tz as floats
-     */
-    public void setTranslation(float tx, float ty, float tz) {
-        matrix.setTranslation(new Vector3(tx, ty, tz));
-    }
-
-    /**
-     * Set Position
-     *
-     * @param tx,ty,tz as floats
-     */
-    public void setPosition(float tx, float ty, float tz) {
-        setTranslation(tx, ty, tz);
-    }
-
-    /**
-     * Set Direction
-     *
-     * @param x,y,z as floats
-     */
-    public void setDirection(float x, float y, float z) {
-        //TODO with Matrix4 (look at)
-    }
-
-    /**
-     * Set the scale
-     *
-     * @param scale as floats
-     */
-    public void setScale(float s) {
-        //TODO
-        matrix.setScale(s);
-    }
-
-    /**
-     * Get the this matrix
-     *
-     * @return Node.
-     */
-    public Matrix4 getMatrix() {
-        return matrix;
-    }
 
     /**
      * Get the model matrix from local to world coordinates
@@ -333,11 +286,52 @@ public abstract class Node {
     public abstract void accept(Visitor visitor);
 
 
-    /**
-     * Get the root.
-     *
-     * @return Node.
-     */
+
+    public boolean isDrawable() {
+        return drawable_;
+    }
+
+    private void default_create() {
+        children = new ArrayList<Node>();
+        parent = null;
+        // Init matrix
+        modelMatrix = new Matrix4();
+        modelMatrix.setIdentity();
+        bbox = new AABB();
+        name = "node";
+        dirty_ = (byte) 0xff;
+        drawable_ = false;
+    }
+
+/****
+
+
+    public void setTranslation(float tx, float ty, float tz) {
+        matrix.setTranslation(new Vector3(tx, ty, tz));
+    }
+
+
+    public void setPosition(float tx, float ty, float tz) {
+        setTranslation(tx, ty, tz);
+    }
+
+
+    public void setDirection(float x, float y, float z) {
+        //TODO with Matrix4 (look at)
+    }
+
+
+    public void setScale(float s) {
+        //TODO
+        matrix.setScale(s);
+    }
+
+
+    public Matrix4 getMatrix() {
+        return matrix;
+    }
+
+
     public Node traverseUp() {
         if (parent == null) {
             System.out.println("La racine a été trouvée ! Elle se nomme " + this.getName());
@@ -349,11 +343,7 @@ public abstract class Node {
         return null;
     }
 
-    /**
-     * Get the leafs.
-     *
-     * @return Node.
-     */
+
     public void traverseDown() {
         if (children.isEmpty()) {
             System.out.println("Une feuille a été trouvée ! Elle se nomme " + this.getName());
@@ -388,26 +378,10 @@ public abstract class Node {
 
         }
     }
+    // Local matrix
+    protected Matrix4 matrix;
 
-    public boolean isDrawable() {
-        return drawable_;
-    }
 
-    private void default_create() {
-        children = new ArrayList<Node>();
-        parent = null;
-        // Init matrix
-        matrix = new Matrix4();
-        matrix.setIdentity();
-        modelMatrix = new Matrix4();
-        modelMatrix.setIdentity();
-        bbox = new AABB();
-        name = "node";
-        dirty_ = (byte) 0xff;
-        drawable_ = false;
-    }
-
-/****
     public Node getNode(String _name){
         if (  _name.equals(name)){
                return this;
