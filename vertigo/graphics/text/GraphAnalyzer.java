@@ -35,9 +35,64 @@ import vertigo.graphics.Visitor;
  *
  * @author Clement DELESTRE
  */
-public class Check implements Visitor {
+public class GraphAnalyzer implements Visitor {
 
-    public boolean checkCam(World w) {
+    public GraphAnalyzer() {
+        // TODO
+    }
+
+    @Override
+    public void visit(BackStage obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Camera obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Light obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Lighting obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Scene obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Shape obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Stage obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Transform obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(Viewing obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void visit(World obj) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+
+    private boolean checkCam(World w) {
         int camnumber = 0;
         int len = w.size();
         for (int i = 0; i < len - 1; i++) {
@@ -52,7 +107,7 @@ public class Check implements Visitor {
         return false;
     }
 
-    public boolean checkScene(Scene s) {
+    private boolean checkScene(Scene s) {
         int error = 0;
         int len = s.size();
         for (int i = 0; i < len - 1; i++) {
@@ -67,7 +122,7 @@ public class Check implements Visitor {
         return false;
     }
 
-    public boolean checkViewing(Viewing v) {
+    private boolean checkViewing(Viewing v) {
         int error = 0;
         int len = v.size();
         for (int i = 0; i < len - 1; i++) {
@@ -82,7 +137,7 @@ public class Check implements Visitor {
         return false;
     }
 
-    public boolean checkLighting(Lighting l) {
+    private boolean checkLighting(Lighting l) {
         int error = 0;
         ArrayList<Node> children = l.getChildren();
         for (Iterator<Node> it = children.iterator(); it.hasNext();) {
@@ -95,7 +150,7 @@ public class Check implements Visitor {
         return false;
     }
 
-    public int checkLightingR(Node n, int error) {
+    private int checkLightingR(Node n, int error) {
         if (!(n instanceof Light)) {
             error++;
             IJ.log("The object " + n.getName() + " is misplaced.");
@@ -108,48 +163,6 @@ public class Check implements Visitor {
         return error;
     }
 
-    @Override
-    public void visit(BackStage obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+} // End of class GraphAnalyzer
 
-    @Override
-    public void visit(Camera obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public void visit(Light obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void visit(Lighting obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void visit(Scene obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void visit(Shape obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void visit(Stage obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void visit(Viewing obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void visit(World obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-} // end of class Check
