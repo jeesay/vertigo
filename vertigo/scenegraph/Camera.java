@@ -63,6 +63,8 @@ public class Camera extends Node {
         znear = 0.1f;
         zfar = 100.0f;
         name = "camera";
+        view_matrix = new Matrix4();
+        view_matrix.setIdentity();
         this.setOutput("Screen");
     }
 
@@ -75,6 +77,8 @@ public class Camera extends Node {
         znear = 0.1f;
         zfar = 100.0f;
         name = "camera";
+        view_matrix = new Matrix4();
+        view_matrix.setIdentity();
         this.setOutput("Screen");
 }
   
