@@ -1,0 +1,9 @@
+package vertigo.graphics;
+public class ShaderFactory{
+    
+    public static ShaderProg getShader(String _name){ 
+        ShaderProg shade;
+        return shade;
+    }
+    
+}// end of class ShaderFactory
