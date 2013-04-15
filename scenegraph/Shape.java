@@ -27,12 +27,18 @@
 package vertigo.scenegraph;
 
 import vertigo.graphics.Visitor;
+import vertigo.math.AxisAngle4;
+import vertigo.math.Matrix4;
+import vertigo.math.Vector3;
 
 public class Shape extends Node {
 
     protected Geometry geo;
     protected Material material;
     private String style_;
+    // Local matrix
+    protected Matrix4 matrix;
+
     public static int count = 0;
 
     public Shape() {
@@ -133,6 +139,36 @@ public class Shape extends Node {
         // need a factory ?
     }
 
+    /**
+     * Rotate this shape
+     *
+     * @param angle_in_degrees rotation angle expressed in degree
+     * @param axis_x,axis_y,axis_z XYZ coordinates of the rotation axis
+     */
+    public void rotate(float angle_in_degrees, float axis_x, float axis_y, float axis_z) {
+        matrix.setRotation(new AxisAngle4( axis_x, axis_y, axis_z, (float) (angle_in_degrees /180.0f * Math.PI)) );
+        // TODO matrix.setTranslation(new Vector3(tx, ty, tz));
+    }
+
+    /**
+     * Translate this shape
+     *
+     * @param tx,ty,tz as floats
+     */
+    public void translate(float tx, float ty, float tz) {
+        matrix.setTranslation(new Vector3(tx, ty, tz));
+    }
+
+
+    public void scale(float s) {
+        //TODO
+        matrix.setScale(s);
+    }
+
+
+    public Matrix4 getMatrix() {
+        return matrix;
+    }
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
