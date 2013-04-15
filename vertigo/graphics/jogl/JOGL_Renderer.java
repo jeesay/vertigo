@@ -29,17 +29,49 @@
 
 package vertigo.graphics.jogl;
 
-import vertigo.scenegraph.Scene;
 import vertigo.graphics.Renderer;
-public class JOGL_Renderer implements Renderer   { 
+import vertigo.scenegraph.Scene;
+import vertigo.scenegraph.World;
+
+
+public class JOGL_Renderer implements Renderer { 
     
     private JOGL_Renderer instance;
+    
+    public JOGL_Renderer() {
+        // TODO
+    }
     
     public JOGL_Renderer(Scene scene) {
         if (instance==null)
             newInstance(scene);
     }
     
+    @Override
+    public void setBackgroundColor(int red, int green, int blue) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void setDimension(int w, int h) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setTitle(String title) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void init(World _world) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
+    @Override
+    public void createWindow() {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
     private void newInstance(Scene a_scene) {
         
     }
