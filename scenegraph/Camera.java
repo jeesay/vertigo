@@ -37,6 +37,7 @@ import ij.IJ;
 
 public class Camera extends Node {
 
+    private Matrix4 view_matrix;
     private Matrix4 proj_matrix;
     private int vp_width;
     private int vp_height;
@@ -131,7 +132,7 @@ public class Camera extends Node {
      *
      */
     public Matrix4 getViewMatrix() {
-        return matrix;
+        return view_matrix;
     }
 
     /**
@@ -368,7 +369,7 @@ public class Camera extends Node {
 
     /**
      * Helping function that specifies the position and orientation of a view
-     * matrix.
+     * view_matrix.
      * @param eye - the location of the eye
      * @param center - a point in the virtual world where the eye is looking
      * @param up - an up vector specifying the frustum's up direction
@@ -402,26 +403,26 @@ public class Camera extends Node {
          *       [                     ]
          *       [ 0  0  0           1 ]
          */
-        matrix.m00 = u.x;
-        matrix.m01 = u.y;
-        matrix.m02 = u.z;
-        matrix.m03 = -(u.x * eye.x + u.y * eye.y + u.z * eye.z);
+        view_matrix.m00 = u.x;
+        view_matrix.m01 = u.y;
+        view_matrix.m02 = u.z;
+        view_matrix.m03 = -(u.x * eye.x + u.y * eye.y + u.z * eye.z);
 
-        matrix.m10 = v.x;
-        matrix.m11 = v.y;
-        matrix.m12 = v.z;
-        matrix.m13 = -(v.x * eye.x + v.y * eye.y + v.z * eye.z);
+        view_matrix.m10 = v.x;
+        view_matrix.m11 = v.y;
+        view_matrix.m12 = v.z;
+        view_matrix.m13 = -(v.x * eye.x + v.y * eye.y + v.z * eye.z);
 
-        matrix.m20 = n.x;
-        matrix.m21 = n.y;
-        matrix.m22 = n.z;
-        matrix.m23 = -(n.x * eye.x + n.y * eye.y + n.z * eye.z);
+        view_matrix.m20 = n.x;
+        view_matrix.m21 = n.y;
+        view_matrix.m22 = n.z;
+        view_matrix.m23 = -(n.x * eye.x + n.y * eye.y + n.z * eye.z);
 
-        matrix.m30 = 0;
-        matrix.m31 = 0;
-        matrix.m32 = 0;
-        matrix.m33 = 1;
-        // matrix.resetType();
+        view_matrix.m30 = 0;
+        view_matrix.m31 = 0;
+        view_matrix.m32 = 0;
+        view_matrix.m33 = 1;
+        // view_matrix.resetType();
 
     }
 
