@@ -1,0 +1,13 @@
+public class MatrixVisitor {
+
+
+	public MatrixVisitor() {
+	}
+
+	public void visit(Node a_node) {
+		a_node.setViewMatrix(a_node.getParent().getViewMatrix() );
+	}
+
+} // End of class MatrixVisitor
+
+
