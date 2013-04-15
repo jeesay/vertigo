@@ -66,7 +66,6 @@ public class LWJGL_Renderer implements Renderer {
         //scene nodes
     }
 
-    //boucle for(Shape)
     @Override
     public void setDimension(int w, int h) {
         width = w;
@@ -86,16 +85,16 @@ public class LWJGL_Renderer implements Renderer {
     }
 
     @Override
-    public void createWindow(String title, int w, int h) {
-        setDimension(w, h);
-        setTitle(title);
+    public void createWindow() {
+        setDimension(width, height);
+        setTitle(title_);
         createContext();
-        System.out.println("On crée une window");
+        System.out.println("Create LWJGL Window");
     }
 
     @Override
     public void init(World _world) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     /*
