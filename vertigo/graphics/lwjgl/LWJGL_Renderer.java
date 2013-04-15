@@ -26,6 +26,12 @@
  */
 package vertigo.graphics.lwjgl;
 
+import java.awt.*;
+import java.awt.Color.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.*;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Keyboard;
@@ -37,17 +43,82 @@ import vertigo.scenegraph.World;
 
 public class LWJGL_Renderer implements Renderer {
 
-    private int width;
-    private int height;
+    private int width = 640;
+    private int height = 480;
     private float red;
     private float green;
     private float blue;
-    private String title_ = "";
+    private String title_ = "Vertigo LWJGL - ";
+    private static boolean closeRequested = false;
+    private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
+    Frame frame;
+    Dimension newDim;
 
     //public LWJGL_Renderer(){} 
     //singleton
     public LWJGL_Renderer() {
         System.out.println("constructor");
+        //createWindow();
+        //display();
+    }
+
+    public static void main(String args[]) {
+        new LWJGL_Renderer();
+    }
+
+    @Override
+    public void createWindow() {
+        frame = new Frame(title_);
+        frame.setLayout(new BorderLayout());
+        final Canvas canvas = new Canvas();
+
+        canvas.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                newCanvasSize.set(canvas.getSize());
+            }
+        });
+
+        frame.addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                canvas.requestFocusInWindow();
+            }
+        });
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeRequested = true;
+            }
+        });
+
+        frame.add(canvas, BorderLayout.CENTER);
+
+        try {
+            Display.setParent(canvas);
+            Display.setVSyncEnabled(true);
+
+            frame.setPreferredSize(new Dimension(width, height));
+            frame.pack();
+            frame.setVisible(true);
+            Display.create();
+
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+        }
+        /**
+         * **
+         * // JButton button = new JButton("Exit"); // Create a new canvas and
+         * set its size. Canvas canvas = new Canvas(); canvas.setSize(width,
+         * height); // The setParent method attaches the // opengl window to the
+         * awt canvas. try { Display.setParent(canvas); } catch (Exception e) {
+         * e.printStackTrace(); System.exit(0); } frame.setBackground(new
+         * Color(red,green,blue)); // Construct the GUI as normal
+         * //frame.add(button, BorderLayout.NORTH); frame.add(canvas,
+         * BorderLayout.CENTER); frame.pack(); frame.setVisible(true);
+        *
+         */
     }
 
     public void initShader() {
@@ -58,7 +129,27 @@ public class LWJGL_Renderer implements Renderer {
 
     @Override
     public void display() {
-        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+
+        // Make sure you run the game, which
+        // executes on a separate thread.
+        while (!Display.isCloseRequested()) {
+            newDim = newCanvasSize.getAndSet(null);
+
+            if (newDim != null) {
+                GL11.glViewport(0, 0, newDim.width, newDim.height);
+                //renderer.syncViewportSize();
+            }
+            Display.sync(60);
+            pollInput();
+            displayScene();
+            Display.update();
+        }
+        System.out.println("exit");
+        Display.destroy();
+        frame.dispose();
+        System.exit(0);
+
+
 
         //process dirty
         // display scenegraph
@@ -66,6 +157,13 @@ public class LWJGL_Renderer implements Renderer {
         //scene nodes
     }
 
+    private void displayScene() {
+        GL11.glClearColor(red, green, blue, 1.0f);
+        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+
+    }
+
+    //boucle for(Shape)
     @Override
     public void setDimension(int w, int h) {
         width = w;
@@ -85,111 +183,8 @@ public class LWJGL_Renderer implements Renderer {
     }
 
     @Override
-    public void createWindow() {
-        setDimension(width, height);
-        setTitle(title_);
-        createContext();
-        System.out.println("Create LWJGL Window");
-    }
-
-    @Override
     public void init(World _world) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
-
-    /*
-     * Copyright (c) 2008-2011, Matthias Mann
-     *
-     * All rights reserved.
-     *
-     * Redistribution and use in source and binary forms, with or without
-     * modification, are permitted provided that the following conditions are met:
-     *
-     *     * Redistributions of source code must retain the above copyright notice,
-     *       this list of conditions and the following disclaimer.
-     *     * Redistributions in binary form must reproduce the above copyright
-     *       notice, this list of conditions and the following disclaimer in the
-     *       documentation and/or other materials provided with the distribution.
-     *     * Neither the name of Matthias Mann nor the names of its contributors may
-     *       be used to endorse or promote products derived from this software
-     *       without specific prior written permission.
-     *
-     * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-     * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-     * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-     * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-     * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-     * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-     * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-     * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-     * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-     * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-     * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-     */
-    private void createContext() {
-        /**
-         * ****
-         * Frame frame = new Frame("title_"); frame.setLayout(new BorderLayout());
-         * final Canvas canvas = new Canvas();
-         *
-         * canvas.addComponentListener(new ComponentAdapter() {
-         *
-         * @Override public void componentResized(ComponentEvent e) {
-         * newCanvasSize.set(canvas.getSize()); } });
-         *
-         * frame.addWindowFocusListener(new WindowAdapter() {
-         * @Override public void windowGainedFocus(WindowEvent e) {
-         * canvas.requestFocusInWindow(); } });
-         *
-         * frame.addWindowListener(new WindowAdapter() {
-         * @Override public void windowClosing(WindowEvent e) { closeRequested =
-         * true; } });
-         *
-         * frame.add(canvas, BorderLayout.CENTER);
-         *
-         * try { Display.setParent(canvas); Display.setVSyncEnabled(true);
-         *
-         * frame.setPreferredSize(new Dimension(1024, 786));
-         * frame.setMinimumSize(new Dimension(250, 250)); frame.pack();
-         * frame.setVisible(true); Display.create();
-         *
-         * LWJGLRenderer renderer = new LWJGLRenderer();
-         *
-         * Dimension newDim;
-         *
-         * while(!Display.isCloseRequested() && !closeRequested) { newDim =
-         * newCanvasSize.getAndSet(null);
-         *
-         * if (newDim != null) { GL11.glViewport(0, 0, newDim.width,
-         * newDim.height); renderer.syncViewportSize(); }
-         *
-         * display(); Display.update(); }
-         *
-         * Display.destroy(); frame.dispose(); System.exit(0); } catch
-         * (LWJGLException e) { e.printStackTrace(); } catch (IOException e) {
-         * e.printStackTrace(); }
-         *
-         ****
-         */
-        try {
-            Display.setDisplayMode(new DisplayMode(width, height));
-            Display.setTitle(title_);
-            Display.setInitialBackground(red, green, blue);
-            Display.create();
-
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-        while (!Display.isCloseRequested()) {
-            Display.sync(60);
-            pollInput();
-            display();
-            Display.update();
-
-        }
-        Display.destroy();
-    }
+            }
 
     private void pollInput() {
 
