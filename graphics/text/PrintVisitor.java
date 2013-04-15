@@ -84,6 +84,11 @@ public class PrintVisitor implements Visitor {
     }
 
     @Override
+    public void visit(Transform obj) {
+        IJ.log(computeLevel(obj) +"Transform: " +obj.getName() );
+    }
+
+    @Override
     public void visit(Viewing obj) {
         IJ.log(computeLevel(obj) +"Viewing: " +obj.getName() );
     }
