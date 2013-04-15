@@ -34,6 +34,7 @@ import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Stage;
+import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 
@@ -48,6 +49,7 @@ public interface Visitor {
     void visit(Scene obj);
     void visit(Shape obj);
     void visit(Stage obj);
+    void visit(Transform obj);
     void visit(Viewing obj);
     void visit(World obj);
 
