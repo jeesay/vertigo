@@ -141,6 +141,6 @@ public class Text_Renderer implements Renderer {
     @Override
     public void init(World world) {
         this.world = world;
-        world.traverseDownT();
+        
     }
 } // End of class Text_Renderer
