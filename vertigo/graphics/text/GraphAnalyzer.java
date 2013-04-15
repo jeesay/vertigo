@@ -24,7 +24,7 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-package vertigo.scenegraph;
+package vertigo.graphics.text;
 
 import ij.IJ;
 import java.util.ArrayList;
