@@ -199,8 +199,9 @@ public class Vertigo_Viewer implements PlugIn {
         test();
     }
 
-    private static void test() {
 
+    private static void test() {
+/*******
         Scene scene = new Scene();
         Light light = new Light();
         scene.add(light);
@@ -273,7 +274,9 @@ public class Vertigo_Viewer implements PlugIn {
 
         Node newnode = w.getNode("BackStage");
         System.out.println("Le nom du newnode est " + newnode.getName());
+******/
     }
+
 
     private void default_scenegraph() {
 
