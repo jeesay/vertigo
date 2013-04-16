@@ -48,10 +48,10 @@ public class NodeFactory {
         IJ.log("get node " + name + " " + index);
         switch (index) {
             case 869: // BackStage
-                a_node=new BackStage();
+                IJ.log("Add a BackStage is not allowed.");
                 break;
             case 585: // Camera
-                a_node=new Camera("Camera");
+                a_node = new Camera("Camera");
                 break;
             case 383: // Cube
                 a_node = new Cube("Cube");
@@ -60,51 +60,60 @@ public class NodeFactory {
                 a_node = new Cube("Flat");
                 break;
             case 1117: // FlatPyramid
+                break;
             case 1543: // FlatTetrahedron
+                break;
             case 525: // Group
-                a_node=new Group();
+                a_node = new Group();
                 break;
             case 504: // Light
                 a_node = new Light();
                 break;
             case 822: // Lighting
-                a_node=new Lighting();
+                IJ.log("Add a Lighting is not allowed.");
                 break;
             case 726: // Pyramid
-                a_node=new Pyramid();
+                a_node = new Pyramid();
                 break;
             case 494: // Scene
-                a_node=new Scene();
+                a_node = new Scene();
                 break;
             case 497: // Shape
                 a_node = new Shape();
                 break;
             case 615: // Sphere
-                a_node=new Sphere();
-                 break;
-            case 500: // Stage
-                a_node=new Stage();
-                  break;
+                a_node = new Sphere();
+                break;
+            case 500: // Stage              
+                IJ.log("Add a Stage is not allowed.");
+                break;
             case 1152: // Tetrahedron
-                a_node=new Tetrahedron();
+                a_node = new Tetrahedron();
                 break;
             case 541: // Torus
-                a_node=new Torus();
+                a_node = new Torus();
                 break;
             case 956: // Transform
-                 a_node=new Transform();
+                a_node = new Transform();
                 break;
             case 729: // Viewing
-                 a_node=new Viewing();
+                IJ.log("Add a Viewing is not allowed.");
                 break;
             case 790: // WireCube
                 a_node = new Cube("Wire");
                 break;
             case 1133: // WirePyramid
+                break;
             case 1022: // WireSphere
+                break;
             case 948: // WireTorus
+                break;
+            case 520: // World
+                IJ.log("Add a World is not allowed.");
+                break;
             default:
                 // Do nothing
+
                 IJ.showMessage("Error Node ", name + " is unknown");
         }
         return a_node;
@@ -118,9 +127,10 @@ public class NodeFactory {
      */
     private static int calcIndex(String name) {
         int index = 0;
-        for (int i=0; i< name.length();i++) index += (int) name.charAt(i);
+        for (int i = 0; i < name.length(); i++) {
+            index += (int) name.charAt(i);
+        }
         return index;
     }
-
 } // End of class NodeFactory
 
