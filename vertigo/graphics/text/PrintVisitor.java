@@ -37,6 +37,7 @@ import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Stage;
+import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 
@@ -84,7 +85,7 @@ public class PrintVisitor implements Visitor {
     }
 
     @Override
-    public void visit(Transform obj) {
+        public void visit(Transform obj) {
         IJ.log(computeLevel(obj) +"Transform: " +obj.getName() );
     }
 

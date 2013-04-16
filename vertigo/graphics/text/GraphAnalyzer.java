@@ -34,6 +34,7 @@ import vertigo.scenegraph.BackStage;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Light;
 import vertigo.scenegraph.Lighting;
+import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Stage;
@@ -47,15 +48,17 @@ import vertigo.scenegraph.World;
  */
 public class GraphAnalyzer implements Visitor {
 private static int num_cam=0;
-private static int num_light=0;
-    public GraphAnalyzer() {
+private static int num_scene=0;
+private static boolean check=true;
+
+    /*public GraphAnalyzer() {
         
         // TODO
-    }
+    }*/
 
     @Override
     public void visit(BackStage obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        //do nothing
     }
 
     @Override
@@ -63,126 +66,78 @@ private static int num_light=0;
         num_cam++;
         if (num_cam > 1){
             IJ.log("ERROR : Camera must be single.");
+            check=false;
         }
-        IJ.log("Nombre de camera "+num_cam);
+        if (obj.size() > 0) {
+            IJ.log("ERROR : Camera can't have any children.");
+            check=false;
+        }
     }
 
     @Override
     public void visit(Light obj) {
-       num_light++;
+          if (obj.size() > 0) {
+            IJ.log("ERROR : Light can't have any children.");
+            check=false;
+        }
     }
 
     @Override
     public void visit(Lighting obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        for (Node node : obj.getChildren()) {
+            if (! (node instanceof Light)) {
+                IJ.log("ERROR : The node "+node.getName()+" is misplaced, Lighting must have only Lights.");
+                check=false;
+            }
+        }
     }
 
     @Override
     public void visit(Scene obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+         num_scene++;
+         for (Node node : obj.getChildren()) {
+            if (! (node instanceof Shape)) {
+                IJ.log("ERROR : The node "+node.getName()+" is misplaced, Scene must have only Shapes.");
+                check=false;
+            }
+        }
+         if (num_scene>1){
+             IJ.log("ERROR : Scene must be single.");
+             check=false;
+         }
+                 
     }
 
     @Override
     public void visit(Shape obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+       //do nothing 
     }
 
+   
     @Override
     public void visit(Stage obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        //do nothing 
     }
 
     @Override
     public void visit(Transform obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        //do nothing
     }
 
     @Override
     public void visit(Viewing obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+          for (Node node : obj.getChildren()) {
+            if (! (node instanceof Camera)) {
+                IJ.log("ERROR : The node "+node.getName()+" is misplaced, Viewing must have only Camera.");
+                check=false;
+            }
+        }
     }
 
     @Override
     public void visit(World obj) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        //do nothing 
     }
-
-
-    private boolean checkCam(World w) {
-        int camnumber = 0;
-        int len = w.size();
-        for (int i = 0; i < len - 1; i++) {
-            Node node = w.getChild(i);
-            if (node instanceof Camera) {
-                camnumber++;
-            }
-        }
-        if (camnumber == 1) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkScene(Scene s) {
-        int error = 0;
-        int len = s.size();
-        for (int i = 0; i < len - 1; i++) {
-            Node node = s.getChild(i);
-            if (!(node instanceof Shape)) {
-                error++;
-            }
-        }
-        if (error == 0) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkViewing(Viewing v) {
-        int error = 0;
-        int len = v.size();
-        for (int i = 0; i < len - 1; i++) {
-            Node node = v.getChild(i);
-            if (!(node instanceof Camera)) {
-                error++;
-            }
-        }
-        if (error == 0) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkLighting(Lighting l) {
-        int error = 0;
-        ArrayList<Node> children = l.getChildren();
-        for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-            Node nodetemp = it.next();
-            error += checkLightingR(nodetemp, error);
-        }
-        if (error == 0) {
-            return true;
-        }
-        return false;
-    }
-
-    private int checkLightingR(Node n, int error) {
-        if (!(n instanceof Light)) {
-            error++;
-            IJ.log("The object " + n.getName() + " is misplaced.");
-        }
-        ArrayList<Node> children = n.getChildren();
-        for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-            Node nodetemp = it.next();
-            error += checkLightingR(nodetemp, error);
-        }
-        return error;
-    }
-
-   
-
-   
-
 
 } // End of class GraphAnalyzer
 

@@ -65,7 +65,7 @@ public class Text_Renderer implements Renderer {
     @Override
     public void display() {
         world.accept(new PrintVisitor());
-        camera.accept(new GraphAnalyzer());
+        world.accept(new GraphAnalyzer());
     }
 
     private void processNode(Node n) {
