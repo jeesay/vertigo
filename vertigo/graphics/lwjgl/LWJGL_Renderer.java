@@ -49,15 +49,17 @@ public class LWJGL_Renderer implements Renderer {
     private float green;
     private float blue;
     private String title_ = "Vertigo LWJGL - ";
-    private static boolean closeRequested = false;
+    private static boolean closeRequested;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
     Frame frame;
     Dimension newDim;
-
+//recup matrice avec le visiteur
+    // VBO pour tous les cas (boucle)  une ou deux passes si une marche pas (isDirty), matrice parent x fils
     //public LWJGL_Renderer(){} 
     //singleton
     public LWJGL_Renderer() {
         System.out.println("constructor");
+        closeRequested = false;
         //createWindow();
         //display();
     }
@@ -86,12 +88,19 @@ public class LWJGL_Renderer implements Renderer {
             }
         });
 
-        frame.addWindowListener(new WindowAdapter() {
+    /*    frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 closeRequested = true;
             }
+        });*/
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+              closeRequested = true;
+            }
         });
+
 
         frame.add(canvas, BorderLayout.CENTER);
 
@@ -117,7 +126,7 @@ public class LWJGL_Renderer implements Renderer {
          * Color(red,green,blue)); // Construct the GUI as normal
          * //frame.add(button, BorderLayout.NORTH); frame.add(canvas,
          * BorderLayout.CENTER); frame.pack(); frame.setVisible(true);
-        *
+         *
          */
     }
 
@@ -132,7 +141,7 @@ public class LWJGL_Renderer implements Renderer {
 
         // Make sure you run the game, which
         // executes on a separate thread.
-        while (!Display.isCloseRequested()) {
+        while (!Display.isCloseRequested() && !closeRequested) {
             newDim = newCanvasSize.getAndSet(null);
 
             if (newDim != null) {
@@ -147,10 +156,6 @@ public class LWJGL_Renderer implements Renderer {
         System.out.println("exit");
         Display.destroy();
         frame.dispose();
-        System.exit(0);
-
-
-
         //process dirty
         // display scenegraph
         //camera
@@ -184,7 +189,7 @@ public class LWJGL_Renderer implements Renderer {
 
     @Override
     public void init(World _world) {
-            }
+    }
 
     private void pollInput() {
 

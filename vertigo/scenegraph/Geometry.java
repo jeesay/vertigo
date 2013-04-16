@@ -40,6 +40,10 @@ public class Geometry {
         buffers = new ArrayList<BO>();
     }
 
+    public ArrayList <BO> getBuffers(){
+        return buffers;
+}
+    
     /**
      * Sets the geometry
      *

@@ -24,38 +24,43 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-
 package vertigo.graphics;
 
 import java.nio.FloatBuffer;
 import java.util.Hashtable;
 
 public class VBO extends BO {
-  
+
     private int capacity;
     private FloatBuffer buffer;
-    private Hashtable<String,Props> props;
-  
+    private Hashtable<String, Props> props;
+
     public VBO() {
-      super();
-      props = new Hashtable<String,Props>();
+        super();
+        props = new Hashtable<String, Props>();
     }
-  
+
     public void setFloatBuffer(String type, FloatBuffer buf) {
-        props.put(type,new Props(type,0,getSize(type)) );
+        props.put(type, new Props(type, 0, getSize(type)));
         buffer = buf;
     }
 
     public void setFloatBuffer(String[] types, FloatBuffer buf) {
         buffer = buf;
-        int stride=0;
-        for (int i=0;i<types.length;i++)
-            stride+=getSize(types[i]);
-        int offset=0;
-        for (int i=0;i<types.length;i++) {
-            props.put(types[i],new Props(types[i],offset,stride));
-            offset+=getSize(types[i]);
+        // int stride=0;
+        int offset = 0;
+        int stride[] = new int[types.length];
+        for (int i = 0; i < types.length; i++) {
+            stride[i] = getSize(types[i]);
+            props.put(types[i], new Props(types[i], offset, stride[i]));
+            offset += getSize(types[i]);
         }
+        //stride+=getSize(types[i]);
+        /*int offset=0;
+         for (int i=0;i<types.length;i++) {
+         props.put(types[i],new Props(types[i],offset,stride[i]));
+         offset+=getSize(types[i]);
+         }*/
     }
 
     public FloatBuffer getFloatBuffer() {
@@ -79,12 +84,12 @@ public class VBO extends BO {
     }
 
     private int getSize(String type) {
-        if (type.contains("3") )
+        if (type.contains("3")) {
             return 3;
-        else if (type.contains("2") )
+        } else if (type.contains("2")) {
             return 2;
+        }
         return 4;
 
     }
-
 } // End of class VBO

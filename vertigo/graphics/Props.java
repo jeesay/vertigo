@@ -29,9 +29,9 @@ package vertigo.graphics;
 
 class Props {
 
-    String type;
-    int offset;
-    int stride;
+    private String type;
+    private int offset;
+    private int stride;
 
     public Props(String type,int offset, int stride) {
         this.type=type;
