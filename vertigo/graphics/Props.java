@@ -51,5 +51,5 @@ class Props {
         return stride;
     }
 
-}
+} // End of class Props
 
