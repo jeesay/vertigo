@@ -87,6 +87,5 @@ public class VBO extends BO {
             return 2;
         }
         return 4;
-
     }
 } // End of class VBO
