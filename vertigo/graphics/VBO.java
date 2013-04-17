@@ -47,20 +47,17 @@ public class VBO extends BO {
 
     public void setFloatBuffer(String[] types, FloatBuffer buf) {
         buffer = buf;
-        // int stride=0;
-        int offset = 0;
-        int stride[] = new int[types.length];
+        int stride = 0;
+        // process stride
         for (int i = 0; i < types.length; i++) {
-            stride[i] = getSize(types[i]);
-            props.put(types[i], new Props(types[i], offset, stride[i]));
-            offset += getSize(types[i]);
+            stride += getSize(types[i]);
         }
-        //stride+=getSize(types[i]);
-        /*int offset=0;
-         for (int i=0;i<types.length;i++) {
-         props.put(types[i],new Props(types[i],offset,stride[i]));
-         offset+=getSize(types[i]);
-         }*/
+        // process offset
+        int offset = 0;
+        for (int i = 0; i < types.length; i++) {
+            props.put(types[i], new Props(types[i], offset, stride));
+            offset+=getSize(types[i]);
+        }
     }
 
     public FloatBuffer getFloatBuffer() {
