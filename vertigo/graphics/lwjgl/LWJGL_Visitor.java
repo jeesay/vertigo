@@ -129,33 +129,39 @@ private void setModelMatrix(Node obj) {
         processShape(obj);
         // OpenGL
 
-
-
     }
 
     private void processShape(Shape obj) {
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
-            obj.setDirty(Node.MATRIX, true);
+            obj.setDirty(Node.MATRIX, false);
         }
         // Geometry: VBO
         if (obj.isDirty(Node.VBO)) {
-            obj.setDirty(Node.VBO, true);
+            processVBO(obj);
+            obj.setDirty(Node.VBO, false);
         }
         // Material: shader
         if (obj.isDirty(Node.SHADER)) {
-            obj.setDirty(Node.SHADER, true);
+            obj.setDirty(Node.SHADER, false);
         }
+    }
+
+    private void processVBO(Shape obj) {
+        // glGenBuffers(size_of_obj.getGeometry().getBuffers());
         for (BO bo : obj.getGeometry().getBuffers()) {
-            if (bo instanceof IBO){
-                
+            // bo.setHandle();
+            // glBindBuffer();
+            if (bo instanceof IBO) {
+                // glBufferData();
             }
             else {
-                
+                // glBufferData();
             }
+            // glBindBuffer(0);
         }
-            
+
     }
 
 } // End of class LWJGL_Visitor
