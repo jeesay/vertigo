@@ -25,7 +25,6 @@
  * Clement Delestre
  */
 
-
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Shape;
@@ -118,7 +117,7 @@ public class Vertigo_Viewer implements PlugIn {
             } catch (ExceptionInInitializerError ei) {
                 // try & catch for tests
                 try {
-                    graphWin = new vertigo.graphics.text.Text_Renderer();
+                    graphWin = (OGL_Window) new vertigo.graphics.text.Text_Renderer();
                     show("TEXT");
                 } catch (ExceptionInInitializerError eie) {
                     IJ.showMessage("Vertigo ERROR", "Please download JOGL or LWJGL.");
@@ -146,7 +145,7 @@ public class Vertigo_Viewer implements PlugIn {
      */
     public void show(String render) {
         if (render.equals("G2D")) {
-            graphWin = new vertigo.graphics.G2D.G2D_Renderer();
+            graphWin = (OGL_Window) new vertigo.graphics.G2D.G2D_Renderer();
 
             graphWin.setVisible(true);
         } else if (render.equals("LWJGL")) {
@@ -163,7 +162,7 @@ public class Vertigo_Viewer implements PlugIn {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
             }
         } else if (render.equals("TEXT")) {
-            graphWin = new vertigo.graphics.text.Text_Renderer(camera_, scene_);
+            graphWin = (OGL_Window) new vertigo.graphics.text.Text_Renderer(camera_, scene_);
 
         }
         graphWin.setBackgroundColor(red, green, blue);
@@ -284,7 +283,6 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     private void default_scenegraph() {
-
         world_ = new World();
         camera_ = new Camera();
         scene_ = new Scene();
@@ -293,8 +291,9 @@ public class Vertigo_Viewer implements PlugIn {
         Stage stage = new Stage();
 
         world_.add(stage);
-        ArcBall mouserot = new ArcBall();
-        stage.add(mouseRot );
+
+        ArcBall mouseRot = new ArcBall();
+        stage.add(mouseRot);
         mouseRot.add(scene_);
         world_.add(bs);
         Viewing vw = new Viewing();
@@ -304,6 +303,6 @@ public class Vertigo_Viewer implements PlugIn {
         bs.add(lights);
         lights.add(new Light("sun"));
         lights.add(new Light("spot"));
-
+        System.out.println("end default scenegraph");
     }
 }// end of class Vertigo_Viewer
