@@ -30,6 +30,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import vertigo.graphics.Visitor;
+import vertigo.graphics.event.Event;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Transform;
 
@@ -46,9 +47,10 @@ public class ArcBall extends Transform implements Observer {
 
 
 
-    @Override
+  @Override
     public void update(Observable o, Object o1) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        Event e = (Event) o1;
+        System.out.println("Event" + e);  
     }
 
     @Override
@@ -58,4 +60,5 @@ public class ArcBall extends Transform implements Observer {
             child.accept(visitor);
         }
     }
-}
+} // end of class ArcBall
+
