@@ -26,9 +26,11 @@
  */
 package vertigo.scenegraph.transform;
 
+import java.util.Observable;
 import java.util.Observer;
+import vertigo.graphics.Visitor;
 import vertigo.scenegraph.Node;
-
+import vertigo.scenegraph.Transform;
 
 public class ArcBall extends Transform implements Observer {
 
@@ -40,9 +42,16 @@ public class ArcBall extends Transform implements Observer {
         this.name = "arcball";
     }
 
-    public ArcBall(String name) {
-        super(name);
+    @Override
+    public void update(Observable o, Object o1) {
+        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Node child : getChildren()) {
+            child.accept(visitor);
+        }
+    }
 }
-
