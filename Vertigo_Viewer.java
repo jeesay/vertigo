@@ -303,6 +303,6 @@ public class Vertigo_Viewer implements PlugIn {
         bs.add(lights);
         lights.add(new Light("sun"));
         lights.add(new Light("spot"));
-        System.out.println("end default scenegraph");
+
     }
 }// end of class Vertigo_Viewer
