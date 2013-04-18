@@ -196,6 +196,8 @@ public class Transform extends Node {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
+        for (Node child : getChildren() )
+            child.accept(visitor);
     }
     
 
