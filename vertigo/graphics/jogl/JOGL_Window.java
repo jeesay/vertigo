@@ -30,12 +30,18 @@ import javax.media.opengl.GLProfile;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.awt.GLCanvas;
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import vertigo.graphics.OGL_Window;
 import vertigo.scenegraph.World;
 
-public class JOGL_Window implements OGL_Window {
+public class JOGL_Window implements OGL_Window, MouseListener, KeyListener,MouseWheelListener {
 
     private int width = 400;
     private int height = 400;
@@ -43,17 +49,18 @@ public class JOGL_Window implements OGL_Window {
     private String win_title;
     private World world;
     private Frame frame;
-    private JOGL_Renderer panel;
+    private JOGL_Renderer renderer;
 
     public JOGL_Window() {
-        panel = new JOGL_Renderer();
+        renderer = new JOGL_Renderer();
+        
     }
 
   
     @Override
     public void setWorld(World _world) {
         world = _world;
-        panel.setWorld(_world);
+        renderer.setWorld(_world);
     }
 
     @Override
@@ -65,7 +72,8 @@ public class JOGL_Window implements OGL_Window {
 
     @Override
     public void setBackgroundColor(int red, int green, int blue) {
-        panel.setBackgroundColor((red / 255.0f), (green / 255.0f), (blue / 255.0f));
+        renderer.setBackgroundColor((red / 255.0f), (green / 255.0f), (blue / 255.0f));
+        System.out.println("Background of JOGL");
     }
 
     @Override
@@ -98,10 +106,77 @@ public class JOGL_Window implements OGL_Window {
         GLProfile.initSingleton();
         GLCapabilities caps = new GLCapabilities(glp);
         GLCanvas canvas = new GLCanvas(caps);
-        canvas.addGLEventListener(panel);
+        canvas.addMouseListener(this);
+        canvas.addMouseWheelListener(this);
+        canvas.addKeyListener(this);
+        canvas.addGLEventListener(renderer);
 
         frame.add(canvas);
         frame.setVisible(true); // Make the frame visible
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        System.out.println("La souris est cliquée.");
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        System.out.println("Mouse pressed; # of clicks: "+ me.getClickCount());
+         if (me.getButton() == MouseEvent.BUTTON1) {
+               System.out.println("Left clic.");
+         }
+         else  if (me.getButton() == MouseEvent.BUTTON3) {
+             System.out.println("Right clic.");
+           }
+          else  if (me.getButton() == MouseEvent.BUTTON2) {
+             System.out.println("La molette est enfoncée.");
+           }
+          else {
+             System.out.println("Unknow button.");
+          }
+         }
+
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        System.out.println("Un des boutons est relâchée.");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        System.out.println("La souris est entré dans la fenêtre en "+me.getX()+" "+me.getY());
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
+        System.out.println("La souris est sortie de la fenêtre.");
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+       
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+           char press=ke.getKeyChar();
+           System.out.println("You have pressed "+press);
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent mwe) {
+        
+        if (mwe.getWheelRotation() < 0) {
+                    System.out.println("Rotated Up... " + mwe.getWheelRotation());
+                } else {
+                    System.out.println("Rotated Down... " + mwe.getWheelRotation());
+                }
     }
 } //end of class JOGL_Window
 
