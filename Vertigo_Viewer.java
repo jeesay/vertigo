@@ -41,7 +41,7 @@ import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
 import java.util.ArrayList;
 import java.util.Iterator;
-import vertigo.graphics.Renderer;
+import vertigo.graphics.OGL_Window;
 
 public class Vertigo_Viewer implements PlugIn {
 
@@ -53,7 +53,7 @@ public class Vertigo_Viewer implements PlugIn {
     private int blue;
     private Scene scene_;
     private Camera camera_;
-    private Renderer renderer;
+    private OGL_Window graphWin;
     private World world_;
     public static final String VERTIGO_VERSION = "0.01";
 
@@ -107,16 +107,16 @@ public class Vertigo_Viewer implements PlugIn {
     public void show() {
         try {
             System.out.println("LWJGL Renderer created");
-            renderer = new vertigo.graphics.lwjgl.LWJGL_Renderer();
+            graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
             show("LWJGL");
         } catch (ExceptionInInitializerError e) {
             try {
-                renderer = new vertigo.graphics.jogl.JOGL_Renderer();
+                graphWin = new vertigo.graphics.jogl.JOGL_Window();
                 show("JOGL");
             } catch (ExceptionInInitializerError ei) {
                 // try & catch for tests
                 try {
-                    renderer = new vertigo.graphics.text.Text_Renderer();
+                    graphWin = new vertigo.graphics.text.Text_Renderer();
                     show("TEXT");
                 } catch (ExceptionInInitializerError eie) {
                     IJ.showMessage("Vertigo ERROR", "Please download JOGL or LWJGL.");
@@ -124,19 +124,16 @@ public class Vertigo_Viewer implements PlugIn {
             }
         }
         try {
-            renderer.setBackgroundColor(red, green, blue);
-            renderer.setDimension(window_width, window_height);
-            renderer.setTitle(title_);
-            renderer.createWindow(); // contexte graphique ? opengl3?
+            graphWin.setBackgroundColor(red, green, blue);
+            graphWin.setDimension(window_width, window_height);
+            graphWin.setTitle(title_);
+
+            graphWin.setVisible(true);
+
         } catch (NullPointerException nullp) {
             IJ.showMessage("Vertigo ERROR", "Can't create a graphics window.");
         }
 
-        //renderer.setDimension(window_height, window_width);
-        // or renderer.createWindow(window_height,window_width); ?
-        renderer.display(); // avec les couleurs svp
-        //renderer.init(getWorld());
-        //init avec getWorld tester si OpenGL3 ou pas
 
     }
 
@@ -147,43 +144,36 @@ public class Vertigo_Viewer implements PlugIn {
      */
     public void show(String render) {
         if (render.equals("G2D")) {
-            renderer = new vertigo.graphics.G2D.G2D_Renderer();
-            renderer.setBackgroundColor(red, green, blue);
-            renderer.setDimension(window_width, window_height);
-            renderer.setTitle(title_);
-            renderer.init(getWorld());
-            renderer.createWindow();
-            renderer.display();
+            graphWin = new vertigo.graphics.G2D.G2D_Renderer();
+
+            graphWin.setVisible(true);
         } else if (render.equals("LWJGL")) {
-            renderer = new vertigo.graphics.lwjgl.LWJGL_Renderer();
-            renderer.setBackgroundColor(red, green, blue);
-            renderer.setDimension(window_width, window_height);
-            renderer.setTitle(title_);
-            renderer.init(getWorld());
-            renderer.createWindow();
-            renderer.display();
+            try {
+                graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
+            } catch (ExceptionInInitializerError e) {
+                IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
+            }
+
         } else if (render.equals("JOGL")) {
-            renderer = new vertigo.graphics.jogl.JOGL_Renderer();
-            renderer.setBackgroundColor(red, green, blue);
-            renderer.setDimension(window_width, window_height);
-            renderer.setTitle(title_);
-            renderer.init(getWorld());
-            renderer.createWindow();
-            renderer.display();
+            try {
+                graphWin = new vertigo.graphics.jogl.JOGL_Window();
+            } catch (ExceptionInInitializerError e) {
+                IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
+            }
         } else if (render.equals("TEXT")) {
-            renderer = new vertigo.graphics.text.Text_Renderer(camera_,scene_);
-            renderer.setBackgroundColor(red, green, blue);
-            renderer.setDimension(window_width, window_height);
-            renderer.setTitle(title_);
-            renderer.init(getWorld());
-            renderer.createWindow();
-            renderer.display();
+            graphWin = new vertigo.graphics.text.Text_Renderer(camera_, scene_);
+
         }
+        graphWin.setBackgroundColor(red, green, blue);
+        graphWin.setDimension(window_width, window_height);
+        graphWin.setTitle(title_);
+        graphWin.setWorld(getWorld());
+        graphWin.setVisible(true);
     }
 
     /**
      * Gets the world (aka root) of the scene graph.
-     *     
+     *
      */
     public World getWorld() {
         return world_;
@@ -192,7 +182,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Gets the scene of the scene graph. Convenient method equivalent to
      * getWorld().get("Stage").get("Scene");
-     *     
+     *
      */
     public Scene getScene() {
         return scene_;
@@ -201,7 +191,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Gets the Camera for *this* (default) scene graph. This is a convenient
      * method equivalent to `getScene().getCamera()'.
-     *     
+     *
      */
     public Camera getCamera() {
         return camera_;
@@ -212,111 +202,54 @@ public class Vertigo_Viewer implements PlugIn {
         test();
     }
 
-
     private static void test() {
-/*******
-        Scene scene = new Scene();
-        Light light = new Light();
-        scene.add(light);
-        // test getName and default Name
-        System.out.println("La scène se nomme : " + scene.getName());
-
-        light.traverseDown();
-
-        // add the second light
-        Light two = new Light();
-        scene.add(two);
-
-        Camera cam = new Camera();
-        cam.add(scene);
-        Shape first_shape = new Shape();
-        scene.add(first_shape);
-
-
-        Shape parent_shape = new Shape();
-        parent_shape.setName("parent_shape");
-        Shape son_shape = new Shape();
-        son_shape.setName("son_shape");
-        Shape daughter_shape = new Shape();
-        daughter_shape.setName("daughter_shape");
-        // add son & daughter to parent
-        parent_shape.add(son_shape);
-        parent_shape.add(daughter_shape);
-
-        Shape s = new Shape();
-        Shape ac = new Shape();
-        ac.setName("Another child.");
-        s.add(ac);
-        scene.add(s);
-
-        scene.add(parent_shape);
-        cam.traverseDownT(); // traverseDownT is better than traverseDown
-
-        // World's test
-        World w = new World();
-        w.setName("World");
-        BackStage bs = new BackStage();
-        bs.setName("BackStage");
-        Stage stage = new Stage();
-        stage.setName("Stage");
-
-        w.add(stage); // Add stage before backstage
-        w.add(bs);
-
-        //w.traverseDownT(); 
-        Node test = w.getChild(0); //get the first child
-        if (test instanceof Stage) {
-            System.out.println("stage");
-        } else {
-            System.out.println("backstage");
-        }
-
-        Viewing viewing = new Viewing();
-        Lighting lighting = new Lighting();
-        bs.add(lighting);
-        bs.add(viewing);
-        w.traverseDownT();
-        test = bs.getChild(0);
-
-        if (test instanceof Viewing) {
-            System.out.println("viewing");
-        } else {
-            System.out.println("lighting");
-        }
-
-
-        Node newnode = w.getNode("BackStage");
-        System.out.println("Le nom du newnode est " + newnode.getName());
-******/
-    }
-
-    private void default_scenegraph() {
-
         /**
+         * *****
+         * Scene scene = new Scene(); Light light = new Light();
+         * scene.add(light); // test getName and default Name
+         * System.out.println("La scène se nomme : " + scene.getName());
          *
-         * world L--backstage L--viewing L
+         * light.traverseDown();
+         *
+         * // add the second light Light two = new Light(); scene.add(two);
+         *
+         * Camera cam = new Camera(); cam.add(scene); Shape first_shape = new
+         * Shape(); scene.add(first_shape);
+         *
+         *
+         * Shape parent_shape = new Shape();
+         * parent_shape.setName("parent_shape"); Shape son_shape = new Shape();
+         * son_shape.setName("son_shape"); Shape daughter_shape = new Shape();
+         * daughter_shape.setName("daughter_shape"); // add son & daughter to
+         * parent parent_shape.add(son_shape); parent_shape.add(daughter_shape);
+         *
+         * Shape s = new Shape(); Shape ac = new Shape(); ac.setName("Another
+         * child."); s.add(ac); scene.add(s);
+         *
+         * scene.add(parent_shape); cam.traverseDownT(); // traverseDownT is
+         * better than traverseDown
+         *
+         * // World's test World w = new World(); w.setName("World"); BackStage
+         * bs = new BackStage(); bs.setName("BackStage"); Stage stage = new
+         * Stage(); stage.setName("Stage");
+         *
+         * w.add(stage); // Add stage before backstage w.add(bs);
+         *
+         * //w.traverseDownT(); Node test = w.getChild(0); //get the first
+         * child if (test instanceof Stage) { System.out.println("stage"); }
+         * else { System.out.println("backstage"); }
+         *
+         * Viewing viewing = new Viewing(); Lighting lighting = new Lighting();
+         * bs.add(lighting); bs.add(viewing); w.traverseDownT(); test =
+         * bs.getChild(0);
+         *
+         * if (test instanceof Viewing) { System.out.println("viewing"); } else
+         * { System.out.println("lighting"); }
+         *
+         *
+         * Node newnode = w.getNode("BackStage"); System.out.println("Le nom du
+         * newnode est " + newnode.getName()); ****
          */
-        world_ = new World();
-        camera_ = new Camera();
-        scene_ = new Scene();
-
-        BackStage bs = new BackStage();
-        Stage stage = new Stage();
-
-        world_.add(stage);
-        stage.add(scene_);
-        world_.add(bs);
-        Viewing vw = new Viewing();
-        vw.add(camera_);
-        bs.add(vw);
-        Lighting lights = new Lighting();
-        bs.add(lights);
-        lights.add(new Light("sun"));
-        lights.add(new Light("spot"));
-        
-        
-        
-       
     }
 
     public Node getNode(String name) {
@@ -336,15 +269,37 @@ public class Vertigo_Viewer implements PlugIn {
             for (Iterator<Node> it = children.iterator(); it.hasNext();) {
                 Node nodetemp = it.next();
                 a_node = searchName(nodetemp, name);
-                if (a_node!=null){
+                if (a_node != null) {
                     return a_node;
                 }
                 /*if (a_node.getName().equals(name)) {
-                    IJ.log("This is " + a_node.getName());
-                    return a_node;
-                }*/
+                 IJ.log("This is " + a_node.getName());
+                 return a_node;
+                 }*/
             }
         }
         return null;
+    }
+
+    private void default_scenegraph() {
+
+        world_ = new World();
+        camera_ = new Camera();
+        scene_ = new Scene();
+
+        BackStage bs = new BackStage();
+        Stage stage = new Stage();
+
+        world_.add(stage);
+        stage.add(scene_);
+        world_.add(bs);
+        Viewing vw = new Viewing();
+        vw.add(camera_);
+        bs.add(vw);
+        Lighting lights = new Lighting();
+        bs.add(lights);
+        lights.add(new Light("sun"));
+        lights.add(new Light("spot"));
+
     }
 }// end of class Vertigo_Viewer
