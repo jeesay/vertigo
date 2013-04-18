@@ -1,5 +1,3 @@
-
-
 /*
  * $Id:$
  *
@@ -26,67 +24,87 @@
  *Olivier Catoliquot
  *Clement Delestre
  */
-
 package vertigo.graphics.jogl;
 
-import vertigo.graphics.Renderer;
-import vertigo.scenegraph.Scene;
+import java.awt.Frame;
+import java.awt.Panel;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL3;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLCanvas;
+import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.World;
 
+/**
+ *
+ * @author Florin Buga Olivier Catoliquot Clement Delestre
+ */
+public class JOGL_Renderer implements GLEventListener {
 
-public class JOGL_Renderer implements Renderer { 
-    
-    private JOGL_Renderer instance;
-    
+    // private GLCanvas canvas;
+    private Camera cam;
+    private World world;
+    private float red;
+    private float green;
+    private float blue;
+    private JOGL_Visitor visitor;
+
     public JOGL_Renderer() {
-        // TODO
+        System.out.println("JOGL_Renderer created");
+
+        red = 1.0f;
+        green = 0.5f;
+        blue = 0.2f;
+        visitor = new JOGL_Visitor();
     }
-    
-    public JOGL_Renderer(Scene scene) {
-        if (instance==null)
-            newInstance(scene);
+
+ 
+    public void setBackgroundColor(float red, float green, float blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
-    
-    @Override
-    public void setBackgroundColor(int red, int green, int blue) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+
+    public void setWorld(World world) {
+        this.world = world;
+        this.cam = (Camera) world.getNode("camera");
     }
 
     @Override
-    public void setDimension(int w, int h) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void init(GLAutoDrawable drawable) {
+        // Do nothing
     }
 
     @Override
-    public void setTitle(String title) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void dispose(GLAutoDrawable drawable) {
+        // Do nothing
     }
 
     @Override
-    public void init(World _world) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public void display(GLAutoDrawable drawable) {
+        System.out.println("Display" + red + " " + green + " " + blue);
+        GL3 gl = drawable.getGL().getGL3();  // up to OpenGL 3.1
+        gl.glClearColor(red, green, blue, 1.0f);
+        gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
+
+        // Render via Visitor
+        visitor.setGLDrawable(drawable);
+        // world.accept(visitor);
+
     }
 
     @Override
-    public void createWindow() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        // Your OpenGL codes to set up the view port, projection mode and view volume. 
+        cam.setViewport(width, height);
+//        cam.setAspect(width/height);
+
     }
 
-    private void newInstance(Scene a_scene) {
-        
-    }
-    //public JOGL_Renderer(){} 
-    //singleton
-    public void initShader(){
-	
-    }
-    public void initVBO(){
-	
-    }
-
-    public void display(){
-
-	//boucle for(Shape)
-
+    private void update() {
+        // nothing to update yet
     }
 } //end of class JOGL_Renderer
