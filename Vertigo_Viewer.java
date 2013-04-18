@@ -25,6 +25,7 @@
  * Clement Delestre
  */
 
+
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Shape;
@@ -35,6 +36,7 @@ import vertigo.scenegraph.BackStage;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Lighting;
 import vertigo.scenegraph.Viewing;
+import vertigo.scenegraph.transform.ArcBall;
 
 import ij.IJ;
 import ij.plugin.PlugIn;
@@ -291,7 +293,9 @@ public class Vertigo_Viewer implements PlugIn {
         Stage stage = new Stage();
 
         world_.add(stage);
-        stage.add(scene_);
+        ArcBall mouserot = new ArcBall();
+        stage.add(mouseRot );
+        mouseRot.add(scene_);
         world_.add(bs);
         Viewing vw = new Viewing();
         vw.add(camera_);
