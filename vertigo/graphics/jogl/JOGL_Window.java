@@ -90,9 +90,9 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
         if (obj instanceof MouseObserver) {
             mouseDispatcher.addObserver((Observer) obj);
         } else if (obj instanceof TimerObserver) {
-            mouseDispatcher.addObserver((Observer) obj);
+            timerDispatcher.addObserver((Observer) obj);
         } else if (obj instanceof KeyboardObserver) {
-            mouseDispatcher.addObserver((Observer) obj);
+            keyboardDispatcher.addObserver((Observer) obj);
         }
         for (Node child : obj.getChildren()) {
             loadObserver(child);
