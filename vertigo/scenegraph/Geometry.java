@@ -59,7 +59,7 @@ public class Geometry {
         vbo.setFloatBuffer(type, buf);
         buffers.add(vbo);
     }
-
+ 
     /**
      * Sets the whole geometry in one single buffer. Ex: X Y Z R G B X Y Z R ...
      * May contain various types of data: XYZ-coordinates, Normals, Colors,

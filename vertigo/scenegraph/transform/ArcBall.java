@@ -47,7 +47,7 @@ public class ArcBall extends Transform implements MouseObserver {
   @Override
     public void update(Observable o, Object o1) {
         Signal e = (Signal) o1;
-        System.out.println("Arball : Event" + e);  
+        System.out.println("Acrball : Event" + e);  
     }
 
     

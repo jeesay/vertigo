@@ -103,6 +103,7 @@ public abstract class Node {
      * @param Node anode
      */
     public void add(Node a_node) {
+        System.out.println("add " + a_node);
         children.add(a_node);
         a_node.setParent(this);
     }
