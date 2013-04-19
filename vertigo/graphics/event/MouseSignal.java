@@ -45,6 +45,8 @@ public class MouseSignal extends Signal {
     // DRAG MOVE
     
     //WHEEL UP DOWN
+    private int button;
+    private int wheel;
  public MouseSignal(){
      
  }
