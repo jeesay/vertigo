@@ -57,6 +57,11 @@ public class MouseSignal extends Signal {
         this.wheel=wheel;
     }
     
+    @Override
+    public String toString() {
+       return "Value of button is : " +button+" wheel's value :  "+wheel;
+    }
+    
     
     
 } // end of class MouseSignal

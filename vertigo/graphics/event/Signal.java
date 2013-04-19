@@ -41,8 +41,6 @@ public class Signal {
     public static final int CLICK = 1; 
     
     
-    @Override
-    public String toString() {
-       return "Value of button is : " +button+" wheel's value :  "+wheel;
-    }
+   
+    
 } // end of class Signal
