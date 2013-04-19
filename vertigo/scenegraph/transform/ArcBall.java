@@ -27,15 +27,12 @@
 package vertigo.scenegraph.transform;
 
 import java.util.Observable;
-import java.util.Observer;
-
-import vertigo.graphics.Visitor;
-import vertigo.graphics.event.Event;
-import vertigo.scenegraph.Node;
+import vertigo.graphics.event.MouseObserver;
+import vertigo.graphics.event.Signal;
 import vertigo.scenegraph.Transform;
 
 
-public class ArcBall extends Transform implements Observer {
+public class ArcBall extends Transform implements MouseObserver {
 
     private int mouse_x;
     private int mouse_y;
@@ -49,16 +46,10 @@ public class ArcBall extends Transform implements Observer {
 
   @Override
     public void update(Observable o, Object o1) {
-        Event e = (Event) o1;
-        System.out.println("Event" + e);  
+        Signal e = (Signal) o1;
+        System.out.println("Arball : Event" + e);  
     }
 
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visit(this);
-        for (Node child : getChildren()) {
-            child.accept(visitor);
-        }
-    }
+    
 } // end of class ArcBall
 
