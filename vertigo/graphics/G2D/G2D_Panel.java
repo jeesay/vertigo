@@ -27,11 +27,7 @@
 
 package vertigo.graphics.G2D;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import vertigo.scenegraph.Camera;
@@ -42,13 +38,15 @@ public class G2D_Panel extends JPanel {
     private Camera cam_;
     private World world_;
     private G2D_Visitor visitor;
+    private G2D_Renderer renderer;
 
+    @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         cam_.setViewport(this.getWidth(),this.getHeight() );
-        visitor.setGraphicsContext(g);
         System.out.println("render");
         world_.accept(visitor);
+        renderer.draw();
 /*
     GradientPaint gp = new GradientPaint(0, 0, Color.RED, 30, 30, Color.cyan, true);
     g2d.setPaint(gp);
@@ -62,6 +60,8 @@ public class G2D_Panel extends JPanel {
         world_ = world;
         cam_ = world_.getCamera();
         visitor = new G2D_Visitor();
+        renderer = new G2D_Renderer();
+        renderer.setWorld(world);
     }
 
 
