@@ -47,9 +47,23 @@ public class MouseSignal extends Signal {
     //WHEEL UP DOWN
     private int button;
     private int wheel;
+    private int status;
+    private int mouse_x;
+    private int mouse_y;
+    private boolean empty=true;
+    private boolean down=false;
+    
  public MouseSignal(){
-     
+    
  }
+ 
+ public int getX(){
+     return mouse_x;
+ }
+ public int getY(){
+     return mouse_y;
+ }
+ 
     public void setButton(int button){
         this.button=button;
     }
@@ -57,11 +71,34 @@ public class MouseSignal extends Signal {
         this.wheel=wheel;
     }
     
-    @Override
-    public String toString() {
-       return "Value of button is : " +button+" wheel's value :  "+wheel;
+
+    public void setXY(int x, int y) {
+        mouse_x=x;
+        mouse_y=y;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setButtonStatus(int status) {
+        this.status=status;
+    }
+    public void setEmpty(){
+        empty=true;
+    }
+public void setDown(){
+    down=true;
+}
+
+    public boolean isButtonDown() {
+        return down;
     }
     
+       @Override
+    public String toString() {
+       return "Value of button is : " +button+" wheel's value :  "+wheel+"\nMouse position: "+mouse_x+":"+mouse_y;
+    }
     
     
 } // end of class MouseSignal

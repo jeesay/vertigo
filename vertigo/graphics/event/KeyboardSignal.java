@@ -33,7 +33,18 @@ package vertigo.graphics.event;
 
 public class KeyboardSignal extends Signal {
    private char letter; 
+   private boolean empty=true;
         public void setChar(char letter){
+        this.letter=letter;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
+    public void setEmpty(){
+        empty=true;
+    }
+    public void setLetter(char letter){
         this.letter=letter;
     }
 } // end of Class KeyboardSignal
