@@ -27,7 +27,11 @@
 package vertigo.graphics.lwjgl;
 
 import java.awt.Graphics;
+import java.nio.IntBuffer;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL15;
 import vertigo.graphics.BO;
+import vertigo.graphics.BufferTools;
 import vertigo.graphics.IBO;
 import vertigo.graphics.Visitor;
 import vertigo.scenegraph.BackStage;
@@ -45,20 +49,17 @@ import vertigo.scenegraph.World;
 
 /**
  *
- * @author
- * Florin Buga
- * Olivier Catoliquot
- * Clement Delestre
+ * @author Florin Buga Olivier Catoliquot Clement Delestre
  */
 public class LWJGL_Visitor implements Visitor {
+
     private int level;
     private Camera cam_;
     private Graphics g;
 
-
     @Override
     public void visit(BackStage obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //do nothing
     }
 
     @Override
@@ -84,7 +85,7 @@ public class LWJGL_Visitor implements Visitor {
 
     @Override
     public void visit(Shape obj) {
-       mulModelMatrix(obj);
+        mulModelMatrix(obj);
     }
 
     @Override
@@ -106,24 +107,21 @@ public class LWJGL_Visitor implements Visitor {
     public void visit(World obj) {
         //do nothing
     }
-    
-private void setModelMatrix(Node obj) {
+
+    private void setModelMatrix(Node obj) {
         if (obj.isDirty(Node.MATRIX)) {
-            obj.setModelMatrix(obj.getParent().getModelMatrix() );
-            obj.setDirty(Node.MATRIX,true);
+            obj.setModelMatrix(obj.getParent().getModelMatrix());
+            obj.setDirty(Node.MATRIX, true);
         }
     }
 
     private void mulModelMatrix(Node obj) {
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
-            obj.setDirty(Node.MATRIX,true);
+            obj.setDirty(Node.MATRIX, true);
         }
     }
-    
-    
-    
-    
+
     private void drawShape(Shape obj) {
         // PreProcessing
         processShape(obj);
@@ -149,19 +147,19 @@ private void setModelMatrix(Node obj) {
     }
 
     private void processVBO(Shape obj) {
-        // glGenBuffers(size_of_obj.getGeometry().getBuffers());
+        int count = obj.getGeometry().getBuffers().size();
+        IntBuffer  bufferid = BufferTools.newIntBuffer(count);
+        GL15.glGenBuffers(bufferid);
         for (BO bo : obj.getGeometry().getBuffers()) {
             // bo.setHandle();
             // glBindBuffer();
             if (bo instanceof IBO) {
                 // glBufferData();
-            }
-            else {
+            } else {
                 // glBufferData();
             }
             // glBindBuffer(0);
         }
 
     }
-
 } // End of class LWJGL_Visitor

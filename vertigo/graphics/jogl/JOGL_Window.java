@@ -40,7 +40,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Observer;
-import vertigo.graphics.EventDispatcher;
+import vertigo.graphics.MouseDispatcher;
 import vertigo.graphics.OGL_Window;
 import vertigo.graphics.event.KeyboardObserver;
 import vertigo.graphics.event.MouseObserver;
@@ -59,20 +59,21 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
     private World world;
     private Frame frame;
     private JOGL_Renderer renderer;
-    private EventDispatcher eventDispatcher;
-    private MouseSignal event;
+    // private MouseDispatcher eventDispatcher;
+    private MouseSignal mouse_event;
     private Signal allevent;
-    private final EventDispatcher keyboardDispatcher;
-    private final EventDispatcher mouseDispatcher;
-    private final EventDispatcher timerDispatcher;
+    private final MouseDispatcher keyboardDispatcher;
+    private final MouseDispatcher mouseDispatcher;
+    private final MouseDispatcher timerDispatcher;
 
     public JOGL_Window() {
         renderer = new JOGL_Renderer();
-        mouseDispatcher = EventDispatcher.getInstance();
-        keyboardDispatcher = EventDispatcher.getInstance();
-        timerDispatcher = EventDispatcher.getInstance();
-        event = new MouseSignal();
+        mouseDispatcher = MouseDispatcher.getInstance();
+        keyboardDispatcher = MouseDispatcher.getInstance();
+        timerDispatcher = MouseDispatcher.getInstance();
+        mouse_event = new MouseSignal();
         allevent = new Signal();
+
 
     }
 
@@ -146,6 +147,7 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
         canvas.addMouseListener(this);
         canvas.addMouseWheelListener(this);
         canvas.addKeyListener(this);
+        canvas.addMouseMotionListener(this);
         canvas.addGLEventListener(renderer);
 
         frame.add(canvas);
@@ -161,27 +163,31 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
 
     @Override
     public void mousePressed(MouseEvent me) {
+    
+        System.out.println("Modifiers int : " + me.getModifiers() + " " + " " + me.getModifiersEx());
+        System.out.println("Modifiers text : " + MouseEvent.getMouseModifiersText(me.getModifiers()) + " " + " " + MouseEvent.getMouseModifiersText(me.getModifiersEx()));
+        
         System.out.println("Mouse pressed; # of clicks: " + me.getClickCount());
         if (me.getButton() == MouseEvent.BUTTON1) {
-            String test = me.getModifiersExText(me.getButton());
-            System.out.println("Test is : " + test);
-            event.setButton(allevent.BUTTON_LEFT);
-            event.setWheel(0);
-            System.out.println(event);
+            
+           
+            mouse_event.setButton(Signal.BUTTON_LEFT);
+            mouse_event.setWheel(0);
+            System.out.println(mouse_event);
         } else if (me.getButton() == MouseEvent.BUTTON3) {
-            System.out.println("Right clic.");
-            event.setButton(allevent.BUTTON_RIGHT);
-            event.setWheel(0);
-            System.out.println(event);
+            System.out.println("Right click.");
+            mouse_event.setButton(Signal.BUTTON_RIGHT);
+            mouse_event.setWheel(0);
+            System.out.println(mouse_event);
         } else if (me.getButton() == MouseEvent.BUTTON2) {
             System.out.println("La molette est enfoncée.");
-            event.setButton(allevent.BUTTON_MIDDLE);
-            event.setWheel(0);
-            System.out.println(event);
+            mouse_event.setButton(Signal.BUTTON_MIDDLE);
+            mouse_event.setWheel(0);
+            System.out.println(mouse_event);
         } else {
             System.out.println("Unknow button.");
         }
-        eventDispatcher.fireUpdate(event);
+        mouseDispatcher.fireUpdate(mouse_event);
     }
 
     @Override
@@ -206,7 +212,7 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
     @Override
     public void keyPressed(KeyEvent ke) {
         char press = ke.getKeyChar();
-        mouseDispatcher.fireUpdate(event);
+        mouseDispatcher.fireUpdate(mouse_event);
         System.out.println("You have pressed " + press);
 
     }
@@ -220,26 +226,33 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
 
         if (mwe.getWheelRotation() < 0) {
             System.out.println("Rotated Up... " + mwe.getWheelRotation());
-            event.setWheel(allevent.WHEEL_UP);
-            event.setButton(0);
-            System.out.println(event);
+            mouse_event.setWheel(Signal.WHEEL_UP);
+            mouse_event.setButton(0);
+            System.out.println(mouse_event);
         } else {
             System.out.println("Rotated Down... " + mwe.getWheelRotation());
-            event.setWheel(allevent.WHEEL_DOWN);
-            event.setButton(0);
-            System.out.println(event);
+            mouse_event.setWheel(Signal.WHEEL_DOWN);
+            mouse_event.setButton(0);
+            System.out.println(mouse_event);
         }
-        mouseDispatcher.fireUpdate(event);
+        mouseDispatcher.fireUpdate(mouse_event);
     }
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        //TODO
+        mouse_event.setXY(me.getX(), me.getY());
+        mouse_event.setButton(Signal.BUTTON_LEFT);
+        System.out.println("dragged " + me.getX() + " " + me.getY());
+mouseDispatcher.fireUpdate(mouse_event);
+
     }
 
     @Override
     public void mouseMoved(MouseEvent me) {
-        //TODO
+        mouse_event.setXY(me.getX(), me.getY());
+        mouse_event.setButton(0);
+        System.out.println("moved " + me.getX() + " " + me.getY());
+        mouseDispatcher.fireUpdate(mouse_event);
     }
 } //end of class JOGL_Window
 

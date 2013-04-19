@@ -28,7 +28,7 @@ package vertigo.graphics.jogl;
 
 import java.util.Observer;
 import javax.media.opengl.GLAutoDrawable;
-import vertigo.graphics.EventDispatcher;
+import vertigo.graphics.MouseDispatcher;
 import vertigo.graphics.Visitor;
 import vertigo.scenegraph.BackStage;
 import vertigo.scenegraph.Camera;

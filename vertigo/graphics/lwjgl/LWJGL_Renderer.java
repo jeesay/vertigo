@@ -73,46 +73,14 @@ public class LWJGL_Renderer{
     }
 
     public void display() {
-        pollInput();
-        displayScene();
-    }
-
-    private void displayScene() {
-        System.out.println("displayScene");
+        //System.out.println("display Scene");
         GL11.glClearColor(red, green, blue, 1.0f);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
         // visitor
-        
     }
 
-    private void pollInput() {
-          if (Mouse.isButtonDown(0)) {
-            int x = Mouse.getX();
-            int y = Mouse.getY();
-
-            System.out.println("CLICK @ X: " + x + " Y: " + y);
-        }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-            System.out.println("space bar");
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-            Display.destroy();
-        }
-
-        while (Keyboard.next()) {
-            if (Keyboard.getEventKeyState()) {
-                if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-                    System.out.println("A Key Pressed");
-                }
-
-            } else {
-                if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-                    System.out.println("A Key Released");
-                }
-            }
-        }
-        
+    void syncViewportSize(int i, int i0, int width, int height) {
+        GL11.glViewport(0, 0, newDim.width, newDim.height);
     }
     
 } // end of class LWJGL_Renderer
