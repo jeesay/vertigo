@@ -28,6 +28,7 @@ package vertigo.graphics.jogl;
 
 import java.awt.Frame;
 import java.awt.Panel;
+import java.util.Observer;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
@@ -36,6 +37,7 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import vertigo.scenegraph.Camera;
+import vertigo.scenegraph.Node;
 import vertigo.scenegraph.World;
 
 /**
@@ -61,7 +63,6 @@ public class JOGL_Renderer implements GLEventListener {
         visitor = new JOGL_Visitor();
     }
 
- 
     public void setBackgroundColor(float red, float green, float blue) {
         this.red = red;
         this.green = green;
@@ -76,7 +77,11 @@ public class JOGL_Renderer implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         // Do nothing
+    
+
     }
+
+
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
@@ -86,7 +91,7 @@ public class JOGL_Renderer implements GLEventListener {
     @Override
     public void display(GLAutoDrawable drawable) {
         System.out.println("Display" + red + " " + green + " " + blue);
-        GL3 gl = drawable.getGL().getGL3();  // up to OpenGL 3.1
+        GL3 gl = drawable.getGL().getGL3();  // up to OpenGL 3
         gl.glClearColor(red, green, blue, 1.0f);
         gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
 

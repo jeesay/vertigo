@@ -26,7 +26,9 @@
  */
 package vertigo.graphics.jogl;
 
+import java.util.Observer;
 import javax.media.opengl.GLAutoDrawable;
+import vertigo.graphics.EventDispatcher;
 import vertigo.graphics.Visitor;
 import vertigo.scenegraph.BackStage;
 import vertigo.scenegraph.Camera;
@@ -40,7 +42,6 @@ import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 
 /**
- *
  * @author 
  *Florin Buga
  *Olivier Catoliquot
@@ -86,6 +87,8 @@ public class JOGL_Visitor implements Visitor {
 
     @Override
     public void visit(Transform obj) {
+                if (obj instanceof Observer)
+            // HACK:EventDispatcher.addObserver(obj);
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
