@@ -28,7 +28,7 @@ package vertigo.graphics;
 
 import java.util.ArrayList;
 import java.util.Observable;
-import vertigo.graphics.event.Event;
+import vertigo.graphics.event.Signal;
 import vertigo.scenegraph.Transform;
 
 /**
@@ -50,8 +50,8 @@ public class EventDispatcher extends Observable {
         return INSTANCE;
     }
 
-    public void fireUpdate(Event e) {
+    public void fireUpdate(Signal e) {
         setChanged();
         notifyObservers(e);
     }
-} // end of class Event Dispatcher
+} // end of class Signal Dispatcher
