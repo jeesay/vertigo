@@ -30,7 +30,6 @@ import java.awt.*;
 import java.awt.Color.*;
 import java.awt.event.*;
 import java.util.concurrent.atomic.AtomicReference;
-import javax.media.opengl.GLAutoDrawable;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -241,4 +240,4 @@ System.out.println("Display  method.");
             createWindow();
         }
     }
-}
+} // end of class LWJGL_Window
