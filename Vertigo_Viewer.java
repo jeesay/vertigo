@@ -120,7 +120,7 @@ public class Vertigo_Viewer implements PlugIn {
                     graphWin = (OGL_Window) new vertigo.graphics.text.Text_Renderer();
                     show("TEXT");
                 } catch (ExceptionInInitializerError eie) {
-                    IJ.showMessage("Vertigo ERROR", "Please download JOGL or LWJGL.");
+                    IJ.showMessage("Vertigo ERROR", "<html>Please download JOGL or LWJGL.</html>");
                 }
             }
         }
@@ -146,25 +146,33 @@ public class Vertigo_Viewer implements PlugIn {
     public void show(String render) {
         if (render.equals("G2D")) {
             graphWin = (OGL_Window) new vertigo.graphics.G2D.G2D_Renderer();
-
-            graphWin.setVisible(true);
+            initWindow(graphWin);
         } else if (render.equals("LWJGL")) {
             try {
                 graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
+                 initWindow(graphWin);
             } catch (ExceptionInInitializerError e) {
-                IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
+                IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download LWJGL or check your ClassPath.");
+               
             }
 
         } else if (render.equals("JOGL")) {
             try {
                 graphWin = new vertigo.graphics.jogl.JOGL_Window();
+                initWindow(graphWin);
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
+                
             }
         } else if (render.equals("TEXT")) {
             graphWin = (OGL_Window) new vertigo.graphics.text.Text_Renderer(camera_, scene_);
+            initWindow(graphWin);
 
         }
+
+    }
+
+    private void initWindow(OGL_Window graphWin) {
         graphWin.setBackgroundColor(red, green, blue);
         graphWin.setDimension(window_width, window_height);
         graphWin.setTitle(title_);
