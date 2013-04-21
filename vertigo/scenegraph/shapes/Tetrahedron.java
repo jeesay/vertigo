@@ -29,8 +29,13 @@ package vertigo.scenegraph.shapes;
 import vertigo.scenegraph.Shape;
 
 /**
+ * Class Tetrahedron
  *
- * @author clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class Tetrahedron extends Shape {
 
@@ -38,4 +43,4 @@ public class Tetrahedron extends Shape {
         super();
         name = "Tetrahedron";
     }
-}
+} // end of class Tetrahedron
