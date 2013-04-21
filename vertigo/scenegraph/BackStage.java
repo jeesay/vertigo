@@ -53,4 +53,4 @@ public class BackStage extends Node {
         for (Node child : getChildren() )
             child.accept(visitor);
     }
-}
+} // end of class BackStage

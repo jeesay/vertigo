@@ -27,7 +27,15 @@
 package vertigo.scenegraph;
 
 import vertigo.graphics.Visitor;
-
+/**
+ * Class Scene
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
 public class Scene extends Node {
 
     public Scene (){

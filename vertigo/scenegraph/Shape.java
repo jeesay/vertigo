@@ -30,7 +30,15 @@ import vertigo.graphics.Visitor;
 import vertigo.math.AxisAngle4;
 import vertigo.math.Matrix4;
 import vertigo.math.Vector3;
-
+/**
+ * Class Shape
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
 public class Shape extends Node {
 
     protected Geometry geo;
@@ -56,11 +64,21 @@ public class Shape extends Node {
         geo = new Geometry();
         material = new Material();
     }
-
+/**
+     * Get the Shape's Geometry
+     *
+     * @return geo
+     *
+     */
     public Geometry getGeometry() {
         return geo;
     }
-
+  /**
+     * Set the  Geometry
+     *
+     * @param types, data as float[]
+     *
+     */
     public void setGeometry(String type, float[] data) {
         geo.setVertices(type, data);
         if (type.equals("V3F")) {
@@ -69,7 +87,12 @@ public class Shape extends Node {
         }
 
     }
-
+   /**
+     * Set the  Geometry
+     *
+     * @param types, data as float[]
+     *
+     */
     public void setGeometry(String[] types, float[] data) {
         if (types.length == 1 && types[0].equals("V3F")) {
             geo.setVertices(types[0], data);
@@ -84,12 +107,22 @@ public class Shape extends Node {
             setDirty(Node.AABB,false);
         }
     }
-
+    /**
+     * Set the  Indexed Geometry
+     *
+     * @param types, data as float[], indices as int []
+     *
+     */
     public void setIndexedGeometry(String type, float[] data, int[] indices) {
         setGeometry(type, data);
         setIndices(indices);
     }
-
+    /**
+     * Set the  Indexed Geometry
+     *
+     * @param types, data as float[], indices as int []
+     *
+     */
     public void setIndexedGeometry(String[] types, float[] data, int[] indices) {
         setGeometry(types, data);
         setIndices(indices);
@@ -159,13 +192,21 @@ public class Shape extends Node {
         matrix.setTranslation(new Vector3(tx, ty, tz));
     }
 
-
+/**
+     * Set the Shape's scale
+     *
+     * @param float s
+     */
     public void scale(float s) {
         //TODO
         matrix.setScale(s);
     }
 
-
+/**
+     * Get the Shape's Matrix
+     *
+     * @return Matrix4 
+     */
     public Matrix4 getMatrix() {
         return matrix;
     }

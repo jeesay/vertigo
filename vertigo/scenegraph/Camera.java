@@ -34,7 +34,15 @@ import vertigo.math.Point2;
 import vertigo.math.Point3;
 import vertigo.math.Vector3;
 import ij.IJ;
-
+/**
+ * Class Camera
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
 public class Camera extends Node {
 
     private Matrix4 view_matrix;
