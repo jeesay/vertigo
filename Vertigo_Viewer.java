@@ -36,13 +36,14 @@ import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Lighting;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.transform.ArcBall;
+import vertigo.graphics.OGL_Window;
 
 import ij.IJ;
 import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
 import java.util.ArrayList;
 import java.util.Iterator;
-import vertigo.graphics.OGL_Window;
+
 
 public class Vertigo_Viewer implements PlugIn {
 
@@ -150,7 +151,7 @@ public class Vertigo_Viewer implements PlugIn {
         } else if (render.equals("LWJGL")) {
             try {
                 graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
-                 initWindow(graphWin);
+                initWindow(graphWin);
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download LWJGL or check your ClassPath.");
                
@@ -158,8 +159,10 @@ public class Vertigo_Viewer implements PlugIn {
 
         } else if (render.equals("JOGL")) {
             try {
+                System.out.println("On try");
                 graphWin = new vertigo.graphics.jogl.JOGL_Window();
-                initWindow(graphWin);
+                System.out.println("On crée");
+               initWindow(graphWin);
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
                 
@@ -169,7 +172,6 @@ public class Vertigo_Viewer implements PlugIn {
             initWindow(graphWin);
 
         }
-
     }
 
     private void initWindow(OGL_Window graphWin) {
@@ -208,6 +210,11 @@ public class Vertigo_Viewer implements PlugIn {
 
     public static void main(String[] args) {
         System.out.println("main");
+        Vertigo_Viewer ve = new Vertigo_Viewer();
+        ve.setBackgroundColor(20, 200, 80);
+        ve.setTitle("Mon titre");
+        ve.show("JOGL");
+        
         test();
     }
 
@@ -281,10 +288,6 @@ public class Vertigo_Viewer implements PlugIn {
                 if (a_node != null) {
                     return a_node;
                 }
-                /*if (a_node.getName().equals(name)) {
-                 IJ.log("This is " + a_node.getName());
-                 return a_node;
-                 }*/
             }
         }
         return null;
@@ -294,7 +297,6 @@ public class Vertigo_Viewer implements PlugIn {
         world_ = new World();
         camera_ = new Camera();
         scene_ = new Scene();
-
         BackStage bs = new BackStage();
         Stage stage = new Stage();
 

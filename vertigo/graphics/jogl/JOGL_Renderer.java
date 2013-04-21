@@ -56,10 +56,6 @@ public class JOGL_Renderer implements GLEventListener {
 
     public JOGL_Renderer() {
         System.out.println("JOGL_Renderer created");
-
-        red = 1.0f;
-        green = 0.5f;
-        blue = 0.2f;
         visitor = new JOGL_Visitor();
     }
 
@@ -94,7 +90,8 @@ public class JOGL_Renderer implements GLEventListener {
         GL3 gl = drawable.getGL().getGL3();  // up to OpenGL 3
         gl.glClearColor(red, green, blue, 1.0f);
         gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
-
+        
+ 
         // Render via Visitor
         visitor.setGLDrawable(drawable);
         // world.accept(visitor);

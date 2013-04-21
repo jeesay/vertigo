@@ -54,8 +54,8 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
 
     private int width = 400;
     private int height = 400;
-    private static final String WIN_TITLE = "Vertigo JOGL - ";
-    private String win_title;
+    private String WIN_TITLE = "Vertigo JOGL - ";
+    //private String win_title;
     private World world;
     private Frame frame;
     private JOGL_Renderer renderer;
@@ -67,14 +67,13 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
     private final MouseDispatcher timerDispatcher;
 
     public JOGL_Window() {
+        System.out.println("JOGL WINDOW    ");
         renderer = new JOGL_Renderer();
         mouseDispatcher = MouseDispatcher.getInstance();
         keyboardDispatcher = MouseDispatcher.getInstance();
         timerDispatcher = MouseDispatcher.getInstance();
         mouse_event = new MouseSignal();
         allevent = new Signal();
-
-
     }
 
     @Override
@@ -109,12 +108,11 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
     @Override
     public void setBackgroundColor(int red, int green, int blue) {
         renderer.setBackgroundColor((red / 255.0f), (green / 255.0f), (blue / 255.0f));
-        System.out.println("Background of JOGL");
     }
 
     @Override
     public void setTitle(String title) {
-        win_title = title;
+        WIN_TITLE += title;
     }
 
     @Override
@@ -136,7 +134,7 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
         });
 
         // Set the title
-        frame.setTitle(WIN_TITLE + win_title);
+        frame.setTitle(WIN_TITLE);
         //Set the size
         frame.setSize(width, height);
 

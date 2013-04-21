@@ -42,9 +42,6 @@ public class LWJGL_Window implements OGL_Window {
 
     private int width = 640;
     private int height = 480;
-    private float red;
-    private float green;
-    private float blue;
     private String title_ = "Vertigo LWJGL - ";
     private static boolean closeRequested;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
@@ -68,7 +65,7 @@ public class LWJGL_Window implements OGL_Window {
         LWJGL_Window lwjgl_Window = new LWJGL_Window();
     }
 
-        public void createWindow() {
+        private void createWindow() {
         frame = new Frame(title_+win_title);
         frame.setLayout(new BorderLayout());
         final Canvas canvas = new Canvas();
@@ -89,12 +86,6 @@ public class LWJGL_Window implements OGL_Window {
             }
         });
 
-    /*    frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                closeRequested = true;
-            }
-        });*/
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -117,7 +108,7 @@ public class LWJGL_Window implements OGL_Window {
         } catch (LWJGLException e) {
             //e.printStackTrace();
             frame.dispose();            
-            System.out.println("ERROR HEREt.");
+            System.out.println("ERROR HERE.");
         }
         /**
          * **
@@ -194,9 +185,6 @@ System.out.println("Display  method.");
     @Override
     public void setBackgroundColor(int red, int green, int blue) {
         renderer.setBackgroundColor((red / 255.0f), (green / 255.0f), (blue / 255.0f));
-        this.red = red / 255.0f;
-        this.green = green / 255.0f;
-        this.blue = blue / 255.0f;
     }
 
     @Override
