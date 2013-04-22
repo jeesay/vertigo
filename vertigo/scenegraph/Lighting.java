@@ -44,4 +44,4 @@ public class Lighting extends Node {
         for (Node child : getChildren() )
             child.accept(visitor);
     }
-}
+} // end of class Lighting

@@ -34,7 +34,15 @@ import vertigo.math.Point2;
 import vertigo.math.Vector3;
 import vertigo.math.Quat4;
 import vertigo.scenegraph.Transform;
-
+/**
+ * Class ArcBall
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
 
 /**
  * Adapted from Nehe Lesson 48 (@author Pepijn Van Eeckhoudt)

@@ -209,13 +209,13 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     public static void main(String[] args) {
-        System.out.println("main");
+        System.out.println("main");/*
         Vertigo_Viewer ve = new Vertigo_Viewer();
         ve.setBackgroundColor(20, 200, 80);
         ve.setTitle("Mon titre");
         ve.show("JOGL");
         
-        test();
+        test();*/
     }
 
     private static void test() {

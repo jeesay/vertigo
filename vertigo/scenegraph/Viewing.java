@@ -29,8 +29,13 @@ package vertigo.scenegraph;
 import vertigo.graphics.Visitor;
 
 /**
+ * Class Viewing
  *
- * @author tomo
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class Viewing extends Node {
     public Viewing(){
@@ -47,4 +52,4 @@ public class Viewing extends Node {
         for (Node child : getChildren() )
             child.accept(visitor);
     }
-}
+} // end of class Viewing

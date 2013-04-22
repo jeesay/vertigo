@@ -27,10 +27,9 @@
 package vertigo.scenegraph;
 
 import vertigo.graphics.Visitor;
-import vertigo.scenegraph.Camera;
 
 /**
- *
+ * class World
  * @author Clement DELESTRE
  */
 public class World extends Node {
@@ -41,7 +40,11 @@ public class World extends Node {
         super();
         name="world";
     }
-     
+      /**
+     * Get The Camera
+     *
+     * @return Camera
+     */
     public Camera getCamera() {
         if (cam_ == null) {
             cam_ = (Camera) getNode("camera");
@@ -68,4 +71,4 @@ public class World extends Node {
             child.accept(visitor);
     }
 
-}
+} // end of class World

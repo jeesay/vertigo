@@ -29,8 +29,13 @@ package vertigo.scenegraph.shapes;
 import vertigo.scenegraph.Shape;
 
 /**
+ * Class Sphere
  *
- * @author Clement DELESTRE
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class Sphere extends Shape {
 
@@ -38,4 +43,4 @@ public class Sphere extends Shape {
         super();
         name = "sphere";
     }
-}
+} // end of class Sphere

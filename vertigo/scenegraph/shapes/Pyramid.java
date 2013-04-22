@@ -29,8 +29,17 @@ package vertigo.scenegraph.shapes;
 import vertigo.scenegraph.Shape;
 
 /**
+ * Class Pyramid
  *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+<<<<<<< HEAD
  * @author Jean-Christophe Taveau
+=======
+>>>>>>> e679ec07b42b376145c0f6d07941e8d680408633
  */
 
 public class Pyramid extends Shape {
@@ -109,6 +118,7 @@ public class Pyramid extends Shape {
         h_ = 1.0f;
         d_ = 1.0f;
     }
+<<<<<<< HEAD
 
     public void setType(int type) {
         switch (type) {
@@ -143,3 +153,6 @@ public class Pyramid extends Shape {
     }
 
 }
+=======
+} // End of class Pyramid
+>>>>>>> e679ec07b42b376145c0f6d07941e8d680408633
