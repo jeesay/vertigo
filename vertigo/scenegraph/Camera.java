@@ -28,6 +28,9 @@ package vertigo.scenegraph;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
+import vertigo.graphics.event.MouseObserver;
+import vertigo.graphics.event.MouseSignal;
 import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
 import vertigo.math.Point2;
@@ -35,7 +38,7 @@ import vertigo.math.Point3;
 import vertigo.math.Vector3;
 import ij.IJ;
 
-public class Camera extends Node {
+public class Camera extends Node implements MouseObserver {
 
     private Matrix4 view_matrix;
     private Matrix4 proj_matrix;
@@ -46,6 +49,7 @@ public class Camera extends Node {
     private float znear;
     private float zfar;
     private int proj_type = 0;
+    private final static float ZOOM_FACTOR = 0.01;
 
     private final static int PERSPECTIVE = 0;
     private final static int ORTHOGRAPHIC = 1;
@@ -72,7 +76,8 @@ public class Camera extends Node {
         super(name);
         proj_matrix = new Matrix4();
         proj_type = PERSPECTIVE;
-        fovy = (float) (45.0 * Math.PI / 180.0);
+        zoom = 1.0;
+        fovy = (float) (50.0 * Math.PI / 180.0);
         aspect = 1.0f;
         znear = 0.1f;
         zfar = 100.0f;
@@ -93,6 +98,42 @@ public class Camera extends Node {
         this.aspect = aspect;
         this.znear = zNear;
         this.zfar = zFar;
+        perspective(fovy * this.zoom, aspect, zNear, zFar);
+        setDirty(Node.PROJMATRIX,false);
+    }
+
+    /**
+     * Set the Camera's Field of View(fov) for perspective projection
+     *
+     * @param fovy,aspect, zNear, zFar
+     */
+    public void setFieldOfView(float fovy) {
+        this.fovy = fovy;
+        perspective(this.fovy * this.zoom, this.aspect, this.znear, this.zfar);
+        setDirty(Node.PROJMATRIX,false);
+    }
+
+    /**
+     * Set the Aspect ratio  for perspective projection
+     *
+     * @param fovy,aspect, zNear, zFar
+     */
+    public void setAspect(float aspect) {
+        this.aspect = aspect;
+        perspective(this.fovy * this.zoom, this.aspect, this.znear, this.zfar);
+        setDirty(Node.PROJMATRIX,false);
+    }
+
+    /**
+     * Set the near and far Z-planes for perspective projection
+     *
+     * @param fovy,aspect, zNear, zFar
+     */
+    public void setPlanes(float zNear, float zFar) {
+        this.znear = zNear;
+        this.zfar = zFar;
+        perspective(this.fovy * this.zoom, this.aspect, this.znear, this.zfar);
+        setDirty(Node.PROJMATRIX,false);
     }
 
     /**
@@ -118,7 +159,7 @@ public class Camera extends Node {
     public void setViewport(int width, int height) {
         vp_width = width;
         vp_height = height;
-        aspect = (float) vp_width / (float) vp_height;
+        this.aspect = (float) vp_width / (float) vp_height;
         setDirty(Node.PROJMATRIX,true);
     }
 
@@ -235,6 +276,14 @@ public class Camera extends Node {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
+    }
+
+  @Override
+    public void update(Observable o, Object o1) {
+        MouseSignal e = (MouseSignal) o1;
+        System.out.println("Camera : Zoom" + e);  
+        // if Mouse Wheel
+        // this.zoom += ZOOM_FACTOR * e.getMouseWheel();
     }
 
 
