@@ -55,79 +55,74 @@ public class G2D_Visitor implements Visitor {
     @Override
     public void visit(BackStage obj) {
         // Do nothing -the matrix is always identity
-        System.out.println("BackStage: " +obj.getName() );
     }
 
     @Override
     public void visit(Camera obj) {
         // Do nothing ?
         cam_ = obj;
-        System.out.println("Camera: " +obj.getName() );
     }
 
     @Override
     public void visit(Light obj) {
         // Do nothing ?
-        System.out.println("Light: " +obj.getName() );
     }
 
     @Override
     public void visit(Lighting obj) {
         // Do nothing
-        System.out.println("Lighting: " +obj.getName() );
     }
 
     @Override
     public void visit(Scene obj) {
         // Update matrix
         setModelMatrix(obj);
-        System.out.println("Scene: " +obj.getName() );
     }
 
     @Override
     public void visit(Shape obj) {
-        System.out.println("Shape: " +obj.getName() +" "+obj);
         // Update matrix
-        mulModelMatrix(obj);
+        // if (obj.isDirty(Node.MATRIX)) {
+            obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix() );
+            obj.setDirty(Node.MATRIX,false);
+        //}
         // update AABB
     }
 
     @Override
     public void visit(Stage obj) {
         // Do nothing
-        System.out.println("Stage: " +obj.getName() );
     }
 
     @Override
     public void visit(Transform obj) {
-        mulModelMatrix(obj);
+        // if (obj.isDirty(Node.MATRIX)) {
+            System.out.println(obj.getMatrix());
+            obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix() );
+            obj.setDirty(Node.MATRIX,false);
+        //}
     }
 
     @Override
     public void visit(Viewing obj) {
         // Do nothing
-        System.out.println("Viewing: " +obj.getName() );
     }
 
     @Override
     public void visit(World obj) {
         // Do nothing
-        System.out.println("World: " +obj.getName() );
     }
 
 
     private void setModelMatrix(Node obj) {
         if (obj.isDirty(Node.MATRIX)) {
             obj.setModelMatrix(obj.getParent().getModelMatrix() );
-            obj.setDirty(Node.MATRIX,true);
+            obj.setDirty(Node.MATRIX,false);
         }
     }
 
     private void mulModelMatrix(Node obj) {
-        if (obj.isDirty(Node.MATRIX)) {
-            obj.setModelMatrix(obj.getParent().getModelMatrix() );
-            obj.setDirty(Node.MATRIX,true);
-        }
+
     }
 
 } // End of class G2D_Visitor

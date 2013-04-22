@@ -50,7 +50,10 @@ public class G2D_Renderer {
     private Camera cam_;
     private Graphics g;
      
-     
+    public G2D_Renderer() {
+         drawables = new ArrayList<Node>();
+    }
+
     public void setWorld(World world) {
        loadDrawables(world); 
     }
@@ -58,6 +61,7 @@ public class G2D_Renderer {
     public void setGraphicsContext(Graphics g) {
         this.g = g;
     }
+
     public void draw() {
         for (Node shape : drawables) {
             drawShape((Shape) shape);
@@ -143,11 +147,13 @@ public class G2D_Renderer {
     }
 
 
-private void loadDrawables(Node obj) {
-        System.out.println("Load Observer observer " + obj);
+    private void loadDrawables(Node obj) {
         if (obj instanceof Camera) {
+        System.out.println("G2D_Rend: Load camera " + obj);
+
             cam_ = (Camera) obj;
         } else if (obj instanceof Shape) {
+        System.out.println("G2D_Rend: Load drawables " + obj);
             drawables.add((Shape) obj);
         }
         for (Node child : obj.getChildren()) {

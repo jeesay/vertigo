@@ -30,8 +30,11 @@ package vertigo.graphics.G2D;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
+import vertigo.graphics.ViewportDispatcher;
+import vertigo.graphics.event.ViewportSignal;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.World;
+
 
 public class G2D_Panel extends JPanel {
 
@@ -43,9 +46,11 @@ public class G2D_Panel extends JPanel {
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        cam_.setViewport(this.getWidth(),this.getHeight() );
-        System.out.println("render");
+        ViewportSignal signal = new ViewportSignal();
+        signal.setSize(this.getWidth(),this.getHeight() );
+        ViewportDispatcher.getInstance().fireUpdate(signal);
         world_.accept(visitor);
+        renderer.setGraphicsContext(g);
         renderer.draw();
 /*
     GradientPaint gp = new GradientPaint(0, 0, Color.RED, 30, 30, Color.cyan, true);
