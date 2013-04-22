@@ -1,7 +1,7 @@
 /*
  * $Id:$
  *
- * crazybio_viewer: 3D Viewer Plugin for ImageJ.
+ * vertigo: 3D Viewer Plugin for ImageJ.
  * Copyright (C) 2013  Jean-Christophe Taveau.
  *
  * This library is free software; you can redistribute it and/or
