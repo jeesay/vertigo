@@ -27,13 +27,18 @@
 package vertigo.scenegraph.transform;
 
 import java.util.Observable;
+import vertigo.graphics.event.Signal;
 import vertigo.graphics.event.MouseObserver;
 import vertigo.graphics.event.MouseSignal;
+import vertigo.graphics.event.ViewportObserver;
+import vertigo.graphics.event.ViewportSignal;
 import vertigo.math.Matrix4;
 import vertigo.math.Point2;
 import vertigo.math.Vector3;
 import vertigo.math.Quat4;
+import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Transform;
+
 /**
  * Class ArcBall
  *
@@ -48,7 +53,7 @@ import vertigo.scenegraph.Transform;
  * Adapted from Nehe Lesson 48 (@author Pepijn Van Eeckhoudt)
  * http://www.java-tips.org/other-api-tips/jogl/arcball-rotation-nehe-tutorial-jogl-port.html
  */
-public class ArcBall extends Transform implements MouseObserver {
+public class ArcBall extends Transform implements MouseObserver, ViewportObserver {
 
     private static final float EPSILON = 1.0e-5f;
     Vector3 vtFrom;          //Saved click vector
@@ -76,30 +81,14 @@ public class ArcBall extends Transform implements MouseObserver {
     }
 
 
-  @Override
+    @Override
     public void update(Observable o, Object o1) {
-        MouseSignal e = (MouseSignal) o1;
-        System.out.println("Arcball : Event" + e);  
-        // if Mouse Down and not dragging
-   if (isClicked)                                  // First Click
-    {
-        isDragging = true;                          // Prepare For Dragging
-        lastRot = thisRot;                          // Set Last Static Rotation To Last Dynamic One
-        click(new Point2(e.getX(), e.getY()) );                        // Update Start Vector And Prepare For Dragging
-    }
-    else if ( isDragging ) {
-        drag(new Point2(e.getX(), e.getY()), thisRot);                  // Update End Vector And Get Rotation As Quaternion
-        thisRot.mul(lastRot);                // Accumulate Last Rotation Into This One
-        // normalise it.
-        thisRot.normalize();
-        matrix.setRotation(thisRot);          // Set Our Final Transform's Rotation From This One
-
-    }
-    else {
-        isDragging = false;                          // Prepare For Dragging
-        isClicked = false;
-    }
-
+        if (o1 instanceof MouseSignal) 
+            updateMouse( (MouseSignal) o1 );
+        else if (o1 instanceof ViewportSignal) {
+            ViewportSignal signal = (ViewportSignal) o1;
+            setBounds(signal.getWidth(), signal.getHeight() );
+        }
     }
 
     public void setBounds(float newWidth, float newHeight) {
@@ -107,6 +96,34 @@ public class ArcBall extends Transform implements MouseObserver {
         //Set adjustment factor for width/height
         adjustWidth = 1.0f / ((newWidth - 1.0f) * 0.5f);
         adjustHeight = 1.0f / ((newHeight - 1.0f) * 0.5f);
+    }
+
+
+    private void updateMouse(MouseSignal e) {
+        // if Mouse Down and dragging
+        if ( e.getButton() == Signal.BUTTON_LEFT && e.getButtonStatus() == Signal.MOVED ) {
+            System.out.println("Arcball : left drag " + e);
+            drag(new Point2(e.getX(), e.getY()), thisRot);                  // Update End Vector And Get Rotation As Quaternion
+            thisRot.mul(lastRot);                // Accumulate Last Rotation Into This One
+            // normalise it.
+            thisRot.normalize();
+            matrix.setRotation(thisRot);          // Set Our Final Transform's Rotation From This One
+            setDirty(Node.MATRIX,true);
+        }
+        // if Mouse Down and not dragging
+        else if (e.getButton() == Signal.BUTTON_LEFT)             // First Click
+        {
+            System.out.println("Arcball : left click " + e);
+            // isDragging = true;                          // Prepare For Dragging
+            lastRot = thisRot;                          // Set Last Static Rotation To Last Dynamic One
+            click(new Point2(e.getX(), e.getY()) );                        // Update Start Vector And Prepare For Dragging
+        }
+
+        else {
+        isDragging = false;                          // Prepare For Dragging
+        isClicked = false;
+        }
+
     }
 
     //Mouse down
@@ -139,6 +156,7 @@ public class ArcBall extends Transform implements MouseObserver {
                 newRot.set(0.0f,0.0f,0.0f,0.0f);
             }
         }
+        System.out.println("Drag " + newRot);
     }
 
 
@@ -169,7 +187,7 @@ public class ArcBall extends Transform implements MouseObserver {
             vector.y = tempPoint.y;
             vector.z = (float) Math.sqrt(1.0f - length);
         }
-
+        System.out.println(point + " -> " + vector);
     }
 
 /******
