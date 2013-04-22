@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Observable;
 import vertigo.graphics.event.MouseObserver;
 import vertigo.graphics.event.MouseSignal;
+import vertigo.graphics.event.ViewportObserver;
+import vertigo.graphics.event.ViewportSignal;
 import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
 import vertigo.math.Point2;
@@ -49,7 +51,7 @@ import ij.IJ;
  * @version 0.1
  *
  */
-public class Camera extends Node implements MouseObserver {
+public class Camera extends Node implements MouseObserver, ViewportObserver {
 
     private Matrix4 view_matrix;
     private Matrix4 proj_matrix;
@@ -59,8 +61,9 @@ public class Camera extends Node implements MouseObserver {
     private float aspect;
     private float znear;
     private float zfar;
+    private float zoom;
     private int proj_type = 0;
-    private final static float ZOOM_FACTOR = 0.01;
+    private final static float ZOOM_FACTOR = 0.01f;
 
     private final static int PERSPECTIVE = 0;
     private final static int ORTHOGRAPHIC = 1;
@@ -73,6 +76,7 @@ public class Camera extends Node implements MouseObserver {
         super();
         proj_matrix = new Matrix4();
         proj_type = PERSPECTIVE;
+        zoom = 1.0f;
         fovy = (float) (45.0 * Math.PI / 180.0);
         aspect = 1.0f;
         znear = 0.1f;
@@ -87,7 +91,7 @@ public class Camera extends Node implements MouseObserver {
         super(name);
         proj_matrix = new Matrix4();
         proj_type = PERSPECTIVE;
-        zoom = 1.0;
+        zoom = 1.0f;
         fovy = (float) (50.0 * Math.PI / 180.0);
         aspect = 1.0f;
         znear = 0.1f;
@@ -287,10 +291,18 @@ public class Camera extends Node implements MouseObserver {
 
   @Override
     public void update(Observable o, Object o1) {
-        MouseSignal e = (MouseSignal) o1;
-        System.out.println("Camera : Zoom" + e);  
-        // if Mouse Wheel
-        // this.zoom += ZOOM_FACTOR * e.getMouseWheel();
+        if (o1 instanceof MouseSignal) {
+            MouseSignal e = (MouseSignal) o1;
+            // if Mouse Wheel
+            this.zoom += ZOOM_FACTOR * e.getWheel();
+            setDirty(Node.PROJMATRIX,true);
+        } 
+        else if (o1 instanceof ViewportSignal) {
+            ViewportSignal e = (ViewportSignal) o1;
+            setViewport(e.getWidth(), e.getHeight() );
+            // System.out.println("Signal Viewport " + e.getWidth() +" " + e.getHeight() );
+
+        }
     }
 
 
