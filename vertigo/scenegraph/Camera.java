@@ -45,6 +45,7 @@ import ij.IJ;
  * @author Florin Buga
  * @author Olivier Catoliquot
  * @author Clement Delestre
+ * @author Jean-Christophe Taveau
  * @version 0.1
  *
  */
@@ -108,19 +109,17 @@ public class Camera extends Node implements MouseObserver {
         this.aspect = aspect;
         this.znear = zNear;
         this.zfar = zFar;
-        perspective(fovy * this.zoom, aspect, zNear, zFar);
-        setDirty(Node.PROJMATRIX,false);
+        setDirty(Node.PROJMATRIX,true);
     }
 
     /**
      * Set the Camera's Field of View(fov) for perspective projection
      *
-     * @param fovy,aspect, zNear, zFar
+     * @param fovy
      */
     public void setFieldOfView(float fovy) {
         this.fovy = fovy;
-        perspective(this.fovy * this.zoom, this.aspect, this.znear, this.zfar);
-        setDirty(Node.PROJMATRIX,false);
+        setDirty(Node.PROJMATRIX,true);
     }
 
     /**
@@ -130,8 +129,7 @@ public class Camera extends Node implements MouseObserver {
      */
     public void setAspect(float aspect) {
         this.aspect = aspect;
-        perspective(this.fovy * this.zoom, this.aspect, this.znear, this.zfar);
-        setDirty(Node.PROJMATRIX,false);
+        setDirty(Node.PROJMATRIX,true);
     }
 
     /**
@@ -142,8 +140,7 @@ public class Camera extends Node implements MouseObserver {
     public void setPlanes(float zNear, float zFar) {
         this.znear = zNear;
         this.zfar = zFar;
-        perspective(this.fovy * this.zoom, this.aspect, this.znear, this.zfar);
-        setDirty(Node.PROJMATRIX,false);
+        setDirty(Node.PROJMATRIX,true);
     }
 
     /**
@@ -492,7 +489,7 @@ public class Camera extends Node implements MouseObserver {
     private void updateProjMatrix() {
         switch (proj_type) {
             case PERSPECTIVE:
-                perspective(fovy,aspect,znear, zfar); 
+                perspective(fovy * zoom,aspect,znear, zfar); 
                 setDirty(Node.PROJMATRIX,false);
                 break;
             case ORTHOGRAPHIC: // ortho TODO
