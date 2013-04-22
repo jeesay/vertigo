@@ -80,6 +80,7 @@ public class LWJGL_Window implements OGL_Window {
     // VBO pour tous les cas (boucle)  une ou deux passes si une marche pas (isDirty), matrice parent x fils
     //public LWJGL_Window(){} 
     //singleton
+    private World world;
 
     public LWJGL_Window() {
         System.out.println("constructor");
@@ -99,9 +100,8 @@ public class LWJGL_Window implements OGL_Window {
         LWJGL_Window lwjgl_Window = new LWJGL_Window();
     }
 
-
-        private void createWindow() {
-        frame = new Frame(title_+win_title);
+    private void createWindow() {
+        frame = new Frame(title_ + win_title);
         frame.setLayout(new BorderLayout());
         final Canvas canvas = new Canvas();
 
@@ -194,16 +194,15 @@ public class LWJGL_Window implements OGL_Window {
     public void dispose() {
         // Do nothing
     }
-    
-     private void displayScene() {
-        
-     //GL11.glClearColor(red, green, blue, 1.0f);
-     //GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
-     System.out.println("Display Scene method.");
-     renderer.display();
 
-     }
-     
+    private void displayScene() {
+
+        //GL11.glClearColor(red, green, blue, 1.0f);
+        //GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+        System.out.println("Display Scene method.");
+        renderer.display();
+
+    }
 
     @Override
     public void setDimension(int w, int h) {
@@ -214,7 +213,6 @@ public class LWJGL_Window implements OGL_Window {
 
     @Override
     public void setTitle(String title) {
-
         win_title = title;
     }
 
@@ -225,6 +223,11 @@ public class LWJGL_Window implements OGL_Window {
 
     @Override
     public void setWorld(World _world) {
+        world = _world;
+        renderer.setWorld(_world);
+        System.out.println("entrée dans load observer");
+        loadObserver(_world);
+        System.out.println("sortie de load observer");
     }
 
     private void pollInput() {
@@ -243,7 +246,7 @@ public class LWJGL_Window implements OGL_Window {
             //System.out.println(mouse_event);
         } else if (Mouse.isButtonDown(2)) {
             mouse_event.setButton(allevent.BUTTON_MIDDLE);
-           // System.out.println(mouse_event);
+            // System.out.println(mouse_event);
         }
 
 
@@ -251,18 +254,14 @@ public class LWJGL_Window implements OGL_Window {
             System.out.println("space bar");
         } else if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
             Display.destroy();
-        }
-        else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             System.out.println("left shift");
-        } 
-         else if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
             System.out.println("right shift");
-        } 
-        
-          else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL )) {
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
             System.out.println("Left Control");
-        } 
-        if ( Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mouse_event.isButtonDown() ){
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mouse_event.isButtonDown()) {
             System.out.println("Souris enfoncé et L shift aussi");
         }
 
@@ -297,6 +296,7 @@ public class LWJGL_Window implements OGL_Window {
             display();
         }
     }
+
     private void loadObserver(Node obj) {
         System.out.println("Load Observer observer " + obj);
         if (obj instanceof MouseObserver) {
