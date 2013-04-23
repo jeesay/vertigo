@@ -39,7 +39,12 @@ public class VBO extends BO {
         super();
         props = new Hashtable<String, Props>();
     }
+  public Hashtable<String, Props> getProps(){
+      return props;
+  }
+  
 
+  
     public void setFloatBuffer(String type, FloatBuffer buf) {
         props.put(type, new Props(type, 0, getSize(type)));
         buffer = buf;
@@ -74,7 +79,7 @@ public class VBO extends BO {
 
     public String getType(String type) {
         return props.get(type).getType();
-    }
+    } 
 
     public int capacity() {
         return buffer.capacity();

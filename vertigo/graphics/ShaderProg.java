@@ -14,6 +14,7 @@ import ij.IJ;
  * @author Jean-Christophe Taveau
  */
 public class ShaderProg {
+    public static int UNKNOWN = -1;
 
     private HashMap<String, Integer> attributes;
     private HashMap<String, Integer> uniforms;
