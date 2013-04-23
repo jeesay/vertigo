@@ -82,10 +82,10 @@ public class G2D_Visitor implements Visitor {
     @Override
     public void visit(Shape obj) {
         // Update matrix
-        // if (obj.isDirty(Node.MATRIX)) {
+        if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix() );
             obj.setDirty(Node.MATRIX,false);
-        //}
+        }
         // update AABB
     }
 
@@ -96,11 +96,11 @@ public class G2D_Visitor implements Visitor {
 
     @Override
     public void visit(Transform obj) {
-        // if (obj.isDirty(Node.MATRIX)) {
+        if (obj.isDirty(Node.MATRIX)) {
             System.out.println(obj.getMatrix());
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix() );
             obj.setDirty(Node.MATRIX,false);
-        //}
+        }
     }
 
     @Override

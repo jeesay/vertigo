@@ -34,7 +34,8 @@ import java.util.ArrayList;
 import vertigo.graphics.IBO;
 import vertigo.graphics.VBO;
 import vertigo.math.Matrix4;
-import vertigo.math.Point3;
+import vertigo.math.Point4;
+import vertigo.math.Vector3;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Shape;
@@ -86,14 +87,14 @@ public class G2D_Renderer {
         Matrix4 mvp = new Matrix4();
         mvp.mul(cam_.getProjection(), cam_.getViewMatrix());
         mvp.mul(obj.getModelMatrix());
-        Point3 point = new Point3();
+        Point4 point = new Point4();
 //        Point point2d = new Point();
 
         VBO vbo = (VBO) obj.getGeometry().getBO(0);
         FloatBuffer data = vbo.getFloatBuffer();
         for (int i = vbo.getOffset("V3F"); i < vbo.capacity(); i += vbo.getStride("V3F")) {
             System.out.println(vbo.getFloatBuffer().get(i) + "; " + vbo.getFloatBuffer().get(i + 1) + "; " + vbo.getFloatBuffer().get(i + 2));
-            point.set(vbo.getFloatBuffer().get(i), vbo.getFloatBuffer().get(i + 1), vbo.getFloatBuffer().get(i + 2) + 5.0f);
+            point.set(vbo.getFloatBuffer().get(i), vbo.getFloatBuffer().get(i + 1), vbo.getFloatBuffer().get(i + 2) + 5.0f, 1.0f);
             mvp.transform(point);
             float x = point.x / point.z * cam_.getViewport().x / 2.0f + cam_.getViewport().x / 2.0f;
             float y = point.y / point.z * cam_.getViewport().y / 2.0f + cam_.getViewport().y / 2.0f;
@@ -105,19 +106,22 @@ public class G2D_Renderer {
 
     private void drawLines(Shape obj) {
         Matrix4 mvp = new Matrix4();
-        mvp.mul(cam_.getProjection(), cam_.getViewMatrix());
+        cam_.getViewMatrix().setTranslation(new Vector3(0.0f,0.0f,5.0f));
+        mvp.mul(cam_.getProjection(), cam_.getViewMatrix() );
         mvp.mul(obj.getModelMatrix());
-        Point3 point = new Point3();
+        Point4 point = new Point4();
+        float halfWidth  = cam_.getViewport().x / 2.0f;
+        float halfHeight = cam_.getViewport().y / 2.0f;
 
         VBO vbo = (VBO) obj.getGeometry().getBO(0);
         int[] points = new int[vbo.capacity()];
         int count = 0;
         FloatBuffer data = vbo.getFloatBuffer();
         for (int i = vbo.getOffset("V3F"); i < vbo.capacity(); i += vbo.getStride("V3F")) {
-            point.set(vbo.getFloatBuffer().get(i), vbo.getFloatBuffer().get(i + 1), vbo.getFloatBuffer().get(i + 2) + 5.0f);
+            point.set(vbo.getFloatBuffer().get(i), vbo.getFloatBuffer().get(i + 1), vbo.getFloatBuffer().get(i + 2),1.0f);
             mvp.transform(point);
-            points[count++] = Math.round(point.x / point.z * cam_.getViewport().x / 2.0f + cam_.getViewport().x / 2.0f);
-            points[count++] = Math.round(point.y / point.z * cam_.getViewport().y / 2.0f + cam_.getViewport().y / 2.0f);
+            points[count++] = Math.round(point.x / point.w * halfWidth  + halfWidth);
+            points[count++] = Math.round((0.5f - point.y) / point.w * halfHeight + halfHeight);
         }
 
         // Indices

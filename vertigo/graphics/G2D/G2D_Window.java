@@ -125,14 +125,17 @@ public class G2D_Window implements OGL_Window, MouseMotionListener, MouseListene
 
     @Override
     public void mousePressed(MouseEvent me) {
+/***
         System.out.println("Button : " + me.getButton() + " " + " " + me.MOUSE_PRESSED+ " " + me.MOUSE_RELEASED);
         System.out.println("Button : " + me.MOUSE_MOVED+ " " + me.MOUSE_DRAGGED+ " " + me.MOUSE_ENTERED+ " " + me.MOUSE_EXITED);
         System.out.println("Modifiers int : " + me.getModifiers() + " " + " " + me.getModifiersEx());
         System.out.println("Modifiers text : " + MouseEvent.getMouseModifiersText(me.getModifiers()) + " " + " " + MouseEvent.getMouseModifiersText(me.getModifiersEx()));
         
         System.out.println("Mouse pressed; # of clicks: " + me.getClickCount());
+***/
 
         MouseSignal mouse_event = new MouseSignal();
+        mouse_event.setXY(me.getX(), me.getY());
 
         switch ( me.getButton() ) {
         case MouseEvent.BUTTON1 :
@@ -153,17 +156,17 @@ public class G2D_Window implements OGL_Window, MouseMotionListener, MouseListene
 
     @Override
     public void mouseReleased(MouseEvent me) {
-        System.out.println("Mouse button UP.");
+        // System.out.println("Mouse button UP.");
     }
 
     @Override
     public void mouseEntered(MouseEvent me) {
-        System.out.println("Mouse Entered " + me.getX() + " " + me.getY());
+        // System.out.println("Mouse Entered " + me.getX() + " " + me.getY());
     }
 
     @Override
     public void mouseExited(MouseEvent me) {
-        System.out.println("Mouse exited.");
+        // System.out.println("Mouse exited.");
     }
 
     @Override
@@ -172,7 +175,7 @@ public class G2D_Window implements OGL_Window, MouseMotionListener, MouseListene
         mouse_event.setXY(me.getX(), me.getY());
         mouse_event.setButton(Signal.BUTTON_LEFT);
         mouse_event.setButtonStatus(Signal.MOVED);
-        System.out.println("dragged " + me.getX() + " " + me.getY());
+        // System.out.println("dragged " + me.getX() + " " + me.getY());
         mouseDispatcher.fireUpdate(mouse_event);
         panel.repaint();
     }
@@ -183,7 +186,7 @@ public class G2D_Window implements OGL_Window, MouseMotionListener, MouseListene
         mouse_event.setXY(me.getX(), me.getY());
         mouse_event.setButton(Signal.NO_BUTTON);
         mouse_event.setButtonStatus(Signal.MOVED);
-        System.out.println("moved " + me.getX() + " " + me.getY());
+        // System.out.println("moved " + me.getX() + " " + me.getY());
         mouseDispatcher.fireUpdate(mouse_event);
         panel.repaint();
     }

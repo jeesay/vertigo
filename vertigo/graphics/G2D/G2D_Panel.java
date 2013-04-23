@@ -36,6 +36,7 @@ import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.World;
 
 
+@SuppressWarnings("serial")
 public class G2D_Panel extends JPanel {
 
     private Camera cam_;
