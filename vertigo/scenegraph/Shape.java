@@ -51,6 +51,9 @@ public class Shape extends Node {
 
     public Shape() {
         super();
+        // Init matrix
+        matrix = new Matrix4();
+        matrix.setIdentity();
         drawable_ = true;
         geo = new Geometry();
         material = new Material();
@@ -60,11 +63,15 @@ public class Shape extends Node {
 
     public Shape(String name) {
         super(name);
+        // Init matrix
+        matrix = new Matrix4();
+        matrix.setIdentity();
         drawable_ = true;
         geo = new Geometry();
         material = new Material();
     }
-/**
+
+   /**
      * Get the Shape's Geometry
      *
      * @return geo
@@ -73,7 +80,8 @@ public class Shape extends Node {
     public Geometry getGeometry() {
         return geo;
     }
-  /**
+
+   /**
      * Set the  Geometry
      *
      * @param types, data as float[]
@@ -180,7 +188,6 @@ public class Shape extends Node {
      */
     public void rotate(float angle_in_degrees, float axis_x, float axis_y, float axis_z) {
         matrix.setRotation(new AxisAngle4( axis_x, axis_y, axis_z, (float) (angle_in_degrees /180.0f * Math.PI)) );
-        // TODO matrix.setTranslation(new Vector3(tx, ty, tz));
     }
 
     /**
@@ -210,6 +217,7 @@ public class Shape extends Node {
     public Matrix4 getMatrix() {
         return matrix;
     }
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
