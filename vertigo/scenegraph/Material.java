@@ -42,6 +42,10 @@ public class Material {
         shader = ShaderFactory.get(shaderName);
     }
     
+    public ShaderProg getShaderMaterial() {
+        return shader;
+    }
+    
     public void setColor(float red, float green, float blue) {
         color[0] = red;
         color[1] = green;
