@@ -1,6 +1,4 @@
 
-import vertigo.graphics.BO;
-
 /*
 * $Id:$
 *
@@ -27,6 +25,8 @@ import vertigo.graphics.BO;
 * Olivier Catoliquot
 * Clement Delestre
 */
+
+import vertigo.graphics.BO;
 
 public class Shader {
     
