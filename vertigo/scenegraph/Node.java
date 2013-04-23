@@ -264,21 +264,18 @@ public abstract class Node {
     }
 
     /**
-     * Set status of this node and children
+     * Set status of this node and propagate to children
      *
      * @param Only check the status of a given properties: MATRIX, VBO, SHADER
      * @return Flag giving the status of this node
      */
-    /*
-     public boolean setAllDirty(int flag, boolean value){
-     if (value)
-     dirty_ = dirty_ | flag;
-     else
-     dirty_ = dirty_ & ~flag;
-     for (Node n : children)
-     n.setAllDirty(flag,value);
+     public void setAllDirty(byte flag, boolean value) {
+         setDirty(flag, value);
+         for (Node n : children)
+             n.setAllDirty(flag,value);
      }
-     */
+
+
     public boolean check() {
         return true; // TODO
     }
