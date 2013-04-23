@@ -185,6 +185,18 @@ public class LWJGL_Visitor implements Visitor {
 
         int i = -1;
         // Bind BOs and Update attributes
+        
+        
+        
+GL11.glInterleavedArrays(format, stride, pointer);
+//use for interleaved
+
+
+
+
+
+
+
 
         for (BO bo : obj.getGeometry().getBuffers()) {
             //ShaderUtils.dontUseShader();
