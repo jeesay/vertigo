@@ -63,13 +63,12 @@ public class LWJGL_Window implements OGL_Window {
 
     private int width = 640;
     private int height = 480;
-    private String title_ = "Vertigo LWJGL - ";
+    private String win_title = "Vertigo LWJGL - ";
     private static boolean closeRequested;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
     private Frame frame;
     private Dimension newDim;
     private LWJGL_Renderer renderer;
-    private String win_title = "";
     private final KeyboardDispatcher keyboardDispatcher;
     private final MouseDispatcher mouseDispatcher;
     private final TimerDispatcher timerDispatcher;
@@ -101,7 +100,7 @@ public class LWJGL_Window implements OGL_Window {
     }
 
     private void createWindow() {
-        frame = new Frame(title_ + win_title);
+        frame = new Frame(win_title);
         frame.setLayout(new BorderLayout());
         final Canvas canvas = new Canvas();
 
@@ -197,9 +196,7 @@ public class LWJGL_Window implements OGL_Window {
 
     private void displayScene() {
 
-        //GL11.glClearColor(red, green, blue, 1.0f);
-        //GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
-        System.out.println("Display Scene method.");
+        //System.out.println("Display Scene method.");
         renderer.display();
 
     }
@@ -213,7 +210,7 @@ public class LWJGL_Window implements OGL_Window {
 
     @Override
     public void setTitle(String title) {
-        win_title = title;
+        win_title += title;
     }
 
     @Override
