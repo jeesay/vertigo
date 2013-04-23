@@ -76,6 +76,7 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
         // Init matrices
         lastRot = new Quat4();
         thisRot = new Quat4();
+        thisRot.set(1.0f,0.0f,0.0f,0.0f);
         matrix = new Matrix4();
         matrix.setIdentity();
     }
@@ -103,25 +104,28 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
         // if Mouse Down and dragging
         if ( e.getButton() == Signal.BUTTON_LEFT && e.getButtonStatus() == Signal.MOVED ) {
             System.out.println("Arcball : left drag " + e);
-            drag(new Point2(e.getX(), e.getY()), thisRot);                  // Update End Vector And Get Rotation As Quaternion
-            thisRot.mul(lastRot);                // Accumulate Last Rotation Into This One
-            // normalise it.
+            // Update End Vector And Get Rotation As Quaternion
+            drag(new Point2(e.getX(), e.getY()), thisRot);
+            
+            // Accumulate Last Rotation Into This One
+            thisRot.mul(lastRot);
             thisRot.normalize();
-            matrix.setRotation(thisRot);          // Set Our Final Transform's Rotation From This One
-            setDirty(Node.MATRIX,true);
+            // Set Our Final Transform's Rotation From This One
+            matrix.setRotation(thisRot);          
+            setAllDirty(Node.MATRIX,true);
         }
-        // if Mouse Down and not dragging
-        else if (e.getButton() == Signal.BUTTON_LEFT)             // First Click
+        // if Mouse Down and not dragging: First Click
+        else if (e.getButton() == Signal.BUTTON_LEFT)             
         {
             System.out.println("Arcball : left click " + e);
-            // isDragging = true;                          // Prepare For Dragging
-            lastRot = thisRot;                          // Set Last Static Rotation To Last Dynamic One
-            click(new Point2(e.getX(), e.getY()) );                        // Update Start Vector And Prepare For Dragging
+            // Set Last Rotation To Current Rotation
+            lastRot.set(thisRot);
+            // Update Start Vector And Prepare For Dragging
+            click(new Point2(e.getX(), e.getY()) );
         }
 
         else {
-        isDragging = false;                          // Prepare For Dragging
-        isClicked = false;
+            // Do nothing for other events 
         }
 
     }
@@ -129,13 +133,12 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
     //Mouse down
     private void click(Point2 newPt) {
         mapToSphere(newPt, this.vtFrom);
-
     }
 
     //Mouse drag, calculate rotation
     private void drag(Point2 newPt, Quat4 newRot) {
         //Map the point to the sphere
-        this.mapToSphere(newPt, vtTo);
+        mapToSphere(newPt, vtTo);
 
         //Return the quaternion equivalent to the rotation
         if (newRot != null) {
@@ -153,15 +156,14 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
             } else //if its zero
             {
                 //The begin and end vectors coincide, so return an identity transform
-                newRot.set(0.0f,0.0f,0.0f,0.0f);
+                newRot.set(1.0f,0.0f,0.0f,0.0f);
             }
         }
-        System.out.println("Drag " + newRot);
     }
 
 
     private void mapToSphere(Point2 point, Vector3 vector) {
-        //Copy paramter into temp point
+        //Copy parameter into temp point
         Point2 tempPoint = new Point2(point.x, point.y);
 
         //Adjust point coords and scale down to range of [-1 ... 1]
@@ -170,7 +172,6 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
 
         //Compute the square of the length of the vector to the point from the center
         float length = (tempPoint.x * tempPoint.x) + (tempPoint.y * tempPoint.y);
-
         //If the point is mapped outside of the sphere... (length > radius squared)
         if (length > 1.0f) {
             //Compute a normalizing factor (radius / sqrt(length))
@@ -187,7 +188,8 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
             vector.y = tempPoint.y;
             vector.z = (float) Math.sqrt(1.0f - length);
         }
-        System.out.println(point + " -> " + vector);
+        System.out.println("MAP " + point + " = " + tempPoint + " -> " + length);
+        vector.normalize();
     }
 
 /******
