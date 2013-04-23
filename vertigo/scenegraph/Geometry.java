@@ -51,7 +51,7 @@ public class Geometry {
      * @param primitives - an array containing the data for each vertex
      * (coordinates, normal, colors,etc.).
      */
-    public void setVertices(String type, float[] data) {
+    public void addBuffer(String type, float[] data) {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
@@ -59,7 +59,49 @@ public class Geometry {
         vbo.setFloatBuffer(type, buf);
         buffers.add(vbo);
     }
+
+    /**
+     * Sets the whole geometry in one single buffer. Ex: X Y Z R G B X Y Z R ...
+     * May contain various types of data: XYZ-coordinates, Normals, Colors,
+     * UV-TexCoords,etc.
+     *
+     * @param types - Data type: VEC3F,COL3F,TEX2F,TEX3F, NORM3F,etc.
+     * @param primitives - an array containing the data for each vertex
+     * (coordinates, normal, colors,etc.).
+     * @param contents - a String containing the various data type present in
+     * the primitives array. Ex: "[VEC3F,COL3F,NORM3F,TEX2F]" corresponds to
+     * Vertex, Color, Normal and finally TexCoords data for each vertex.
+     */
+    public void addBuffer(String[] types, float[] data) {
+        FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
+        buf.put(data);
+        buf.rewind();
+        PackedVBO vbo = new PackedVBO();
+        vbo.setFloatBuffer(types, buf);
+        buffers.add(vbo);
+    }
+
+    /**
+     * Sets the geometry
+     *
+     * @param type - Data type: V3F,C3F,T2F,T3F, N3F,etc.
+     * @param primitives - an array containing the data for each vertex
+     * (coordinates, normal, colors,etc.).
+     */
+    public void setVertices(String type, float[] data) {
+        addBuffer(type,data);
+    }
  
+    public void addIndices(int[] indexes) {
+        IntBuffer buf = BufferTools.newIntBuffer(indexes.length);
+        buf.put(indexes);
+        buf.rewind();
+        IBO ibo = new IBO();
+        ibo.setIntBuffer(buf);
+        buffers.add(ibo);
+    }
+
+
     /**
      * Sets the whole geometry in one single buffer. Ex: X Y Z R G B X Y Z R ...
      * May contain various types of data: XYZ-coordinates, Normals, Colors,
@@ -73,21 +115,11 @@ public class Geometry {
      * Vertex, Color, Normal and finally TexCoords data for each vertex.
      */
     public void setVertices(String[] types, float[] data) {
-        FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
-        buf.put(data);
-        buf.rewind();
-        PackedVBO vbo = new PackedVBO();
-        vbo.setFloatBuffer(types, buf);
-        buffers.add(vbo);
+        addBuffer(types,data);
     }
 
     public void setIndices(int[] indexes) {
-        IntBuffer buf = BufferTools.newIntBuffer(indexes.length);
-        buf.put(indexes);
-        buf.rewind();
-        IBO ibo = new IBO();
-        ibo.setIntBuffer(buf);
-        buffers.add(ibo);
+        addIndices(indexes);
     }
 
     public BO getBO(int index) {
