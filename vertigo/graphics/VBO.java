@@ -44,7 +44,9 @@ public class VBO extends BO {
   }
   
 
-  
+  public boolean IsInterleaved(){
+      return (props.size()>1);
+  }
     public void setFloatBuffer(String type, FloatBuffer buf) {
         props.put(type, new Props(type, 0, getSize(type)));
         buffer = buf;
