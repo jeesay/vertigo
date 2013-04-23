@@ -26,6 +26,7 @@
  */
 package vertigo.scenegraph.shapes;
 
+import vertigo.scenegraph.Geometry;
 import vertigo.scenegraph.Shape;
 
 /**
