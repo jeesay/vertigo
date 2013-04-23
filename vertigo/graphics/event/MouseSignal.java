@@ -32,20 +32,22 @@ package vertigo.graphics.event;
  *Olivier Catoliquot
  *Clement Delestre
  */
+
 public class MouseSignal extends Signal {
+
+
     
-    // PUSH, RELEASED, CLICK,DOUBLE_CLICK
-    private int buttonStatus;
-    
-    // LEFT MIDDLE RIGHT
  
     
     // CTRL SHIFT ALT
     
     // DRAG MOVE
     
-    //WHEEL UP DOWN
+
+    // LEFT MIDDLE RIGHT
     private int button;
+
+    //WHEEL UP DOWN
     private int wheel;
     private int status;
     private int mouse_x;
@@ -53,24 +55,55 @@ public class MouseSignal extends Signal {
     private boolean empty=true;
     private boolean down=false;
     
- public MouseSignal(){
+    public MouseSignal() {
     
- }
+    }
  
- public int getX(){
-     return mouse_x;
- }
- public int getY(){
-     return mouse_y;
- }
+    public int getX(){
+        return mouse_x;
+    }
+
+    public int getY(){
+        return mouse_y;
+    }
  
+   /**
+    * Set Button ID
+    *
+    * @param BUTTON1, BUTTON2 or BUTTON3
+    */
     public void setButton(int button){
         this.button=button;
     }
+
+   /**
+    * Get Button ID
+    *
+    * @return BUTTON1, BUTTON2 or BUTTON3
+    */
+    public int getButton(){
+        return this.button;
+    }
+
+   /**
+    * Get wheel scroll
+    *
+    * @return -1, 0, +1 corresponding to wheel scroll as UP, NONE, DOWN, respectively
+    */
+    public int getWheel(){
+        return this.wheel;
+    }
+
+
+   /**
+    * Set wheel scroll
+    *
+    * @return -1, 0, +1 corresponding to wheel scroll as UP, NONE, DOWN, respectively
+    */
     public void setWheel(int wheel){
         this.wheel=wheel;
     }
-    
+
 
     public void setXY(int x, int y) {
         mouse_x=x;
@@ -81,23 +114,47 @@ public class MouseSignal extends Signal {
         return empty;
     }
 
+   /**
+    * Set Button status
+    *
+    * @param PRESSED, RELEASED, MOVED,
+    */
     public void setButtonStatus(int status) {
         this.status=status;
     }
+
+   /**
+    * Get Button status
+    *
+    * @return PRESSED, RELEASED, MOVED,
+    */
+    public int getButtonStatus() {
+        return this.status;
+    }
+
     public void setEmpty(){
         empty=true;
     }
-public void setDown(){
-    down=true;
-}
 
+    public void setDown(){
+        down=true;
+    }
+
+    public boolean isDragged(int button) {
+        return (isButtonDown(button) && status==Signal.MOVED);
+    }
+    
+    public boolean isButtonDown(int button) {
+        return down;
+    }
+    
     public boolean isButtonDown() {
         return down;
     }
     
-       @Override
+    @Override
     public String toString() {
-       return "Value of button is : " +button+" wheel's value :  "+wheel+"\nMouse position: "+mouse_x+":"+mouse_y;
+       return "[Button : " +button+" Status : " +status +" Wheel :  "+wheel+" xy("+mouse_x+";"+mouse_y + ") ]";
     }
     
     

@@ -1,7 +1,7 @@
 /*
  * $Id:$
  *
- * crazybio_viewer: 3D Viewer Plugin for ImageJ.
+ * vertigo: 3D Viewer Plugin for ImageJ.
  * Copyright (C) 2013  Jean-Christophe Taveau.
  *
  * This library is free software; you can redistribute it and/or
@@ -27,26 +27,45 @@
 package vertigo.graphics.event;
 
 /**
- *
- * @author Authors : Florin Buga Olivier Catoliquot Clement Delestre
+ * @author : Jean-Christophe Taveau
  */
-public class Signal {
+public class ViewportSignal extends Signal {
 
-    public static final int NO_BUTTON = 0;
-    public static final int BUTTON_LEFT = 1;
-    public static final int BUTTON_MIDDLE = 2;
-    public static final int BUTTON_RIGHT = 3;
-    public static final int WHEEL_UP = 1;
-    public static final int WHEEL_DOWN = -1;
-    public static final int PRESSED = 101;
-    public static final int RELEASED = 102;
-    public static final int CLICKED = 103; 
-    public static final int MOVED = 104; 
-    public static final int DRAGGED = 105; 
-    public static final int ENTERED = 106; 
-    public static final int EXITED = 107; 
+    private int x;
+    private int y;
+    private int width;
+    private int height;
+
+    public ViewportSignal() {
     
+    }
+ 
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+ 
+    public void setSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    public void set(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
     
-   
-    
-} // end of class Signal
+} // end of class ViewportSignal

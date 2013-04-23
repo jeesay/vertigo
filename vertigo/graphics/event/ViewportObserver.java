@@ -1,14 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package vertigo.math;
-
-/*
  * $Id:$
  *
- * VolTIJ, VOLume viewing Tools for ImageJ.
- * Copyright (C) 2009  Jean-Christophe Taveau.
+ * Vertigo: 3D Viewer Plugin for ImageJ.
+ * Copyright (C) 2013  Jean-Christophe Taveau.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,29 +20,18 @@ package vertigo.math;
  * 02110-1301  USA, or see the FSF site: http://www.fsf.org.
  *
  * Authors :
- *  Michael Vacher
- *  Mickael Escudero
- *  Ibouniyamine Nabihoudine
- *  Frederic Romagné
+ * Florin Buga
+ * Olivier Catoliquot
+ * Clement Delestre
  */
+package vertigo.graphics.event;
 
+import java.util.Observer;
 
-
-public class Point2 {
-
-   public float x,  y;
-
-   public Point2(float x, float y) {
-      this.x = x;
-      this.y = y;
-   }
-
-    /**
-      * Returns a string that contains the values of this Tuple3. The form is (x,y).
-      * @return the String representation
-      */
-    @Override
-    public String toString() {
-	    return "(" + x + ", " + y +")";
-    }
-}
+/**
+ *
+ * @author Jean-Christophe Taveau
+ */
+public interface ViewportObserver extends Observer{
+    
+} // End of class ViewportObserver

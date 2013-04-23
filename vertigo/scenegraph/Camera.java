@@ -28,22 +28,30 @@ package vertigo.scenegraph;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
+import vertigo.graphics.event.MouseObserver;
+import vertigo.graphics.event.MouseSignal;
+import vertigo.graphics.event.ViewportObserver;
+import vertigo.graphics.event.ViewportSignal;
 import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
 import vertigo.math.Point2;
 import vertigo.math.Point3;
 import vertigo.math.Vector3;
 import ij.IJ;
+
+
 /**
  * Class Camera
  *
  * @author Florin Buga
  * @author Olivier Catoliquot
  * @author Clement Delestre
+ * @author Jean-Christophe Taveau
  * @version 0.1
  *
  */
-public class Camera extends Node {
+public class Camera extends Node implements MouseObserver, ViewportObserver {
 
     private Matrix4 view_matrix;
     private Matrix4 proj_matrix;
@@ -53,7 +61,9 @@ public class Camera extends Node {
     private float aspect;
     private float znear;
     private float zfar;
+    private float zoom;
     private int proj_type = 0;
+    private final static float ZOOM_FACTOR = 0.01f;
 
     private final static int PERSPECTIVE = 0;
     private final static int ORTHOGRAPHIC = 1;
@@ -66,6 +76,7 @@ public class Camera extends Node {
         super();
         proj_matrix = new Matrix4();
         proj_type = PERSPECTIVE;
+        zoom = 1.0f;
         fovy = (float) (45.0 * Math.PI / 180.0);
         aspect = 1.0f;
         znear = 0.1f;
@@ -80,7 +91,8 @@ public class Camera extends Node {
         super(name);
         proj_matrix = new Matrix4();
         proj_type = PERSPECTIVE;
-        fovy = (float) (45.0 * Math.PI / 180.0);
+        zoom = 1.0f;
+        fovy = (float) (50.0 * Math.PI / 180.0);
         aspect = 1.0f;
         znear = 0.1f;
         zfar = 100.0f;
@@ -101,6 +113,38 @@ public class Camera extends Node {
         this.aspect = aspect;
         this.znear = zNear;
         this.zfar = zFar;
+        setDirty(Node.PROJMATRIX,true);
+    }
+
+    /**
+     * Set the Camera's Field of View(fov) for perspective projection
+     *
+     * @param fovy
+     */
+    public void setFieldOfView(float fovy) {
+        this.fovy = fovy;
+        setDirty(Node.PROJMATRIX,true);
+    }
+
+    /**
+     * Set the Aspect ratio  for perspective projection
+     *
+     * @param fovy,aspect, zNear, zFar
+     */
+    public void setAspect(float aspect) {
+        this.aspect = aspect;
+        setDirty(Node.PROJMATRIX,true);
+    }
+
+    /**
+     * Set the near and far Z-planes for perspective projection
+     *
+     * @param fovy,aspect, zNear, zFar
+     */
+    public void setPlanes(float zNear, float zFar) {
+        this.znear = zNear;
+        this.zfar = zFar;
+        setDirty(Node.PROJMATRIX,true);
     }
 
     /**
@@ -126,7 +170,7 @@ public class Camera extends Node {
     public void setViewport(int width, int height) {
         vp_width = width;
         vp_height = height;
-        aspect = (float) vp_width / (float) vp_height;
+        this.aspect = (float) vp_width / (float) vp_height;
         setDirty(Node.PROJMATRIX,true);
     }
 
@@ -243,6 +287,22 @@ public class Camera extends Node {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
+    }
+
+  @Override
+    public void update(Observable o, Object o1) {
+        if (o1 instanceof MouseSignal) {
+            MouseSignal e = (MouseSignal) o1;
+            // if Mouse Wheel
+            this.zoom += ZOOM_FACTOR * e.getWheel();
+            setDirty(Node.PROJMATRIX,true);
+        } 
+        else if (o1 instanceof ViewportSignal) {
+            ViewportSignal e = (ViewportSignal) o1;
+            setViewport(e.getWidth(), e.getHeight() );
+            // System.out.println("Signal Viewport " + e.getWidth() +" " + e.getHeight() );
+
+        }
     }
 
 
@@ -441,7 +501,7 @@ public class Camera extends Node {
     private void updateProjMatrix() {
         switch (proj_type) {
             case PERSPECTIVE:
-                perspective(fovy,aspect,znear, zfar); 
+                perspective(fovy * zoom,aspect,znear, zfar); 
                 setDirty(Node.PROJMATRIX,false);
                 break;
             case ORTHOGRAPHIC: // ortho TODO

@@ -26,6 +26,7 @@
  */
 package vertigo.scenegraph.shapes;
 
+import vertigo.scenegraph.Geometry;
 import vertigo.scenegraph.Shape;
 
 /**
@@ -52,7 +53,7 @@ public class Cube extends Shape {
          1.0f,  1.0f, -1.0f,
          1.0f, -1.0f, -1.0f
     };
-    private int[] wireIndices = {0,1,2,3,0,4,5,1,5,6,2,6,7,3,7,4};
+    private int[] wireIndices = {0,1,2,3,0,4,5,3,5,6,2,6,7,1,7,4};
 
     private float[] flatvertices = {
   // Front face: white
@@ -123,12 +124,10 @@ public class Cube extends Shape {
         }
         else if  (name.equals("Flat") ) {
             setDrawingStyle("TRIANGLES");
-            create_flatcube(); 
             setType(FLAT);
         }
         else if  (name.equals("Cube") ) {
-            setDrawingStyle("TRIANGLES");
-            create_cube(); 
+            setDrawingStyle("TRIANGLES"); 
             setType(CUBE);
         }
         else{
@@ -141,25 +140,33 @@ public class Cube extends Shape {
 }
 
     public void setType(int type) {
-        switch (type) {
-        case WIRE:
-            create_wirecube(); 
-            break;
-        case FLAT:
-            create_flatcube(); 
-            break;
-        case CUBE:
-            create_cube(); 
-            break;
-        default:
-            create_wirecube(); 
-        }
+        this.type = type;
     }
 
-    public void setDimension(float width, float height, float depth) {
+    public void setSize(float width, float height, float depth) {
         w_ = width;
         h_ = height;
         d_ = depth;
+    }
+
+    @Override
+    public Geometry getGeometry() {
+        if (geo.getBuffers().isEmpty() )
+           switch (this.type) {
+           case WIRE : 
+               create_wirecube();
+               break;
+           case FLAT : 
+               create_flatcube();
+               break;
+           case CUBE : 
+               create_texcube();
+               break;
+           default : 
+               create_flatcube();
+               break;
+           }
+        return geo;
     }
 
     private void create_wirecube() {
@@ -176,8 +183,8 @@ public class Cube extends Shape {
             for (int i =0; i<wireVertices.length;i+=3) 
                System.out.println(wireVertices[i  ] +" "+wireVertices[i+1] +" "+wireVertices[i+2]);
         // 2- create geometry
-        geo.setVertices("V3F",wireVertices);
-        geo.setIndices(wireIndices);
+        geo.addBuffer("V3F",wireVertices);
+        geo.addIndices(wireIndices);
         // 3- create material
         // use default
       
@@ -197,7 +204,7 @@ public class Cube extends Shape {
            material.setShaderMaterial("flat");
     }
 
-    private void create_cube() {
+    private void create_texcube() {
            if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
             for (int i =0; i<wireVertices.length;i+=3) {
                wireVertices[i  ] *= w_;

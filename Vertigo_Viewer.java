@@ -146,7 +146,7 @@ public class Vertigo_Viewer implements PlugIn {
      */
     public void show(String render) {
         if (render.equals("G2D")) {
-            graphWin = (OGL_Window) new vertigo.graphics.G2D.G2D_Renderer();
+            graphWin = (OGL_Window) new vertigo.graphics.G2D.G2D_Window();
             initWindow(graphWin);
         } else if (render.equals("LWJGL")) {
             try {
@@ -315,4 +315,5 @@ public class Vertigo_Viewer implements PlugIn {
         lights.add(new Light("spot"));
 
     }
+
 }// end of class Vertigo_Viewer

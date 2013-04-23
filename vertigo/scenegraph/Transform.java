@@ -45,7 +45,7 @@ import java.util.Iterator;
 public class Transform extends Node {
 
     // Local matrix
-    private Matrix4 matrix;
+    protected Matrix4 matrix;
 
     /**
      * Constructor
