@@ -42,4 +42,13 @@ public class Point2 {
       this.x = x;
       this.y = y;
    }
+
+    /**
+      * Returns a string that contains the values of this Tuple3. The form is (x,y).
+      * @return the String representation
+      */
+    @Override
+    public String toString() {
+	    return "(" + x + ", " + y +")";
+    }
 }
