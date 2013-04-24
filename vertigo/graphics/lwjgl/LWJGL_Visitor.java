@@ -178,8 +178,7 @@ public class LWJGL_Visitor implements Visitor {
         ArrayList<Attribute> atribute = new ArrayList();
         int j = 0;
         for (String name : allAttributes) {
-            Attribute lwjgl = new Attribute(name);
-            lwjgl.setHandle(j);
+            Attribute lwjgl = new Attribute(name,j);
             atribute.add(lwjgl);
             j++;
         }
@@ -188,9 +187,11 @@ public class LWJGL_Visitor implements Visitor {
 //for (String uniforms : allUniforms) {
 
         // uniformFadeFactor = glGetUniformLocation(prog, uniforms);
-
-
-
+        ///////////////////////////////////////////////////////
+        //int uniformFadeFactor= GL20.glGetUniformLocation(glshader.getUniformLocation(glshader.getName()), glshader.getName());
+        //GL20.glUniformMatrix4(uniformFadeFactor, false, null);
+        ///////////////////////////////////////////////////
+       // glshader.getUniformLocation(glshader.getName());
         //        }
 
 
@@ -219,20 +220,20 @@ public class LWJGL_Visitor implements Visitor {
                 int a = 0;
                 while (a <= jmax) {
                     if (vbo.getType().equals(atribute.get(a).getVBOtype(atribute.get(a).getName()))) { //null exception ?
-                        if (!vbo.isBind()){
-                        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
-                        GL20.glGetAttribLocation(atribute.get(a).getHandle(), vbo.getType());
-                        GL20.glEnableVertexAttribArray(i); //set the vertex's position
+                        if (!vbo.isBind()) {
+                            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
+                            GL20.glGetAttribLocation(atribute.get(a).getHandle(), vbo.getType());
+                            GL20.glEnableVertexAttribArray(i); //set the vertex's position
 
-                        //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                        GL20.glVertexAttribPointer(i, vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
-                        // i or vbo.getOffset?
-                        //GL20.glVertexAttribPointer(i, vbo.capacity(), vbo.getSize(), false, vbo.getStride(),vbo.getFloatBuffer());
-                        //GL20.glVertexAttribPoin
+                            //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+                            GL20.glVertexAttribPointer(vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
+                            // i or vbo.getOffset?
+                            //GL20.glVertexAttribPointer(i, vbo.capacity(), vbo.getSize(), false, vbo.getStride(),vbo.getFloatBuffer());
+                            //GL20.glVertexAttribPoin
 
 
-                        ShaderUtils.useShader(atribute.get(a).getHandle());
-                        vbo.setBind();
+                            ShaderUtils.useShader(atribute.get(a).getHandle());
+                            vbo.setBind();
                         }
                     }
                     a++;

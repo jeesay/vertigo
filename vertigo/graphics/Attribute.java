@@ -47,6 +47,15 @@ private HashMap<String,String> table;
         table.put("aColorVertex","C4F");
         table.put("aNormalVertex","N3F");
     }
+       public Attribute(String name,int handle) {
+        this.name = name;
+        this.handle=handle;
+        // define the VBO/Attribute pair
+        table.put("aPositionVertex","V3F");
+        table.put("aColorVertex","C4F");
+        table.put("aNormalVertex","N3F");
+    }
+    
 public void setHandle(int handle){
     this.handle=handle;
 }

@@ -62,6 +62,9 @@ public class VBO extends BO {
   public int getSize(){
       return getSize(type);
   }
+  public int getOffset(){
+      return offset;
+  }
   public void setBind(){
       Buffdata.setBind();
   }
