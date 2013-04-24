@@ -26,7 +26,12 @@
 */
 
 package vertigo.graphics;
-
+/**
+ * Class BO
+ * @author  Florin Buga
+* Olivier Catoliquot
+* Clement Delestre
+ */
  public class BO {
    
    private int handle;

@@ -67,5 +67,8 @@ public class BufferData {
      public int getHandle(){
             return handle;
      }
+     public int getCapacity(){
+         return buff.capacity();
+     }
     
 } // end of class BufferData

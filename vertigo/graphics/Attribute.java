@@ -35,13 +35,14 @@ import java.util.ArrayList;
  */
 public class Attribute {
 
-    private String name;
+    protected String name;
+    protected int handle;
 
     public Attribute(String name) {
         this.name = name;
     }
 
-    public void bindVBO(ArrayList<BO> buffer) {
+   /* public void bindVBO(ArrayList<BO> buffer) {
         for (BO bo : buffer) {
             VBO vbo = (VBO) bo;
             String VBOtype = vbo.getType();
@@ -52,9 +53,9 @@ public class Attribute {
 
                 //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
                 GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
-                ShaderUtils.useShader(glshader.getHandle());*/
+                ShaderUtils.useShader(glshader.getHandle());
             }
         }
 
-    }
+    }*/
 } // end of class Attribute

@@ -31,7 +31,7 @@ import java.util.Hashtable;
 
 public class VBO extends BO {
 
-    private int capacity;
+
     private FloatBuffer buffer;
     private Hashtable<String, Props> props;
     
@@ -59,9 +59,14 @@ public class VBO extends BO {
       this.type=type;
   }
 
-  
+  public int getSize(){
+      return getSize(type);
+  }
   public Hashtable<String, Props> getProps(){
       return props;
+  }
+  public String getType(){
+      return type;
   }
   
   public boolean IsInterleaved(){
@@ -70,7 +75,6 @@ public class VBO extends BO {
   
     public void setBuffData(BufferData BuffData){
         this.Buffdata=BuffData;
-        
     }
   
     public void setFloatBuffer(String type, FloatBuffer buf) {
@@ -80,10 +84,13 @@ public class VBO extends BO {
         buffer = buf;
     }
 
-  
+  public int getStride(){
+      return stride;
+  }
     
     public void setFloatBuffer(String[] types, FloatBuffer buf) {
         buffer = buf;
+
         //int stride = 0;
         // process stride
         for (int i = 0; i < types.length; i++) {
@@ -114,7 +121,8 @@ public class VBO extends BO {
     } 
 
     public int capacity() {
-        return buffer.capacity();
+       // return buffer.capacity();
+        return Buffdata.getCapacity();
     }
 
     private int getSize(String type) {
