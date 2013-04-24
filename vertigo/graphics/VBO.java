@@ -62,6 +62,12 @@ public class VBO extends BO {
   public int getSize(){
       return getSize(type);
   }
+  public void setBind(){
+      Buffdata.setBind();
+  }
+  public boolean isBind(){
+      return Buffdata.isBind();
+  }
   public Hashtable<String, Props> getProps(){
       return props;
   }

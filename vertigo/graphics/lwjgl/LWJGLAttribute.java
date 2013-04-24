@@ -59,7 +59,7 @@ public class LWJGLAttribute extends Attribute {
         }
 
     }
-    
+    /*
      public void bindVBO(VBO vbo, int i) {
       
             if (compare(vbo)) {
@@ -75,7 +75,7 @@ public class LWJGLAttribute extends Attribute {
                 
                 ShaderUtils.useShader(this.handle);
             }
-    }
+    }*/
 
 
     private int getSize(String type) {

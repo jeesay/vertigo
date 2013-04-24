@@ -37,6 +37,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import vertigo.graphics.Attribute;
 import vertigo.graphics.BO;
 import vertigo.graphics.BufferTools;
 import vertigo.graphics.IBO;
@@ -174,13 +175,16 @@ public class LWJGL_Visitor implements Visitor {
 
         ArrayList<String> allUniforms = prog.getAllUniforms();
         ArrayList<String> allAttributes = prog.getAllAttributes();
-        ArrayList<LWJGLAttribute> lwjglattributes = new ArrayList();
+        ArrayList<Attribute> atribute = new ArrayList();
+        int j = 0;
         for (String name : allAttributes) {
-            LWJGLAttribute lwjgl = new LWJGLAttribute(name);
-            lwjglattributes.add(lwjgl);
+            Attribute lwjgl = new Attribute(name);
+            lwjgl.setHandle(j);
+            atribute.add(lwjgl);
+            j++;
         }
 
-
+        int jmax = j;
 //for (String uniforms : allUniforms) {
 
         // uniformFadeFactor = glGetUniformLocation(prog, uniforms);
@@ -211,10 +215,27 @@ public class LWJGL_Visitor implements Visitor {
             i++;
             if (bo instanceof VBO) {
                 VBO vbo = (VBO) bo;
-                Hashtable<String, Props> props = vbo.getProps();
 
-                for (LWJGLAttribute lwjgl : lwjglattributes) {
-                    lwjgl.bindVBO(vbo, i);
+                int a = 0;
+                while (a <= jmax) {
+                    if (vbo.getType().equals(atribute.get(a).getVBOtype(atribute.get(a).getName()))) { //null exception ?
+                        if (!vbo.isBind()){
+                        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
+                        GL20.glGetAttribLocation(atribute.get(a).getHandle(), vbo.getType());
+                        GL20.glEnableVertexAttribArray(i); //set the vertex's position
+
+                        //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+                        GL20.glVertexAttribPointer(i, vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
+                        // i or vbo.getOffset?
+                        //GL20.glVertexAttribPointer(i, vbo.capacity(), vbo.getSize(), false, vbo.getStride(),vbo.getFloatBuffer());
+                        //GL20.glVertexAttribPoin
+
+
+                        ShaderUtils.useShader(atribute.get(a).getHandle());
+                        vbo.setBind();
+                        }
+                    }
+                    a++;
                 }
 
 
@@ -283,8 +304,8 @@ public class LWJGL_Visitor implements Visitor {
                 //update VBO
                 isIndexed = false;
                 GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle())[1]);
-                
-                
+
+
 
                 // prog.getAttributeLocation(allAttributes.get(i))
             } else if (bo instanceof IBO) {

@@ -27,6 +27,7 @@
 package vertigo.graphics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class Attribute
@@ -35,12 +36,30 @@ import java.util.ArrayList;
  */
 public class Attribute {
 
-    protected String name;
-    protected int handle;
+    private String name;
+    private int handle=-1;
+private HashMap<String,String> table;
 
     public Attribute(String name) {
         this.name = name;
+        // define the VBO/Attribute pair
+        table.put("aPositionVertex","V3F");
+        table.put("aColorVertex","C4F");
+        table.put("aNormalVertex","N3F");
     }
+public void setHandle(int handle){
+    this.handle=handle;
+}
+public int getHandle(){
+    return handle;
+}
+
+public String getVBOtype(String type){
+    return table.get(type);
+}
+public String getName(){
+    return name;
+}
 
    /* public void bindVBO(ArrayList<BO> buffer) {
         for (BO bo : buffer) {
