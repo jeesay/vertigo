@@ -51,12 +51,12 @@ public class BufferData {
      }
      
      
-     public boolean isBind(){
+     public boolean isBound(){
          return bound;
      }
      
-     public void setBind(){
-         bound=true;
+     public void setBound(boolean bound){
+         this.bound=bound;
      }
      public void dontBind(){
          bound=false;

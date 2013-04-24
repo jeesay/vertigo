@@ -43,8 +43,8 @@ import ij.IJ;
 public class ShaderProg {
     public static int UNKNOWN = -1;
 
-    private HashMap<String, Integer> attributes;
-    private HashMap<String, Integer> uniforms;
+    private HashMap<String, Attribute> attributes;
+    private HashMap<String, Uniform> uniforms;
     private int program;
     private String name;
     private String vshader;
@@ -128,7 +128,7 @@ public class ShaderProg {
     }
 
     public void addUniform(String name) {
-        uniforms.put(name, -1);
+        uniforms.put(new Uniform(name), -1);
     }
 
     public void setUniformLocation(String name, int uniformToken) {

@@ -69,7 +69,7 @@ public class VBO extends BO {
       Buffdata.setBind();
   }
   public boolean isBind(){
-      return Buffdata.isBind();
+      return Buffdata.isBound();
   }
   public Hashtable<String, Props> getProps(){
       return props;

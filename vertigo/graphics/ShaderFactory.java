@@ -93,7 +93,7 @@ public class ShaderFactory {
         shader.addUniform("M_Matrix");
         shader.addUniform("V_Matrix");
         shader.addUniform("P_Matrix");
-        shader.addUniform("aColor");
+        shader.addUniform("uColor");
         shader.addAttribute("aVertexPosition");
 
         return shader;
