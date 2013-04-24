@@ -173,6 +173,14 @@ public class LWJGL_Visitor implements Visitor {
         // GL30.glUniform2u(bo.getHandle(), vbo.getFloatBuffer());
 
         ArrayList<String> allUniforms = prog.getAllUniforms();
+        ArrayList<String> allAttributes = prog.getAllAttributes();
+        ArrayList<LWJGLAttribute> lwjglattributes = new ArrayList();
+        for (String name : allAttributes){
+            LWJGLAttribute lwjgl=new LWJGLAttribute(name);
+            lwjglattributes.add(lwjgl);
+        }
+        
+        
 //for (String uniforms : allUniforms) {
 
         // uniformFadeFactor = glGetUniformLocation(prog, uniforms);
@@ -181,14 +189,14 @@ public class LWJGL_Visitor implements Visitor {
 
         //        }
 
-        ArrayList<String> allAttributes = prog.getAllAttributes();
+        
 
         int i = -1;
         // Bind BOs and Update attributes
         
         
         
-GL11.glInterleavedArrays(format, stride, pointer);
+//GL11.glInterleavedArrays(format, stride, pointer);
 //use for interleaved
 
 
@@ -203,10 +211,21 @@ GL11.glInterleavedArrays(format, stride, pointer);
             i++;
             if (bo instanceof VBO) {
                 VBO vbo = (VBO) bo;
-                //Hashtable<String, Props> props = vbo.getProps();
-                ArrayList<String> types = (ArrayList<String>) vbo.getProps().keys();
-                for (String type : types) {
-                    for (String attribute : allAttributes) {
+                Hashtable<String, Props> props = vbo.getProps();
+
+                for (LWJGLAttribute lwjgl : lwjglattributes){
+                    lwjgl.bindVBO(vbo, i);
+                }
+                
+                
+                //String type;
+                //int stride =0;
+                
+                //ArrayList<String> types = (ArrayList<String>) vbo.getProps().keys();
+               // for (String type : props.getkeys() ) {
+                 //   for (String attribute : allAttributes) {
+                        
+                       /* 
                         int numtype = calcIndex(type);
                         switch (numtype) {
                             case 207: // V3F
@@ -226,23 +245,29 @@ GL11.glInterleavedArrays(format, stride, pointer);
                             case 204: // T2F
                             //aTexture
                             default: // Do nothing  
-                        }
-                    }
-                }
+                        }*/
+                   // }
+                    
+                    
+                 //   if (vbo.IsInterleaved()){
+                   //     stride+=vbo.getStride(type);
+                          //      get(type);
+                    //}
+                
 
 
-                GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
+                //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
                 //glvertexAttribPointer(prog.getAttributeLocation(allAttributes.get(i)),
                 //...)
 
 
 
 
-                for (String attribute : allAttributes) {
+              //  for (String attribute : allAttributes) {
                 
-                    GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
+                    //GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
                     // link vertex and shader's attributes
-                }
+              //  }
                 // i : indice
                 // capacity : size
                 //normalised ???-> False
@@ -257,20 +282,24 @@ GL11.glInterleavedArrays(format, stride, pointer);
                 GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, i, vbo.getFloatBuffer());
                 //update VBO
                 isIndexed = false;
+                GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle())[1]);
 
                 // prog.getAttributeLocation(allAttributes.get(i))
             } else if (bo instanceof IBO) {
                 IBO ibo = (IBO) bo;
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, bo.getHandle());
                 isIndexed = true;
+                GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle())[0], ibo.getIntBuffer());
             }
             // Draw
+            
+            /*
             if (isIndexed) {
                 GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getIntBuffer());
 
             } else {
                 GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle())[1]);
-            }
+            }*/
         }
         GL20.glUseProgram(0);
     }
