@@ -142,12 +142,14 @@ public class LWJGL_Visitor implements Visitor {
     private void drawShape(Shape obj) {
         // PreProcessing
         processShape(obj);
+
         // OpenGL
 
     }
 
     private void processShape(Shape obj) {
         boolean isIndexed = false;
+        IBO ibo = null;
         ShaderProg glshader = new ShaderProg();
         int handle = 0;
         // PreProcessing
@@ -178,7 +180,7 @@ public class LWJGL_Visitor implements Visitor {
         ArrayList<Attribute> atribute = new ArrayList();
         int j = 0;
         for (String name : allAttributes) {
-            Attribute lwjgl = new Attribute(name,j);
+            Attribute lwjgl = new Attribute(name, j);
             atribute.add(lwjgl);
             j++;
         }
@@ -191,7 +193,7 @@ public class LWJGL_Visitor implements Visitor {
         //int uniformFadeFactor= GL20.glGetUniformLocation(glshader.getUniformLocation(glshader.getName()), glshader.getName());
         //GL20.glUniformMatrix4(uniformFadeFactor, false, null);
         ///////////////////////////////////////////////////
-       // glshader.getUniformLocation(glshader.getName());
+        // glshader.getUniformLocation(glshader.getName());
         //        }
 
 
@@ -210,6 +212,7 @@ public class LWJGL_Visitor implements Visitor {
 
 
 
+        ShaderUtils.useShader(obj.getMaterial().getShaderMaterial().getHandle());
 
         for (BO bo : obj.getGeometry().getBuffers()) {
             //ShaderUtils.dontUseShader();
@@ -220,20 +223,20 @@ public class LWJGL_Visitor implements Visitor {
                 int a = 0;
                 while (a <= jmax) {
                     if (vbo.getType().equals(atribute.get(a).getVBOtype(atribute.get(a).getName()))) { //null exception ?
-                        if (!vbo.isBind()) {
+                        if (!vbo.isBound()) {
                             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
-                            GL20.glGetAttribLocation(atribute.get(a).getHandle(), vbo.getType());
+                            // GL20.glGetAttribLocation(atribute.get(a).getHandle(), vbo.getType());
                             GL20.glEnableVertexAttribArray(i); //set the vertex's position
 
                             //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                            GL20.glVertexAttribPointer(vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
+                            GL20.glVertexAttribPointer(atribute.getHandle(), vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
                             // i or vbo.getOffset?
                             //GL20.glVertexAttribPointer(i, vbo.capacity(), vbo.getSize(), false, vbo.getStride(),vbo.getFloatBuffer());
                             //GL20.glVertexAttribPoin
 
 
-                            ShaderUtils.useShader(atribute.get(a).getHandle());
-                            vbo.setBind();
+
+                            vbo.setBound(true);
                         }
                     }
                     a++;
@@ -301,7 +304,7 @@ public class LWJGL_Visitor implements Visitor {
 
 
 
-                GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, i, vbo.getFloatBuffer());
+                //GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, i, vbo.getFloatBuffer());
                 //update VBO
                 isIndexed = false;
                 GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle())[1]);
@@ -310,20 +313,22 @@ public class LWJGL_Visitor implements Visitor {
 
                 // prog.getAttributeLocation(allAttributes.get(i))
             } else if (bo instanceof IBO) {
-                IBO ibo = (IBO) bo;
+                ibo = (IBO) bo;
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, bo.getHandle());
                 isIndexed = true;
                 GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle())[0], ibo.getIntBuffer());
             }
-            // Draw
 
-            /*
-             if (isIndexed) {
-             GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getIntBuffer());
 
-             } else {
-             GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle())[1]);
-             }*/
+
+
+        }
+        // Draw
+        if (isIndexed) {
+            GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getIntBuffer());
+
+        } else {
+            GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle()));
         }
         GL20.glUseProgram(0);
     }
@@ -383,21 +388,47 @@ public class LWJGL_Visitor implements Visitor {
      * @param String vertigo_style
      * @return tab[0] : OpenGL variable tab[1] size of this variable
      */
-    private int[] getOpenGLStyle(String vertigo_style) {
+    private int getOpenGLStyle(String vertigo_style) {
         int style = calcIndex(vertigo_style);
-        int[] tab = new int[2];
         switch (style) {
+            case 296: // LINE_STRIP
+                return GL11.GL_LINE_STRIP;
+            case 296: // LINE_STRIP
+                return GL11.GL_LINE_LOOP;
+            case 296: // LINE_STRIP
+                return GL11.GL_LINES;
+            case 296: // LINE_STRIP
+                return GL11.GL_LINE_STRIP_ADJACENCY;
+            case 296: // LINE_STRIP
+                return GL11.GL_LINES_ADJACENCY;
             case 296: // LINE
-                tab[0] = GL11.GL_LINE;
-                tab[1] = 2;
-            case 681: // TRIANGLES
-                tab[0] = GL11.GL_TRIANGLES;
-                tab[1] = 3;
+                return GL11.GL_LINES;
+            case 296: // LINE
+                return GL11.GL_PATCHES
             case 477: // POINTS
-                tab[0] = GL11.GL_POINT;
-                tab[1] = 1;
+                return GL11.GL_POINTS;
+            case 296: // LINE
+
+            case 681: // TRIANGLES 
+                return GL11.GL_TRIANGLES;
+            case 296: // LINE_STRIP
+                return GL11.GL_TRIANGLE_STRIP
+
+                        case 296: // LINE_STRIP
+                return GL11.GL_TRIANGLE_FAN
+
+                        case 296: // LINE_STRIP
+                return GL11.GL_TRIANGLES
+
+                        case 296: // LINE_STRIP
+                return GL11.GL_TRIANGLE_STRIP_ADJACENCY
+
+                        case 296: // LINE_STRIP
+                return GL11.GL_TRIANGLES_ADJACENCY
+                       case 296: // LINE_STRIP
+
             default:
-                return tab;
+                return -1;
         }
     }
 
