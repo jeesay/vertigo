@@ -19,7 +19,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  *
- * Authors : Florin Buga Olivier Catoliquot Clement Delestre
+ * Authors : 
+ * Florin Buga 
+ * Olivier Catoliquot 
+ * Clement Delestre
  */
 package vertigo.scenegraph;
 
@@ -27,6 +30,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import vertigo.graphics.BO;
+import vertigo.graphics.BufferData;
 import vertigo.graphics.VBO;
 import vertigo.graphics.BufferTools;
 import vertigo.graphics.PackedVBO;
@@ -35,7 +39,7 @@ import vertigo.graphics.IBO;
 public class Geometry {
 
     private ArrayList<BO> buffers;
-
+    private BufferData buffdata;
     public Geometry() {
         buffers = new ArrayList<BO>();
     }
@@ -43,6 +47,33 @@ public class Geometry {
     public ArrayList <BO> getBuffers(){
         return buffers;
 }
+    
+     public void addBuffert(String[] types, float[] data) {
+         buffdata=new BufferData(data);
+         int stride = 0;
+         int offset=0;
+     for (int i = 0; i < types.length; i++) {
+            stride += getSize(types[i]);
+        }
+     
+     
+      for (int i = 0; i < types.length; i++) {
+            VBO vbo = new VBO (stride,offset,types[i]);
+            vbo.setBuffData(buffdata);
+            buffers.add(vbo);
+            offset+=getSize(types[i]);
+        }
+     }
+     
+     
+      private int getSize(String type) {
+        if (type.contains("3")) {
+            return 3;
+        } else if (type.contains("2")) {
+            return 2;
+        }
+        return 4;
+    }
     
     /**
      * Sets the geometry
@@ -55,9 +86,12 @@ public class Geometry {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
-        VBO vbo = new VBO();
+        VBO vbo = new VBO(type);
         vbo.setFloatBuffer(type, buf);
         buffers.add(vbo);
+        
+        buffdata=new BufferData(data);
+        vbo.setBuffData(buffdata);
     }
 
     /**

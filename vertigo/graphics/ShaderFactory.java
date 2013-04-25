@@ -27,26 +27,26 @@
 package vertigo.graphics;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ShaderFactory {
- /**
+
+    /**
      *
      * @author Jean-Christophe Taveau
      */
+    private static HashMap<Integer, ShaderProg> table = new HashMap<Integer, ShaderProg>();
 
     public static ShaderProg get(String name) {
         int index = calcIndex(name);
         ShaderProg shader;
         switch (index) {
             case 741: // default
-                shader = new ShaderProg("default");
-                shader.loadVertexShader();
-                shader.loadFragmentShader();
-                shader.addUniform("uModelMatrix");
-                shader.addUniform("uViewMatrix");
-                shader.addUniform("uProjMatrix");
-                shader.addAttribute("aVertexPosition");
+                if (table.get(741) == null) {
+                    table.put(741, create_monochrome());
+                }
+                shader = table.get(741);
                 break;
             case 423: // flat
                 shader = new ShaderProg("flat");
@@ -84,5 +84,18 @@ public class ShaderFactory {
             index += (int) name.charAt(i);
         }
         return index;
+    }
+
+    private static ShaderProg create_monochrome() {
+        ShaderProg shader = new ShaderProg("monochrome");
+        shader.loadVertexShader();
+        shader.loadFragmentShader();
+        shader.addUniform("M_Matrix");
+        shader.addUniform("V_Matrix");
+        shader.addUniform("P_Matrix");
+        shader.addUniform("uColor");
+        shader.addAttribute("aVertexPosition");
+
+        return shader;
     }
 }// end of class ShaderFactory

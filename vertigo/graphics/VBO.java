@@ -31,29 +31,82 @@ import java.util.Hashtable;
 
 public class VBO extends BO {
 
-    private int capacity;
+
     private FloatBuffer buffer;
     private Hashtable<String, Props> props;
-
+    
+    private int stride;
+    private int offset;
+    private BufferData Buffdata;
+    private String type;
+    
+    
     public VBO() {
         super();
         props = new Hashtable<String, Props>();
     }
+    public VBO(String type){
+        this.type=type;
+        offset=0;
+        stride=getSize(type);
+    }
+  
+  
+  public VBO(int stride,int offset,String type){
+      super();
+      this.stride=stride;
+      this.offset=offset;
+      this.type=type;
+  }
 
+  public int getSize(){
+      return getSize(type);
+  }
+  public int getOffset(){
+      return offset;
+  }
+  public void setBind(){
+      Buffdata.setBind();
+  }
+  public boolean isBind(){
+      return Buffdata.isBound();
+  }
+  public Hashtable<String, Props> getProps(){
+      return props;
+  }
+  public String getType(){
+      return type;
+  }
+  
+  public boolean IsInterleaved(){
+      return (props.size()>1);
+  }
+  
+    public void setBuffData(BufferData BuffData){
+        this.Buffdata=BuffData;
+    }
+  
     public void setFloatBuffer(String type, FloatBuffer buf) {
         props.put(type, new Props(type, 0, getSize(type)));
+        offset=0;
+        stride=getSize(type);
         buffer = buf;
     }
 
+  public int getStride(){
+      return stride;
+  }
+    
     public void setFloatBuffer(String[] types, FloatBuffer buf) {
         buffer = buf;
-        int stride = 0;
+
+        //int stride = 0;
         // process stride
         for (int i = 0; i < types.length; i++) {
             stride += getSize(types[i]);
         }
         // process offset
-        int offset = 0;
+        //int offset = 0;
         for (int i = 0; i < types.length; i++) {
             props.put(types[i], new Props(types[i], offset, stride));
             offset+=getSize(types[i]);
@@ -74,10 +127,11 @@ public class VBO extends BO {
 
     public String getType(String type) {
         return props.get(type).getType();
-    }
+    } 
 
     public int capacity() {
-        return buffer.capacity();
+       // return buffer.capacity();
+        return Buffdata.getCapacity();
     }
 
     private int getSize(String type) {

@@ -77,6 +77,7 @@ public class LWJGL_Renderer{
         GL11.glClearColor(red, green, blue, 1.0f);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
         // visitor
+         world.accept(new LWJGL_Visitor());
     }
 
     void syncViewportSize(int i, int i0, int width, int height) {

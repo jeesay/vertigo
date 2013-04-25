@@ -223,4 +223,12 @@ public class Shape extends Node {
         visitor.visit(this);
     }
 
+    /**
+     *
+     * @return Material
+     */
+    public Material getMaterial() {
+        return material;
+    }
+
 } // End of class Shape

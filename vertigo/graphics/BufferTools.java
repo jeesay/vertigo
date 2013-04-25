@@ -62,5 +62,5 @@ public final class BufferTools {
     public static DoubleBuffer newDoubleBuffer(int numElements) {
         return newByteBuffer(numElements << 3).asDoubleBuffer();
     }
-}
+} // end of class BufferTools
 
