@@ -138,6 +138,11 @@ public class ShaderProg {
         //niforms.put(new Uniform(name), -1);
         uniforms.add(new Uniform(name));
     }
+    
+     public void addUniform(String name,String type) {
+        //niforms.put(new Uniform(name), -1);
+        uniforms.add(new Uniform(name,type));
+    }
 
     public void setUniformLocation(String name, int uniformToken) {
         //uniforms.put(name, uniformToken);
@@ -164,6 +169,11 @@ public ArrayList<Uniform> getAllUniforms(){
     public void addAttribute(String attr){
         //attributes.put(attr, -1);
         attributes.add(new Attribute(name));
+    }
+    
+       public void addAttribute(String attr,String type){
+        //attributes.put(attr, -1);
+        attributes.add(new Attribute(name,type));
     }
 
     public void setAttributeLocation(String name, int attributeToken) {

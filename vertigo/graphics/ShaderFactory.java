@@ -52,19 +52,19 @@ public class ShaderFactory {
                 shader = new ShaderProg("flat");
                 shader.loadVertexShader();
                 shader.loadFragmentShader();
-                shader.addUniform("uModelMatrix");
-                shader.addUniform("uViewMatrix");
-                shader.addUniform("uProjMatrix");
-                shader.addAttribute("aVertexPosition");
+                shader.addUniform("uModelMatrix", "matrix");
+                shader.addUniform("uViewMatrix", "view_matrix");
+                shader.addUniform("uProjMatrix", "proj_matrix");
+                shader.addAttribute("aVertexPosition", "V3F");
                 break;
             case 540: // phong
                 shader = new ShaderProg("phong");
                 shader.loadVertexShader();
                 shader.loadFragmentShader();
-                shader.addUniform("uModelMatrix");
-                shader.addUniform("uViewMatrix");
-                shader.addUniform("uProjMatrix");
-                shader.addAttribute("aVertexPosition");
+                shader.addUniform("uModelMatrix", "matrix");
+                shader.addUniform("uViewMatrix", "view_matrix");
+                shader.addUniform("uProjMatrix", "proj_matrix");
+                shader.addAttribute("aVertexPosition", "V3F");
                 break;
             default: // Do nothing  
                 shader = new ShaderProg();
@@ -90,11 +90,11 @@ public class ShaderFactory {
         ShaderProg shader = new ShaderProg("monochrome");
         shader.loadVertexShader();
         shader.loadFragmentShader();
-        shader.addUniform("M_Matrix");
-        shader.addUniform("V_Matrix");
-        shader.addUniform("P_Matrix");
-        shader.addUniform("uColor");
-        shader.addAttribute("aVertexPosition");
+        shader.addUniform("uModelMatrix", "matrix");
+        shader.addUniform("uViewMatrix", "view_matrix");
+        shader.addUniform("uProjMatrix", "proj_matrix");
+        shader.addUniform("uColor", "C4F");
+        shader.addAttribute("aVertexPosition", "V3F");
 
         return shader;
     }
