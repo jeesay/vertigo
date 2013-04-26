@@ -170,6 +170,7 @@ public class Cube extends Shape {
     }
 
     private void create_wirecube() {
+        System.out.println("Create wirecube");
         // 1- modify dimension
         if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
 /**
@@ -183,7 +184,9 @@ public class Cube extends Shape {
             for (int i =0; i<wireVertices.length;i+=3) 
                System.out.println(wireVertices[i  ] +" "+wireVertices[i+1] +" "+wireVertices[i+2]);
         // 2- create geometry
+              System.out.println("Create geometry");
         geo.addBuffer("V3F",wireVertices);
+        System.out.println("geometry Created");
         geo.addIndices(wireIndices);
         // 3- create material
         // use default

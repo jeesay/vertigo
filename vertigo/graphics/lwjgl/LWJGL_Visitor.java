@@ -45,6 +45,7 @@ import vertigo.graphics.BufferTools;
 import vertigo.graphics.IBO;
 import vertigo.graphics.Props;
 import vertigo.graphics.ShaderProg;
+import vertigo.graphics.Uniform;
 import vertigo.graphics.VBO;
 import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
@@ -80,8 +81,8 @@ public class LWJGL_Visitor implements Visitor {
     public void visit(Camera obj) {
         cam_ = obj;
         setModelMatrix(obj);
-        Matrix4 projection = cam_.getProjection();
-        Matrix4 view = cam_.getViewMatrix();
+      
+        //glGetUniformLocation 
         //GL20.glUniformMatrix4(level, true, view);
 
     }
@@ -144,7 +145,6 @@ public class LWJGL_Visitor implements Visitor {
     private void drawShape(Shape obj) {
         // PreProcessing
         processShape(obj);
-
         // OpenGL
 
     }
@@ -153,7 +153,6 @@ public class LWJGL_Visitor implements Visitor {
         boolean isIndexed = false;
         IBO ibo = null;
         ShaderProg glshader = new ShaderProg();
-        //int handle = 0;
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
@@ -170,19 +169,42 @@ public class LWJGL_Visitor implements Visitor {
             obj.setDirty(Node.SHADER, false);
         }
 
-        // Use Program
-        ShaderProg prog = obj.getMaterial().getShaderMaterial();
-        GL20.glUseProgram(prog.getHandle());
+        /*
+         GL11.glBegin(GL11.GL_POINTS);
+         GL11.glVertex3f(0f, 1f, 0f);
+         GL11.glVertex3f(-1f, 0f, 0f);
+         GL11.glVertex3f(-0.7f, 0f, 0f);
+         GL11.glVertex3f(-0.6f, 0f, 0f);
+         GL11.glVertex3f(-0.5f, 0f, 0f);
+         GL11.glVertex3f(1f, 0f, 0f);
+         GL11.glEnd();*/
 
+
+        // Use Program
+         glshader = obj.getMaterial().getShaderMaterial();
+        GL20.glUseProgram(glshader.getHandle());
+        ArrayList<Uniform> uniforms = glshader.getAllUniforms();
+        for (Uniform uni : uniforms) {
+            if (uni.getType().equals("view_matrix")) {
+                GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
+                GL20.glUniformMatrix4(uni.getHandle(), false,cam_.getProjection().toBuffer());
+            } else if (uni.getType().equals("proj_matrix")) {
+                GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
+                GL20.glUniformMatrix4(uni.getHandle(), false, cam_.getViewMatrix().toBuffer());
+            } else if (uni.getType().equals("matrix")) {
+                GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
+                GL20.glUniformMatrix4(uni.getHandle(), false,obj.getMatrix().toBuffer());
+            }
+        }
         // Update uniforms
         // GL30.glUniform2u(bo.getHandle(), vbo.getFloatBuffer());
 
 
-        ArrayList<Attribute> atribute = prog.getAllAttributes();
+        ArrayList<Attribute> atribute = glshader.getAllAttributes();
 
 //for (String uniforms : allUniforms) {
 
-        // uniformFadeFactor = glGetUniformLocation(prog, uniforms);
+        // uniformFadeFactor = glGetUniformLocation(glshader, uniforms);
         ///////////////////////////////////////////////////////
         //int uniformFadeFactor= GL20.glGetUniformLocation(glshader.getUniformLocation(glshader.getName()), glshader.getName());
         //GL20.glUniformMatrix4(uniformFadeFactor, false, null);
@@ -270,7 +292,7 @@ public class LWJGL_Visitor implements Visitor {
                     //}
 
                     //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
-                    //glvertexAttribPointer(prog.getAttributeLocation(allAttributes.get(i)),
+                    //glvertexAttribPointer(glshader.getAttributeLocation(allAttributes.get(i)),
                     //...)
 
                     //  for (String attribute : allAttributes) {
@@ -286,7 +308,7 @@ public class LWJGL_Visitor implements Visitor {
                     //GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, i, vbo.getFloatBuffer());
                     //update VBO
 
-                    // prog.getAttributeLocation(allAttributes.get(i))
+                    // glshader.getAttributeLocation(allAttributes.get(i))
 
                 } else if (bo instanceof IBO) {
                     ibo = (IBO) bo;
@@ -298,17 +320,20 @@ public class LWJGL_Visitor implements Visitor {
         }
 // Draw
         if (isIndexed) {
+
             GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getIntBuffer());
 
         } else {
+            System.out.println("isIndexed is false");
             GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, obj.getGeometry().getCount());
         }
         GL20.glUseProgram(0);
     }
 
     private void processBO(Shape obj) {
-        //System.out.println("VBO process");
-        int count = obj.getGeometry().getBuffers().size();
+        //int count = obj.getGeometry().getBuffers().size();
+        //int count = obj.getGeometry().getCount();
+        int count = obj.getGeometry().getCount();
         System.out.println(" count is : " + count);
         IntBuffer bufferid = BufferTools.newIntBuffer(count);
         GL15.glGenBuffers(bufferid);

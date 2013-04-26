@@ -40,13 +40,25 @@ public class Geometry {
 
     private ArrayList<BO> buffers;
     private BufferData buffdata;
+    
     public Geometry() {
         buffers = new ArrayList<BO>();
+        System.out.println("Une geometry est créée.");
     }
 
+    public void presente(){
+        System.out.println("number of BO "+buffers.size()+" size of :  BufferData "+buffdata.getCapacity());
+        
+    }
+    
+    
     public ArrayList <BO> getBuffers(){
         return buffers;
 }
+    
+    public int getCount(){
+        return buffdata.getCapacity();
+    }
     
      public void addBuffert(String[] types, float[] data) {
          buffdata=new BufferData(data);
@@ -83,12 +95,12 @@ public class Geometry {
      * (coordinates, normal, colors,etc.).
      */
     public void addBuffer(String type, float[] data) {
-        FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
-        buf.put(data);
-        buf.rewind();
+        //FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
+        //buf.put(data);
+        //buf.rewind();
         VBO vbo = new VBO(type);
-        vbo.setFloatBuffer(type, buf);
-        buffers.add(vbo);
+        //vbo.setFloatBuffer(type, buf);
+        //buffers.add(vbo);
         
         buffdata=new BufferData(data);
         vbo.setBuffData(buffdata);
@@ -110,7 +122,7 @@ public class Geometry {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
-        PackedVBO vbo = new PackedVBO();
+      //  PackedVBO vbo = new PackedVBO();
         vbo.setFloatBuffer(types, buf);
         buffers.add(vbo);
     }

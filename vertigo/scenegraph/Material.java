@@ -35,7 +35,7 @@ public class Material {
     private ShaderProg shader;
     
     public Material() {
-        shader = ShaderFactory.get("default");
+        shader = ShaderFactory.get("monochrome");
     }
 
     public void setShaderMaterial(String shaderName) {

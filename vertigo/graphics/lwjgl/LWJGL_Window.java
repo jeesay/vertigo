@@ -46,7 +46,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import vertigo.graphics.KeyboardDispatcher;
 import vertigo.graphics.MouseDispatcher;
-import vertigo.graphics.OGL_Window;
+import vertigo.graphics.Window3D;
 import vertigo.graphics.TimerDispatcher;
 import vertigo.graphics.event.KeyboardObserver;
 import vertigo.graphics.event.MouseObserver;
@@ -60,7 +60,7 @@ import vertigo.graphics.event.Signal;
 import vertigo.graphics.event.MouseSignal;
 import vertigo.graphics.event.TimerObserver;
 
-public class LWJGL_Window implements OGL_Window {
+public class LWJGL_Window implements Window3D {
 
     private int width = 640;
     private int height = 480;
@@ -252,6 +252,7 @@ public class LWJGL_Window implements OGL_Window {
             System.out.println("space bar");
         } else if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
             Display.destroy();
+            frame.dispose();
         } else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             System.out.println("left shift");
         } else if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {

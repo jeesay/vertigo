@@ -42,7 +42,7 @@ public class NodeFactory {
      *
      * @author Jean-Christophe Taveau
      */
-    public static Node get(String name) {
+   public static Node get(String name) {
         int index = calcIndex(name);
         Node a_node = null;
         IJ.log("get node " + name + " " + index);
