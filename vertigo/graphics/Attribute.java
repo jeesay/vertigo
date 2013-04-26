@@ -39,12 +39,19 @@ public class Attribute {
     private String name;
     private int handle = -1;
     private static HashMap<String, String> table;
+    private  String type;
 
     public Attribute(String name) {
         this.name = name;
         initTable();
     }
 
+        public Attribute(String name,String type) {
+        this.name = name;
+        this.type=type;
+        //initTable();
+    }
+    
     public Attribute(String name, int handle) {
         this.name = name;
         this.handle = handle;

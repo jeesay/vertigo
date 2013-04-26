@@ -37,7 +37,8 @@ public class BufferData {
     private FloatBuffer buff;
     private boolean bound=false;
 
-
+public BufferData(){
+}
     
      public  BufferData(float[] data){
          buff=BufferTools.newFloatBuffer(data.length);

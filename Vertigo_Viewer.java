@@ -36,7 +36,7 @@ import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Lighting;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.transform.ArcBall;
-import vertigo.graphics.OGL_Window;
+import vertigo.graphics.Window3D;
 
 import ij.IJ;
 import ij.plugin.PlugIn;
@@ -55,7 +55,7 @@ public class Vertigo_Viewer implements PlugIn {
     private int blue;
     private Scene scene_;
     private Camera camera_;
-    private OGL_Window graphWin;
+    private Window3D graphWin;
     private World world_;
     public static final String VERTIGO_VERSION = "0.01";
 
@@ -118,7 +118,7 @@ public class Vertigo_Viewer implements PlugIn {
             } catch (ExceptionInInitializerError ei) {
                 // try & catch for tests
                 try {
-                    graphWin = (OGL_Window) new vertigo.graphics.text.Text_Renderer();
+                    graphWin = (Window3D) new vertigo.graphics.text.Text_Renderer();
                     show("TEXT");
                 } catch (ExceptionInInitializerError eie) {
                     IJ.showMessage("Vertigo ERROR", "<html>Please download JOGL or LWJGL.</html>");
@@ -146,12 +146,22 @@ public class Vertigo_Viewer implements PlugIn {
      */
     public void show(String render) {
         if (render.equals("G2D")) {
-            graphWin = (OGL_Window) new vertigo.graphics.G2D.G2D_Window();
-            initWindow(graphWin);
+            graphWin = (Window3D) new vertigo.graphics.G2D.G2D_Window();
+            graphWin.setBackgroundColor(red, green, blue);
+        graphWin.setDimension(window_width, window_height);
+        graphWin.setTitle(title_);
+        graphWin.setWorld(getWorld());
+        graphWin.setVisible(true);
+            
         } else if (render.equals("LWJGL")) {
             try {
                 graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
-                initWindow(graphWin);
+                 graphWin.setBackgroundColor(red, green, blue);
+        graphWin.setDimension(window_width, window_height);
+        graphWin.setTitle(title_);
+        graphWin.setWorld(getWorld());
+        graphWin.setVisible(true);
+
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download LWJGL or check your ClassPath.");
                
@@ -159,28 +169,30 @@ public class Vertigo_Viewer implements PlugIn {
 
         } else if (render.equals("JOGL")) {
             try {
-                System.out.println("On try");
+       
                 graphWin = new vertigo.graphics.jogl.JOGL_Window();
-                System.out.println("On crée");
-               initWindow(graphWin);
+        
+                  graphWin.setBackgroundColor(red, green, blue);
+        graphWin.setDimension(window_width, window_height);
+        graphWin.setTitle(title_);
+        graphWin.setWorld(getWorld());
+        graphWin.setVisible(true);
+         
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
                 
             }
         } else if (render.equals("TEXT")) {
-            graphWin = (OGL_Window) new vertigo.graphics.text.Text_Renderer(camera_, scene_);
-            initWindow(graphWin);
-
-        }
-    }
-
-    private void initWindow(OGL_Window graphWin) {
-        graphWin.setBackgroundColor(red, green, blue);
+            graphWin = (Window3D) new vertigo.graphics.text.Text_Renderer(camera_, scene_);
+            graphWin.setBackgroundColor(red, green, blue);
         graphWin.setDimension(window_width, window_height);
         graphWin.setTitle(title_);
         graphWin.setWorld(getWorld());
         graphWin.setVisible(true);
+
+        }
     }
+
 
     /**
      * Gets the world (aka root) of the scene graph.
@@ -209,13 +221,13 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     public static void main(String[] args) {
-        System.out.println("main");/*
+        System.out.println("main");
         Vertigo_Viewer ve = new Vertigo_Viewer();
         ve.setBackgroundColor(20, 200, 80);
         ve.setTitle("Mon titre");
-        ve.show("JOGL");
+        ve.show("LWJGL");
         
-        test();*/
+        //test();
     }
 
     private static void test() {
@@ -302,7 +314,7 @@ public class Vertigo_Viewer implements PlugIn {
 
         world_.add(stage);
 
-        ArcBall mouseRot = new ArcBall();
+       ArcBall mouseRot = new ArcBall();
         stage.add(mouseRot);
         mouseRot.add(scene_);
         world_.add(bs);
