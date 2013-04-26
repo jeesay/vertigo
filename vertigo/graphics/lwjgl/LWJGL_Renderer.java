@@ -73,7 +73,7 @@ public class LWJGL_Renderer{
     }
 
     public void display() {
-        //System.out.println("display Scene");
+        System.out.println("display Scene Visitor");
         GL11.glClearColor(red, green, blue, 1.0f);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
         // visitor

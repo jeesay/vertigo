@@ -42,6 +42,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import vertigo.graphics.KeyboardDispatcher;
 import vertigo.graphics.MouseDispatcher;
@@ -103,8 +104,6 @@ public class LWJGL_Window implements OGL_Window {
         frame = new Frame(win_title);
         frame.setLayout(new BorderLayout());
         final Canvas canvas = new Canvas();
-
-
         System.out.println("createWindow");
 
         canvas.addComponentListener(new ComponentAdapter() {
@@ -113,7 +112,7 @@ public class LWJGL_Window implements OGL_Window {
                 newCanvasSize.set(canvas.getSize());
             }
         });
-
+        System.out.println("add Listener");
         frame.addWindowFocusListener(new WindowAdapter() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
@@ -121,7 +120,7 @@ public class LWJGL_Window implements OGL_Window {
             }
         });
 
-
+        System.out.println("add focus listener");
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -129,16 +128,18 @@ public class LWJGL_Window implements OGL_Window {
             }
         });
 
-
+        System.out.println("add window listener");
         frame.add(canvas, BorderLayout.CENTER);
-
+        System.out.println("add canvas");
         try {
             Display.setParent(canvas);
+            System.out.println("set parent");
             Display.setVSyncEnabled(true);
             frame.setPreferredSize(new Dimension(width, height));
             frame.pack();
             frame.setVisible(true);
             Display.create();
+
 
         } catch (LWJGLException e) {
             //e.printStackTrace();
@@ -236,13 +237,13 @@ public class LWJGL_Window implements OGL_Window {
 
         if (Mouse.isButtonDown(0)) {
             mouse_event.setButton(Signal.BUTTON_LEFT);
-            mouse_event.setButtonStatus(Signal.PUSH);
+            mouse_event.setButtonStatus(Signal.PRESSED);
             //System.out.println(mouse_event);
         } else if (Mouse.isButtonDown(1)) {
-            mouse_event.setButton(allevent.BUTTON_RIGHT);
+            mouse_event.setButton(Signal.BUTTON_RIGHT);
             //System.out.println(mouse_event);
         } else if (Mouse.isButtonDown(2)) {
-            mouse_event.setButton(allevent.BUTTON_MIDDLE);
+            mouse_event.setButton(Signal.BUTTON_MIDDLE);
             // System.out.println(mouse_event);
         }
 
@@ -288,6 +289,7 @@ public class LWJGL_Window implements OGL_Window {
 
     @Override
     public void setVisible(boolean flag) {
+        System.out.println("set visible");
         if (flag == true) {
             createWindow();
             display();

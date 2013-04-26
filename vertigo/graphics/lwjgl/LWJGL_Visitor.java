@@ -37,6 +37,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL32;
+import org.lwjgl.opengl.GL40;
 import vertigo.graphics.Attribute;
 import vertigo.graphics.BO;
 import vertigo.graphics.BufferTools;
@@ -151,7 +153,7 @@ public class LWJGL_Visitor implements Visitor {
         boolean isIndexed = false;
         IBO ibo = null;
         ShaderProg glshader = new ShaderProg();
-        int handle = 0;
+        //int handle = 0;
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
@@ -175,17 +177,9 @@ public class LWJGL_Visitor implements Visitor {
         // Update uniforms
         // GL30.glUniform2u(bo.getHandle(), vbo.getFloatBuffer());
 
-        ArrayList<String> allUniforms = prog.getAllUniforms();
-        ArrayList<String> allAttributes = prog.getAllAttributes();
-        ArrayList<Attribute> atribute = new ArrayList();
-        int j = 0;
-        for (String name : allAttributes) {
-            Attribute lwjgl = new Attribute(name, j);
-            atribute.add(lwjgl);
-            j++;
-        }
 
-        int jmax = j;
+        ArrayList<Attribute> atribute = prog.getAllAttributes();
+
 //for (String uniforms : allUniforms) {
 
         // uniformFadeFactor = glGetUniformLocation(prog, uniforms);
@@ -198,7 +192,7 @@ public class LWJGL_Visitor implements Visitor {
 
 
 
-        int i = -1;
+
         // Bind BOs and Update attributes
 
 
@@ -214,121 +208,100 @@ public class LWJGL_Visitor implements Visitor {
 
         ShaderUtils.useShader(obj.getMaterial().getShaderMaterial().getHandle());
 
-        for (BO bo : obj.getGeometry().getBuffers()) {
-            //ShaderUtils.dontUseShader();
-            i++;
-            if (bo instanceof VBO) {
-                VBO vbo = (VBO) bo;
 
-                int a = 0;
-                while (a <= jmax) {
+
+        //ShaderUtils.dontUseShader();
+
+
+        int a = 0;
+        while (a < atribute.size()) {
+            for (BO bo : obj.getGeometry().getBuffers()) {
+                if (bo instanceof VBO) {
+                    VBO vbo = (VBO) bo;
                     if (vbo.getType().equals(atribute.get(a).getVBOtype(atribute.get(a).getName()))) { //null exception ?
                         if (!vbo.isBound()) {
                             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
                             // GL20.glGetAttribLocation(atribute.get(a).getHandle(), vbo.getType());
-                            GL20.glEnableVertexAttribArray(i); //set the vertex's position
+                            GL20.glEnableVertexAttribArray(atribute.get(a).getHandle()); //set the VBO's offset
 
                             //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                            GL20.glVertexAttribPointer(atribute.getHandle(), vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
+                            GL20.glVertexAttribPointer(vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
                             // i or vbo.getOffset?
                             //GL20.glVertexAttribPointer(i, vbo.capacity(), vbo.getSize(), false, vbo.getStride(),vbo.getFloatBuffer());
                             //GL20.glVertexAttribPoin
 
-
-
                             vbo.setBound(true);
                         }
                     }
-                    a++;
-                }
 
 
-                //String type;
-                //int stride =0;
 
-                //ArrayList<String> types = (ArrayList<String>) vbo.getProps().keys();
-                // for (String type : props.getkeys() ) {
-                //   for (String attribute : allAttributes) {
 
-                /* 
-                 int numtype = calcIndex(type);
-                 switch (numtype) {
-                 case 207: // V3F
-                 if (attribute.equals("aVertexPosition")) {
-                 //gl.getAttribLocation(shaderProgram, "aVertexPosition");
-                 GL20.glGetAttribLocation(glshader.getHandle(), "aVertexPosition");
-                 GL20.glEnableVertexAttribArray(i); //set the vertex's position
+                    //String type;
+                    //int stride =0;
+                    //ArrayList<String> types = (ArrayList<String>) vbo.getProps().keys();
+                    // for (String type : props.getkeys() ) {
+                    //   for (String attribute : allAttributes) {
+                    /* 
+                     int numtype = calcIndex(type);
+                     switch (numtype) {
+                     case 207: // V3F
+                     if (attribute.equals("aVertexPosition")) {
+                     //gl.getAttribLocation(shaderProgram, "aVertexPosition");
+                     GL20.glGetAttribLocation(glshader.getHandle(), "aVertexPosition");
+                     GL20.glEnableVertexAttribArray(i); //set the vertex's position
 
-                 //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                 GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
-                 ShaderUtils.useShader(glshader.getHandle());
+                     //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+                     GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
+                     ShaderUtils.useShader(glshader.getHandle());
                                     
-                 }
-                 //aVertexPosition
-                 case 189: // C4F
-                 //aVertexColor
-                 case 204: // T2F
-                 //aTexture
-                 default: // Do nothing  
-                 }*/
-                // }
+                     }
+                     //aVertexPosition
+                     case 189: // C4F
+                     //aVertexColor
+                     case 204: // T2F
+                     //aTexture
+                     default: // Do nothing  
+                     }*/
+                    // }
+                    //   if (vbo.IsInterleaved()){
+                    //     stride+=vbo.getStride(type);
+                    //      get(type);
+                    //}
 
+                    //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
+                    //glvertexAttribPointer(prog.getAttributeLocation(allAttributes.get(i)),
+                    //...)
 
-                //   if (vbo.IsInterleaved()){
-                //     stride+=vbo.getStride(type);
-                //      get(type);
-                //}
+                    //  for (String attribute : allAttributes) {
 
+                    //GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
+                    // link vertex and shader's attributes
+                    //  }
+                    // i : indice
+                    // capacity : size
+                    //normalised ???-> False
+                    //getSize -> Stirde
+                    // getFloatBuffer : java.nio.FloatBuffer buffer
+                    //GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, i, vbo.getFloatBuffer());
+                    //update VBO
 
+                    // prog.getAttributeLocation(allAttributes.get(i))
 
-                //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
-                //glvertexAttribPointer(prog.getAttributeLocation(allAttributes.get(i)),
-                //...)
-
-
-
-
-                //  for (String attribute : allAttributes) {
-
-                //GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
-                // link vertex and shader's attributes
-                //  }
-                // i : indice
-                // capacity : size
-                //normalised ???-> False
-                //getSize -> Stirde
-                // getFloatBuffer : java.nio.FloatBuffer buffer
-
-
-
-
-
-
-                //GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, i, vbo.getFloatBuffer());
-                //update VBO
-                isIndexed = false;
-                GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle())[1]);
-
-
-
-                // prog.getAttributeLocation(allAttributes.get(i))
-            } else if (bo instanceof IBO) {
-                ibo = (IBO) bo;
-                GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, bo.getHandle());
-                isIndexed = true;
-                GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle())[0], ibo.getIntBuffer());
+                } else if (bo instanceof IBO) {
+                    ibo = (IBO) bo;
+                    GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, bo.getHandle());
+                    isIndexed = true;
+                }
             }
-
-
-
-
+            a++;
         }
-        // Draw
+// Draw
         if (isIndexed) {
             GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getIntBuffer());
 
         } else {
-            GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle())[0], 0, getOpenGLStyle(obj.getDrawingStyle()));
+            GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, obj.getGeometry().getCount());
         }
         GL20.glUseProgram(0);
     }
@@ -391,43 +364,31 @@ public class LWJGL_Visitor implements Visitor {
     private int getOpenGLStyle(String vertigo_style) {
         int style = calcIndex(vertigo_style);
         switch (style) {
-            case 296: // LINE_STRIP
-                return GL11.GL_LINE_STRIP;
-            case 296: // LINE_STRIP
+            case 379: // LINES
+                return GL11.GL_LINES;
+            case 1116: // LINES_ADJACENCY
+                return GL32.GL_LINES_ADJACENCY;
+            case 705: // LINE_LOOP
                 return GL11.GL_LINE_LOOP;
-            case 296: // LINE_STRIP
-                return GL11.GL_LINES;
-            case 296: // LINE_STRIP
-                return GL11.GL_LINE_STRIP_ADJACENCY;
-            case 296: // LINE_STRIP
-                return GL11.GL_LINES_ADJACENCY;
-            case 296: // LINE
-                return GL11.GL_LINES;
-            case 296: // LINE
-                return GL11.GL_PATCHES
+            case 793: // LINE_STRIP
+                return GL11.GL_LINE_STRIP;
+            case 1530: // LINE_STRIP_ADJACENCY
+                return GL32.GL_LINE_STRIP_ADJACENCY;
+            case 520: // PATCHES
+                return GL40.GL_PATCHES;
             case 477: // POINTS
                 return GL11.GL_POINTS;
-            case 296: // LINE
-
-            case 681: // TRIANGLES 
+            case 681: // TRIANGLES
                 return GL11.GL_TRIANGLES;
-            case 296: // LINE_STRIP
-                return GL11.GL_TRIANGLE_STRIP
-
-                        case 296: // LINE_STRIP
-                return GL11.GL_TRIANGLE_FAN
-
-                        case 296: // LINE_STRIP
-                return GL11.GL_TRIANGLES
-
-                        case 296: // LINE_STRIP
-                return GL11.GL_TRIANGLE_STRIP_ADJACENCY
-
-                        case 296: // LINE_STRIP
-                return GL11.GL_TRIANGLES_ADJACENCY
-                       case 296: // LINE_STRIP
-
-            default:
+            case 1418: // TRIANGLES_ADJACENCY
+                return GL32.GL_TRIANGLES_ADJACENCY;
+            case 906: // TRIANGLE_FAN
+                return GL11.GL_TRIANGLE_FAN;
+            case 1095: // TRIANGLE_STRIP
+                return GL11.GL_TRIANGLE_STRIP;
+            case 1832: // TRIANGLE_STRIP_ADJACENCY
+                return GL32.GL_TRIANGLE_STRIP_ADJACENCY;
+            default: // Do nothing  
                 return -1;
         }
     }

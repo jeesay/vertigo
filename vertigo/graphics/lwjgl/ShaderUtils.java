@@ -40,8 +40,10 @@ import ij.IJ;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import vertigo.graphics.Attribute;
 import vertigo.graphics.BufferTools;
 import vertigo.graphics.ShaderProg;
+import vertigo.graphics.Uniform;
 
 public final class ShaderUtils {
 
@@ -144,13 +146,13 @@ public final class ShaderUtils {
 
             GL20.glUseProgram(progID);
 
-            for (String uniform : prog.getAllUniforms()) {
-                System.out.println("uniform "+uniform);
-                prog.setUniformLocation(uniform,GL20.glGetUniformLocation(progID, uniform));
+            for (Uniform uniform : prog.getAllUniforms()) {
+                System.out.println("uniform "+uniform.getName());
+                prog.setUniformLocation(uniform.getName(),GL20.glGetUniformLocation(progID, uniform.getName()));
             }
-            for (String attribute : prog.getAllAttributes()) {
-                System.out.println("attr "+attribute);
-                prog.setAttributeLocation(attribute, GL20.glGetAttribLocation(progID, attribute) );
+            for (Attribute attribute : prog.getAllAttributes()) {
+                System.out.println("attr "+attribute.getName());
+                prog.setAttributeLocation(attribute.getName(), GL20.glGetAttribLocation(progID, attribute.getName()) );
             }
             GL20.glUseProgram(0);
 
