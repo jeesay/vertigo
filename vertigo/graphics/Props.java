@@ -27,7 +27,7 @@
 
 package vertigo.graphics;
 
-class Props {
+public class Props {
 
     private String type;
     private int offset;

@@ -65,10 +65,10 @@ public class VBO extends BO {
   public int getOffset(){
       return offset;
   }
-  public void setBind(){
-      Buffdata.setBind();
+  public void setBound(boolean bound){
+      Buffdata.setBound(bound);
   }
-  public boolean isBind(){
+  public boolean isBound(){
       return Buffdata.isBound();
   }
   public Hashtable<String, Props> getProps(){

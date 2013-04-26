@@ -34,4 +34,18 @@ public class Uniform {
 
     private String name;
     private int handle = -1;
-}
+    public Uniform (String name){
+        this.name=name;
+    }
+    public Uniform (String name, int handle){
+        this.name=name;
+        this.handle=handle;
+    }
+    public String getName(){
+        return name;
+    }
+
+    int getHandle() {
+        return handle;
+    }
+} // end of class Uniform

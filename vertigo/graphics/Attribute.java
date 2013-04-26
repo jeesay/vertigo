@@ -37,53 +37,57 @@ import java.util.HashMap;
 public class Attribute {
 
     private String name;
-    private int handle=-1;
-private HashMap<String,String> table;
+    private int handle = -1;
+    private static HashMap<String, String> table;
 
     public Attribute(String name) {
         this.name = name;
-        // define the VBO/Attribute pair
-        table.put("aPositionVertex","V3F");
-        table.put("aColorVertex","C4F");
-        table.put("aNormalVertex","N3F");
+        initTable();
     }
-       public Attribute(String name,int handle) {
+
+    public Attribute(String name, int handle) {
         this.name = name;
-        this.handle=handle;
-        // define the VBO/Attribute pair
-        table.put("aPositionVertex","V3F");
-        table.put("aColorVertex","C4F");
-        table.put("aNormalVertex","N3F");
+        this.handle = handle;
+        initTable();
     }
-    
-public void setHandle(int handle){
-    this.handle=handle;
-}
-public int getHandle(){
-    return handle;
-}
 
-public String getVBOtype(String type){
-    return table.get(type);
-}
-public String getName(){
-    return name;
-}
+    private static void initTable() {
+        // define the VBO/Attribute pair
+        table.put("aPositionVertex", "V3F");
+        table.put("aColorVertex", "C4F");
+        table.put("aNormalVertex", "N3F");
+    }
 
-   /* public void bindVBO(ArrayList<BO> buffer) {
-        for (BO bo : buffer) {
-            VBO vbo = (VBO) bo;
-            String VBOtype = vbo.getType();
-            if (name.equals(vbo.getType())) {
+    public void setHandle(int handle) {
+        this.handle = handle;
+    }
 
-               /* GL20.glGetAttribLocation(glshader.getHandle(), "aVertexPosition");
-                GL20.glEnableVertexAttribArray(i); //set the vertex's position
+    public int getHandle() {
+        return handle;
+    }
 
-                //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
-                ShaderUtils.useShader(glshader.getHandle());
-            }
-        }
+    public String getVBOtype(String type) {
+        return table.get(type);
+    }
 
-    }*/
+    public String getName() {
+        return name;
+    }
+
+    /* public void bindVBO(ArrayList<BO> buffer) {
+     for (BO bo : buffer) {
+     VBO vbo = (VBO) bo;
+     String VBOtype = vbo.getType();
+     if (name.equals(vbo.getType())) {
+
+     /* GL20.glGetAttribLocation(glshader.getHandle(), "aVertexPosition");
+     GL20.glEnableVertexAttribArray(i); //set the vertex's position
+
+     //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+     GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
+     ShaderUtils.useShader(glshader.getHandle());
+     }
+     }
+
+     }*/
 } // end of class Attribute

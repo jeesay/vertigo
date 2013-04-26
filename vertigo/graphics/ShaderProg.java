@@ -43,8 +43,11 @@ import ij.IJ;
 public class ShaderProg {
     public static int UNKNOWN = -1;
 
-    private HashMap<String, Attribute> attributes;
-    private HashMap<String, Uniform> uniforms;
+    //private HashMap<String, Attribute> attributes;
+    //private HashMap<String, Uniform> uniforms;
+     private ArrayList< Attribute> attributes;
+    private ArrayList<Uniform> uniforms;
+    
     private int program;
     private String name;
     private String vshader;
@@ -57,8 +60,10 @@ public class ShaderProg {
      * Constructs and initializes an empty ShaderProg.
      */
     public ShaderProg() {
-        attributes = new HashMap<String, Integer>();
-        uniforms = new HashMap<String, Integer>();
+        //attributes = new HashMap<String, Attribute>();
+        //uniforms = new HashMap<String, Uniform>();
+         attributes = new ArrayList< Attribute>();
+        uniforms = new ArrayList<Uniform>();
         name = null;
         dirty_ = true;
     }
@@ -69,8 +74,10 @@ public class ShaderProg {
      * sources must be 'name'.vs, 'name'.fs, 'name'.gs, respectively.
      */
     public ShaderProg(String name) {
-        attributes = new HashMap<String, Integer>();
-        uniforms = new HashMap<String, Integer>();
+       // attributes = new HashMap<String, Attribute>();
+        //uniforms = new HashMap<String, Uniform>();
+        attributes = new ArrayList< Attribute>();
+        uniforms = new ArrayList<Uniform>();
         this.name = name;
         dirty_ = true;
     }
@@ -128,38 +135,61 @@ public class ShaderProg {
     }
 
     public void addUniform(String name) {
-        uniforms.put(new Uniform(name), -1);
+        //niforms.put(new Uniform(name), -1);
+        uniforms.add(new Uniform(name));
     }
 
     public void setUniformLocation(String name, int uniformToken) {
-        uniforms.put(name, uniformToken);
+        //uniforms.put(name, uniformToken);
+        uniforms.add(new Uniform(name,uniformToken));
     }
 
-    public ArrayList<String> getAllUniforms() {
+    /*public ArrayList<String> getAllUniforms() {
         return new ArrayList(uniforms.keySet());
-    }
-
+    }*/
+public ArrayList<Uniform> getAllUniforms(){
+    return uniforms;
+}
 
     public int getUniformLocation(String key) {
-        return uniforms.get(key);
+        //return uniforms.get(key);
+        for (Uniform uni : uniforms){
+            if (uni.getName().equals(key)){
+                return uni.getHandle();
+            }
+        }
+        return -1;
     }
 
     public void addAttribute(String attr){
-        attributes.put(attr, -1);
+        //attributes.put(attr, -1);
+        attributes.add(new Attribute(name));
     }
 
     public void setAttributeLocation(String name, int attributeToken) {
-        attributes.put(name, attributeToken);
+        //attributes.put(name, attributeToken);
+        attributes.add(new Attribute(name,attributeToken));
     }
 
-    public ArrayList<String> getAllAttributes() {
+ /*   public ArrayList<String> getAllAttributes() {
         return new ArrayList(attributes.keySet());
+    }
+    */
+     public ArrayList<Attribute> getAllAttributes() {
+        return attributes;
     }
 
 
     public int getAttributeLocation(String key) {
-        return attributes.get(key);
+        //return attributes.get(key);
+          for (Attribute atri : attributes){
+            if (atri.getName().equals(key)){
+                return atri.getHandle();
+            }
+        }
+        return -1;
     }
+
 
     /**
      * Loads the shaders
