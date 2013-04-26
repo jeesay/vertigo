@@ -273,20 +273,17 @@ public class Matrix4 implements Serializable {
                    "  ["+m20+"\t"+m21+"\t"+m22+"\t"+m23+"]" + nl +
                    "  ["+m30+"\t"+m31+"\t"+m32+"\t"+m33+"] ]";
     }
-
     
-        /**
-* Returns a float array that contains the values of this Matrix4.
-* @return the array of float representation
-*/
+     /**
+     * Returns a float array that contains the values of this Matrix4.
+     * @return the array of float representation
+     */ 
     public FloatBuffer toBuffer() {
-     float[] buf = {m00,m01,m02,m03,m10,m11,m12,m13,m20,m21,m22,m23,m30,m31,m32,m33};
-     FloatBuffer fbuf = BufferTools.newFloatBuffer(16);
-     fbuf.put(buf);
-     fbuf.rewind();
-     return fbuf;
+    	float[] buf = {m00,m01,m02,m03,m10,m11,m12,m13,m20,m21,m22,m23,m30,m31,m32,m33};
+    	FloatBuffer fbuf = BufferTools.newFloatBuffer(16);
+    	fbuf.put(buf);
+    	fbuf.rewind();
     }
-    
     /**
      * Sets this Matrix4 to identity.
      */
