@@ -43,12 +43,14 @@ public BufferData(){
      public  BufferData(float[] data){
          buff=BufferTools.newFloatBuffer(data.length);
          buff.put(data);
+         buff.rewind();
      }
      
          public  BufferData(FloatBuffer data){
          //BufferData();
          //buff=BufferTools.newFloatBuffer(data.length);
          buff.put(data);
+         buff.rewind();
      }
      
      
