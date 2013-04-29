@@ -28,7 +28,15 @@
 package vertigo.scenegraph;
 
 import vertigo.graphics.Visitor;
-
+/**
+ * Class Light
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
 public class Light extends Node {
 public static int count = 0; 
     public Light (){
@@ -43,6 +51,11 @@ public static int count = 0;
     public void add(Node anode){
 	System.out.println("Light must not have any children");
     }
+       /**
+     * Return the number of Camera
+     *
+     * @return number of camera (int)
+     */
     public int getNumberCamera(){
         return count;
     }
