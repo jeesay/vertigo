@@ -51,6 +51,9 @@ public class Geometry {
         
     }
     
+    public BufferData getBufferData(){
+        return buffdata;
+    }
     
     public ArrayList <BO> getBuffers(){
         return buffers;
@@ -77,6 +80,9 @@ public class Geometry {
         }
      }
      
+     public int getNumberBO(){
+         return buffers.size();
+     }
      
       private int getSize(String type) {
         if (type.contains("3")) {

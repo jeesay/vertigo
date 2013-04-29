@@ -336,8 +336,9 @@ public class LWJGL_Visitor implements Visitor {
         //int count = obj.getGeometry().getBuffers().size();
         //int count = obj.getGeometry().getCount();
         int count = obj.getGeometry().getCount();
-        System.out.println(" count is : " + count);
         IntBuffer bufferid = BufferTools.newIntBuffer(count);
+        System.out.println(" count is : " + count+" and bufferid : "+bufferid);
+         
         GL15.glGenBuffers(bufferid);
         int i = 0;
         for (BO bo : obj.getGeometry().getBuffers()) {
@@ -345,6 +346,7 @@ public class LWJGL_Visitor implements Visitor {
             int handle = bufferid.get(i);
             System.out.println("ID is : " + handle);
             bo.setHandle(handle);
+            //or bo.setHandle(i); ??
             i++;
             System.out.println("Handle is : " + bo.getHandle());
 
