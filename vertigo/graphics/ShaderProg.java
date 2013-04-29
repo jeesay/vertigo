@@ -24,7 +24,6 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-
 package vertigo.graphics;
 
 import java.io.BufferedReader;
@@ -41,20 +40,19 @@ import ij.IJ;
  * @author Jean-Christophe Taveau
  */
 public class ShaderProg {
-    public static int UNKNOWN = -1;
 
+    public static int UNKNOWN = -1;
     //private HashMap<String, Attribute> attributes;
     //private HashMap<String, Uniform> uniforms;
-     private ArrayList< Attribute> attributes;
+    private ArrayList< Attribute> attributes;
     private ArrayList<Uniform> uniforms;
-    
     private int program;
     private String name;
     private String vshader;
     private String fshader;
     private String gshader;
     private boolean dirty_;
-    private String path="shaders/";
+    private String path = "shaders/";
 
     /**
      * Constructs and initializes an empty ShaderProg.
@@ -62,24 +60,28 @@ public class ShaderProg {
     public ShaderProg() {
         //attributes = new HashMap<String, Attribute>();
         //uniforms = new HashMap<String, Uniform>();
-         attributes = new ArrayList< Attribute>();
+        attributes = new ArrayList< Attribute>();
         uniforms = new ArrayList<Uniform>();
         name = null;
         dirty_ = true;
+        program=-1;
     }
 
     /**
      * Constructs and initializes a ShaderProg from its name.
+     *
      * @param Name of the shader. The vertex, fragment, ang geometry shader
      * sources must be 'name'.vs, 'name'.fs, 'name'.gs, respectively.
      */
     public ShaderProg(String name) {
-       // attributes = new HashMap<String, Attribute>();
+        // attributes = new HashMap<String, Attribute>();
         //uniforms = new HashMap<String, Uniform>();
         attributes = new ArrayList< Attribute>();
         uniforms = new ArrayList<Uniform>();
         this.name = name;
         dirty_ = true;
+        program=-1;
+        System.out.println("Shader prog is creat : "+name);
     }
 
     public boolean isDirty() {
@@ -91,7 +93,9 @@ public class ShaderProg {
     }
 
     public void loadVertexShader() {
+        System.out.println("The name 1 : "+name);
         vshader = loadShader(this.name + ".vs");
+        System.out.println("The name  2 : "+name);
     }
 
     public void loadFragmentShader() {
@@ -138,90 +142,93 @@ public class ShaderProg {
         //niforms.put(new Uniform(name), -1);
         uniforms.add(new Uniform(name));
     }
-    
-     public void addUniform(String name,String type) {
+
+    public void addUniform(String name, String type) {
         //niforms.put(new Uniform(name), -1);
-        uniforms.add(new Uniform(name,type));
+        uniforms.add(new Uniform(name, type));
     }
 
     public void setUniformLocation(String name, int uniformToken) {
         //uniforms.put(name, uniformToken);
-        uniforms.add(new Uniform(name,uniformToken));
+        uniforms.add(new Uniform(name, uniformToken));
     }
 
     /*public ArrayList<String> getAllUniforms() {
-        return new ArrayList(uniforms.keySet());
-    }*/
-public ArrayList<Uniform> getAllUniforms(){
-    return uniforms;
-}
+     return new ArrayList(uniforms.keySet());
+     }*/
+    public ArrayList<Uniform> getAllUniforms() {
+        return uniforms;
+    }
 
     public int getUniformLocation(String key) {
         //return uniforms.get(key);
-        for (Uniform uni : uniforms){
-            if (uni.getName().equals(key)){
+        for (Uniform uni : uniforms) {
+            if (uni.getName().equals(key)) {
                 return uni.getHandle();
             }
         }
         return -1;
     }
 
-    public void addAttribute(String attr){
+    public void addAttribute(String attr) {
         //attributes.put(attr, -1);
         attributes.add(new Attribute(name));
     }
-    
-       public void addAttribute(String attr,String type){
+
+    public void addAttribute(String attr, String type) {
         //attributes.put(attr, -1);
-        attributes.add(new Attribute(name,type));
+        attributes.add(new Attribute(name, type));
     }
 
     public void setAttributeLocation(String name, int attributeToken) {
         //attributes.put(name, attributeToken);
-        attributes.add(new Attribute(name,attributeToken));
+        attributes.add(new Attribute(name, attributeToken));
     }
 
- /*   public ArrayList<String> getAllAttributes() {
-        return new ArrayList(attributes.keySet());
-    }
-    */
-     public ArrayList<Attribute> getAllAttributes() {
+    /*   public ArrayList<String> getAllAttributes() {
+     return new ArrayList(attributes.keySet());
+     }
+     */
+    public ArrayList<Attribute> getAllAttributes() {
         return attributes;
     }
 
-
     public int getAttributeLocation(String key) {
         //return attributes.get(key);
-          for (Attribute atri : attributes){
-            if (atri.getName().equals(key)){
+        for (Attribute atri : attributes) {
+            if (atri.getName().equals(key)) {
                 return atri.getHandle();
             }
         }
         return -1;
     }
 
-
     /**
-     * Loads the shaders
-     * We assume that the shader is a file located in the  JAR file
-     * in the subpackage shaders
+     * Loads the shaders We assume that the shader is a file located in the JAR
+     * file in the subpackage shaders
      */
     private String loadShader(String name) {
+        System.out.println("We load "+name);
         StringBuilder sb = new StringBuilder();
         try {
-            InputStream is = ShaderFactory.class.getResourceAsStream(path+name);
+            System.out.println("We try");
+            InputStream is = ShaderFactory.class.getResourceAsStream(path + name);
+            if(is==null){
+                System.out.println("Is "+name+" is null");
+            }
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line = null;
+            System.out.println("BR is : "+br.readLine());
             while ((line = br.readLine()) != null) {
                 sb.append(line).append('\n');
             }
             is.close();
         } catch (Exception e) {
+            System.out.println("We catch.");
             e.printStackTrace();
         }
-//        System.out.println("Shader is <Path shader> " + (path+name) +'\n'+ sb.toString());
+       System.out.println("Shader is <Path shader> " + (path+name) +'\n'+ sb.toString());
         return sb.toString();
     }
 } // end of class ShaderProg
-
 

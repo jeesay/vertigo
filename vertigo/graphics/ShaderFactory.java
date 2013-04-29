@@ -45,6 +45,7 @@ public class ShaderFactory {
             case 741: // default
                 if (table.get(741) == null) {
                     table.put(741, create_monochrome());
+                    System.out.println("We create a monochrome "+name);
                 }
                 shader = table.get(741);
                 break;
@@ -88,6 +89,7 @@ public class ShaderFactory {
 
     private static ShaderProg create_monochrome() {
         ShaderProg shader = new ShaderProg("monochrome");
+        System.out.println("We create a monochrome here");
         shader.loadVertexShader();
         shader.loadFragmentShader();
         shader.addUniform("uModelMatrix", "matrix");

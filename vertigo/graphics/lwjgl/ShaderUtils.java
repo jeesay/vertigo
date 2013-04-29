@@ -171,6 +171,7 @@ public final class ShaderUtils {
         int shaderprogram;
         vertexShaderProgram = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         fragmentShaderProgram = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+        
         GL20.glShaderSource(vertexShaderProgram, prog.getVertexSource());
         GL20.glCompileShader(vertexShaderProgram);
         if (GL20.glGetShaderi(vertexShaderProgram, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)

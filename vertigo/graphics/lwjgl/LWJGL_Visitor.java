@@ -44,6 +44,7 @@ import vertigo.graphics.BO;
 import vertigo.graphics.BufferTools;
 import vertigo.graphics.IBO;
 import vertigo.graphics.Props;
+import vertigo.graphics.ShaderFactory;
 import vertigo.graphics.ShaderProg;
 import vertigo.graphics.Uniform;
 import vertigo.graphics.VBO;
@@ -152,7 +153,8 @@ public class LWJGL_Visitor implements Visitor {
     private void processShape(Shape obj) {
         boolean isIndexed = false;
         IBO ibo = null;
-        ShaderProg glshader = new ShaderProg();
+        //ShaderProg glshader = new ShaderProg();
+        ShaderProg glshader = ShaderFactory.get("monochrome");
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
@@ -368,10 +370,15 @@ public class LWJGL_Visitor implements Visitor {
         int handle;
         ShaderProg glshader = obj.getMaterial().getShaderMaterial();
         // compile once
+        System.out.println("The handle 1 : "+glshader.getHandle());
         if (glshader.getHandle() == ShaderProg.UNKNOWN) {
+            glshader.loadVertexShader();
+            System.out.println("The handle 2 : "+glshader.getHandle());
             try {
                 handle = ShaderUtils.attachShaders(glshader.getVertexSource(), glshader.getFragmentSource());
+                 System.out.println("The handle 4 : "+handle);
                 glshader.setHandle(handle);
+                System.out.println("The handle 5  : "+glshader.getHandle());
             } catch (Exception e) {
                 IJ.log("Error with the Shader");
             } //Compile, Link error
