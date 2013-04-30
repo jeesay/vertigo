@@ -51,7 +51,10 @@ public class Attribute {
         this.type=type;
         //initTable();
     }
-    
+    public String getType(){
+        return type;
+    }
+        
     public Attribute(String name, int handle) {
         this.name = name;
         this.handle = handle;

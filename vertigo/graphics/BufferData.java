@@ -73,5 +73,8 @@ public BufferData(){
      public int getCapacity(){
          return buff.capacity();
      }
+     public FloatBuffer getFloatBuffer(){
+         return buff;
+     }
     
 } // end of class BufferData

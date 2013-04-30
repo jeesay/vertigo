@@ -46,6 +46,7 @@ public class VBO extends BO {
         props = new Hashtable<String, Props>();
     }
     public VBO(String type){
+         super();
         this.type=type;
         offset=0;
         stride=getSize(type);
@@ -119,6 +120,10 @@ public class VBO extends BO {
 
     public int getOffset(String type) {
         return props.get(type).getOffset();
+    }
+    
+    public FloatBuffer getFloatBuff(){
+        return Buffdata.getFloatBuffer();
     }
 
     public int getStride(String type) {

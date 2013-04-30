@@ -42,12 +42,12 @@ public class ShaderFactory {
         int index = calcIndex(name);
         ShaderProg shader;
         switch (index) {
-            case 741: // default
-                if (table.get(741) == null) {
-                    table.put(741, create_monochrome());
+            case 1079: // monochrome
+                if (table.get(1079) == null) {
+                    table.put(1079, create_monochrome());
                     System.out.println("We create a monochrome "+name);
                 }
-                shader = table.get(741);
+                shader = table.get(1079);
                 break;
             case 423: // flat
                 shader = new ShaderProg("flat");
