@@ -24,7 +24,6 @@
  *Olivier Catoliquot
  *Clement Delestre
  */
-
 package vertigo.graphics.lwjgl;
 
 import java.io.BufferedReader;
@@ -53,29 +52,19 @@ public final class ShaderUtils {
     // loads the shaders
     // in this example we assume that the shader is a file located in the applications JAR file.
     //
-/****  TEST de PUSH
- * 
-    public static String[] loadShader(String name) {
-        StringBuilder sb = new StringBuilder();
-        System.out.println(name);
-        try {
-            InputStream is = ShaderFactory.class.getResourceAsStream(name);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-
-                sb.append(line);
-                sb.append('\n');
-            }
-            is.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("Shader is " + sb.toString());
-        return new String[]{sb.toString()};
-    }
-***/
-
+    /**
+     * ** TEST de PUSH
+     *
+     * public static String[] loadShader(String name) { StringBuilder sb = new
+     * StringBuilder(); System.out.println(name); try { InputStream is =
+     * ShaderFactory.class.getResourceAsStream(name); BufferedReader br = new
+     * BufferedReader(new InputStreamReader(is)); String line = null; while
+     * ((line = br.readLine()) != null) {
+     *
+     * sb.append(line); sb.append('\n'); } is.close(); } catch (Exception e) {
+     * e.printStackTrace(); } System.out.println("Shader is " + sb.toString());
+     * return new String[]{sb.toString()}; } *
+     */
     // This compiles and loads the shader to the video card.
     // if there is a problem with the source the program will exit at this point.
     //
@@ -83,31 +72,48 @@ public final class ShaderUtils {
         int vertexShaderProgram;
         int fragmentShaderProgram;
         int shaderprogram;
+        
         vertexShaderProgram = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         fragmentShaderProgram = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+        System.out.println("We re here. VSP : " + vertexShaderProgram + " and FSP : " + fragmentShaderProgram);
         GL20.glShaderSource(vertexShaderProgram, vertexCode);
         GL20.glCompileShader(vertexShaderProgram);
+        //System.out.println("We re here. VC : "+vertexCode+" and FC : "+fragmentCode);
         GL20.glShaderSource(fragmentShaderProgram, fragmentCode);
         GL20.glCompileShader(fragmentShaderProgram);
         shaderprogram = GL20.glCreateProgram();
+        System.out.println("Create program seem be ok. Shader program is : " + shaderprogram);
         //
         GL20.glAttachShader(shaderprogram, vertexShaderProgram);
         GL20.glAttachShader(shaderprogram, fragmentShaderProgram);
         GL20.glLinkProgram(shaderprogram);
         GL20.glValidateProgram(shaderprogram);
+        System.out.println("ValidateProgram seem be ok");
         IntBuffer intBuffer = IntBuffer.allocate(1);
-        GL20.glGetProgram(shaderprogram, GL20.GL_LINK_STATUS, intBuffer);
-
+        System.out.println("capacity is : "+intBuffer.capacity());
+        System.out.println("Allocate seem be ok");
+        System.out.println("Try get program with : " + shaderprogram + " " + GL20.GL_LINK_STATUS + " " + intBuffer);
+        //GL20.glGetProgram(shaderprogram, GL20.GL_LINK_STATUS, intBuffer);
+        //TEST
+        //GL20.GL_LINK_STATUS or GL_INFO_LOG_LENGTH ?
+        if (GL20.glGetProgrami(shaderprogram, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
+            System.out.println("Problem here with get program");
+        }
+        System.out.println("Get program seem be ok");
         if (intBuffer.get(0) != 1) {
-            GL20.glGetProgram(shaderprogram, GL20.GL_INFO_LOG_LENGTH, intBuffer);
-            int size = intBuffer.get(0);
-            System.err.println("Program link error: ");
+            System.out.println("Try get program (in the if) with : " + shaderprogram + " " + GL20.GL_INFO_LOG_LENGTH + " " + intBuffer);
+           // GL20.glGetProgram(shaderprogram, GL20.GL_INFO_LOG_LENGTH, intBuffer);
+   
+            //int size = intBuffer.get(0); // capacity ??
+            // TEST
+            int size = intBuffer.capacity();  
+            System.err.println("Program link error: "+size);
             if (size > 0) {
                 ByteBuffer byteBuffer = ByteBuffer.allocate(size);
                 GL20.glGetProgramInfoLog(shaderprogram, intBuffer, byteBuffer);
-//                for (byte b : byteBuffer.array()) {
-//                    System.err.print((char) b);
-//                }
+               for (byte b : byteBuffer.array()) {
+                    System.err.print((char) b);
+                }
             } else {
                 System.out.println("Unknown");
             }
@@ -129,9 +135,9 @@ public final class ShaderUtils {
         GL20.glUseProgram(0);
     }
 
-      public static ShaderProg updateShader(ShaderProg prog) {
+    public static ShaderProg updateShader(ShaderProg prog) {
         int progID = -1;
-        System.out.println("updateShader:\n"+prog.getVertexSource() + "\n------\n"+prog.getFragmentSource());
+        System.out.println("updateShader:\n" + prog.getVertexSource() + "\n------\n" + prog.getFragmentSource());
         if (prog.isDirty()) {
             try {
                 System.out.println("AttachShaders");
@@ -140,24 +146,24 @@ public final class ShaderUtils {
                 System.out.println("Exception attachShaders");
                 Logger.getLogger(LWJGL_Renderer.class.getName()).log(Level.SEVERE, null, ex);
                 // Renderer or LWJGL_Renderer ?
-    
+
             }
             prog.setHandle(progID);
 
             GL20.glUseProgram(progID);
 
             for (Uniform uniform : prog.getAllUniforms()) {
-                System.out.println("uniform "+uniform.getName());
-                prog.setUniformLocation(uniform.getName(),GL20.glGetUniformLocation(progID, uniform.getName()));
+                System.out.println("uniform " + uniform.getName());
+                prog.setUniformLocation(uniform.getName(), GL20.glGetUniformLocation(progID, uniform.getName()));
             }
             for (Attribute attribute : prog.getAllAttributes()) {
-                System.out.println("attr "+attribute.getName());
-                prog.setAttributeLocation(attribute.getName(), GL20.glGetAttribLocation(progID, attribute.getName()) );
+                System.out.println("attr " + attribute.getName());
+                prog.setAttributeLocation(attribute.getName(), GL20.glGetAttribLocation(progID, attribute.getName()));
             }
             GL20.glUseProgram(0);
 
         }
-          return prog;
+        return prog;
     }
 
     // This compiles and loads the shader to the video card.
@@ -171,16 +177,18 @@ public final class ShaderUtils {
         int shaderprogram;
         vertexShaderProgram = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
         fragmentShaderProgram = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        
+
         GL20.glShaderSource(vertexShaderProgram, prog.getVertexSource());
         GL20.glCompileShader(vertexShaderProgram);
-        if (GL20.glGetShaderi(vertexShaderProgram, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
+        if (GL20.glGetShaderi(vertexShaderProgram, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
             System.err.println("Compile error of vertexshader");
+        }
 
         GL20.glShaderSource(fragmentShaderProgram, prog.getFragmentSource());
         GL20.glCompileShader(fragmentShaderProgram);
-        if (GL20.glGetShaderi(fragmentShaderProgram, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
+        if (GL20.glGetShaderi(fragmentShaderProgram, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
             System.err.println("Compile error of fragmentshader");
+        }
 
         //
         shaderprogram = GL20.glCreateProgram();
@@ -196,7 +204,7 @@ public final class ShaderUtils {
             GL20.glGetProgram(shaderprogram, GL20.GL_INFO_LOG_LENGTH, intBuffer);
 
             int size = intBuffer.get(0);
-            System.err.println("Program link error: "+size );
+            System.err.println("Program link error: " + size);
             if (size > 0) {
                 ByteBuffer byteBuffer = BufferTools.newByteBuffer(size);
                 GL20.glGetProgramInfoLog(shaderprogram, intBuffer, byteBuffer);
@@ -204,23 +212,20 @@ public final class ShaderUtils {
                 byte[] bytearray = new byte[byteBuffer.remaining()];
                 byteBuffer.get(bytearray);
                 System.err.println(bytearray.length);
-                String s = new String(bytearray,0,bytearray.length-1,Charset.forName("UTF-8") );
-                System.err.print("<<"+s+">>");
-/***
-                for (byte b : bytearray) {
-                    System.err.print(b+";");
-                }
-***/
+                String s = new String(bytearray, 0, bytearray.length - 1, Charset.forName("UTF-8"));
+                System.err.print("<<" + s + ">>");
+                /**
+                 * *
+                 * for (byte b : bytearray) { System.err.print(b+";"); } *
+                 */
                 System.err.println(" - End");
             } else {
                 System.out.println("Unknown");
             }
             System.exit(1);
         }
-                System.out.println("End of attachVFShader");
+        System.out.println("End of attachVFShader");
         return shaderprogram;
 
     }
-
-
 } // End of class ShaderUtils

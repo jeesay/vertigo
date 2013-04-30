@@ -82,7 +82,7 @@ public class LWJGL_Visitor implements Visitor {
     public void visit(Camera obj) {
         cam_ = obj;
         setModelMatrix(obj);
-      
+
         //glGetUniformLocation 
         //GL20.glUniformMatrix4(level, true, view);
 
@@ -153,8 +153,8 @@ public class LWJGL_Visitor implements Visitor {
     private void processShape(Shape obj) {
         boolean isIndexed = false;
         IBO ibo = null;
-        //ShaderProg glshader = new ShaderProg();
-        ShaderProg glshader = ShaderFactory.get("monochrome");
+        ShaderProg glshader = new ShaderProg();
+        // ShaderProg glshader = ShaderFactory.get("monochrome");
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
@@ -166,6 +166,8 @@ public class LWJGL_Visitor implements Visitor {
             obj.setDirty(Node.VBO, false);
         }
         // Material: shader
+
+
         if (obj.isDirty(Node.SHADER)) {
             glshader = processShader(obj);
             obj.setDirty(Node.SHADER, false);
@@ -179,23 +181,23 @@ public class LWJGL_Visitor implements Visitor {
          GL11.glVertex3f(-0.6f, 0f, 0f);
          GL11.glVertex3f(-0.5f, 0f, 0f);
          GL11.glVertex3f(1f, 0f, 0f);
-         GL11.glEnd();*/
-
+         GL11.glEnd();
+         */
 
         // Use Program
-         glshader = obj.getMaterial().getShaderMaterial();
+        glshader = obj.getMaterial().getShaderMaterial();
         GL20.glUseProgram(glshader.getHandle());
         ArrayList<Uniform> uniforms = glshader.getAllUniforms();
         for (Uniform uni : uniforms) {
             if (uni.getType().equals("view_matrix")) {
                 GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
-                GL20.glUniformMatrix4(uni.getHandle(), false,cam_.getProjection().toBuffer());
+                GL20.glUniformMatrix4(uni.getHandle(), false, cam_.getProjection().toBuffer());
             } else if (uni.getType().equals("proj_matrix")) {
                 GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
                 GL20.glUniformMatrix4(uni.getHandle(), false, cam_.getViewMatrix().toBuffer());
             } else if (uni.getType().equals("matrix")) {
                 GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
-                GL20.glUniformMatrix4(uni.getHandle(), false,obj.getMatrix().toBuffer());
+                GL20.glUniformMatrix4(uni.getHandle(), false, obj.getMatrix().toBuffer());
             }
         }
         // Update uniforms
@@ -242,51 +244,53 @@ public class LWJGL_Visitor implements Visitor {
             for (BO bo : obj.getGeometry().getBuffers()) {
                 if (bo instanceof VBO) {
                     VBO vbo = (VBO) bo;
-                    if (vbo.getType().equals(atribute.get(a).getVBOtype(atribute.get(a).getName()))) { //null exception ?
+                    System.out.println("VBO ! a=" + a);
+
+                    // if (vbo.getType().equals(atribute.get(a).getVBOtype(atribute.get(a).getName()))) { //null exception ?
+
+                    if (vbo.getType().equals(atribute.get(a).getType())) {
+                        System.out.println("first If ");
                         if (!vbo.isBound()) {
+                            System.out.println("second If ");
                             GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
+                            System.out.println("Bind Array");
                             // GL20.glGetAttribLocation(atribute.get(a).getHandle(), vbo.getType());
+
                             GL20.glEnableVertexAttribArray(atribute.get(a).getHandle()); //set the VBO's offset
 
+                            System.out.println("Enable Vertex Attrib Array ");
                             //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                            GL20.glVertexAttribPointer(vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuffer());
+
+
+
+                            //org.lwjgl.opengl.ARBVertexProgram.glVertexAttribPointerARB(vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuff());
+                            org.lwjgl.opengl.ARBVertexShader.glVertexAttribPointerARB(vbo.getOffset(), vbo.getStride(), GL11.GL_FLOAT, false, 0, 0);
+                            // why ?
+                            // because : http://lwjgl.org/forum/index.php?topic=2971.0;wap2
+
+                            // maybe : // GL20.glVertexAttribPointer(vbo.getOffset(), vbo.capacity(), false, vbo.getStride(), vbo.getFloatBuff());
+
+                            // 	glVertexAttribPointerARB(int index, int size, boolean normalized, int stride, java.nio.FloatBuffer buffer) 
+                            //GL20.glvertexattribpoi
+
+
+
+                            System.out.println("Enable Vertex Attrib Pointer ");
                             // i or vbo.getOffset?
                             //GL20.glVertexAttribPointer(i, vbo.capacity(), vbo.getSize(), false, vbo.getStride(),vbo.getFloatBuffer());
                             //GL20.glVertexAttribPoin
 
                             vbo.setBound(true);
+                            System.out.println("set Bound ");
                         }
                     }
-
-
-
 
                     //String type;
                     //int stride =0;
                     //ArrayList<String> types = (ArrayList<String>) vbo.getProps().keys();
                     // for (String type : props.getkeys() ) {
                     //   for (String attribute : allAttributes) {
-                    /* 
-                     int numtype = calcIndex(type);
-                     switch (numtype) {
-                     case 207: // V3F
-                     if (attribute.equals("aVertexPosition")) {
-                     //gl.getAttribLocation(shaderProgram, "aVertexPosition");
-                     GL20.glGetAttribLocation(glshader.getHandle(), "aVertexPosition");
-                     GL20.glEnableVertexAttribArray(i); //set the vertex's position
 
-                     //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                     GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
-                     ShaderUtils.useShader(glshader.getHandle());
-                                    
-                     }
-                     //aVertexPosition
-                     case 189: // C4F
-                     //aVertexColor
-                     case 204: // T2F
-                     //aTexture
-                     default: // Do nothing  
-                     }*/
                     // }
                     //   if (vbo.IsInterleaved()){
                     //     stride+=vbo.getStride(type);
@@ -313,12 +317,15 @@ public class LWJGL_Visitor implements Visitor {
                     // glshader.getAttributeLocation(allAttributes.get(i))
 
                 } else if (bo instanceof IBO) {
+                    System.out.println("IBO ! a=" + a);
                     ibo = (IBO) bo;
                     GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, bo.getHandle());
                     isIndexed = true;
+                    GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
                 }
             }
             a++;
+            System.out.println("end loop ! a=" + a);
         }
 // Draw
         if (isIndexed) {
@@ -337,8 +344,8 @@ public class LWJGL_Visitor implements Visitor {
         //int count = obj.getGeometry().getCount();
         int count = obj.getGeometry().getCount();
         IntBuffer bufferid = BufferTools.newIntBuffer(count);
-        System.out.println(" count is : " + count+" and bufferid : "+bufferid);
-         
+        System.out.println(" count is : " + count + " and bufferid : " + bufferid);
+
         GL15.glGenBuffers(bufferid);
         int i = 0;
         for (BO bo : obj.getGeometry().getBuffers()) {
@@ -348,45 +355,57 @@ public class LWJGL_Visitor implements Visitor {
             bo.setHandle(handle);
             //or bo.setHandle(i); ??
             i++;
-            System.out.println("Handle is : " + bo.getHandle());
+            System.out.println("Handle is ! : " + bo.getHandle());
 
             if (bo instanceof IBO) {
+                System.out.println("Here IBO ! ");
                 IBO ibo = (IBO) bo;
                 // bind a buffer
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, handle);
+                System.out.println("Here 1 ! ");
                 GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, ibo.getIntBuffer(), GL15.GL_STATIC_DRAW);
+                System.out.println("Here 2 ! ");
                 // release ibo
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+                System.out.println("Here 3 ! ");
             } else {
+                System.out.println(" VBO --");
                 VBO vbo = (VBO) bo;
                 // bind a buffer
                 GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, handle);
-                GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vbo.getFloatBuffer(), GL15.GL_STATIC_DRAW);
+                System.out.println(" test --");
+                GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vbo.getFloatBuff(), GL15.GL_STATIC_DRAW);
+                System.out.println(" test again *--");
                 // release vbo
                 GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+                System.out.println("Released VBO");
             }
         }
+        System.out.println("Here for loop ! i=" + i);
     }
 
     private ShaderProg processShader(Shape obj) {
         int handle;
         ShaderProg glshader = obj.getMaterial().getShaderMaterial();
         // compile once
-        System.out.println("The handle 1 : "+glshader.getHandle());
+        System.out.println("The handle 1 : " + glshader.getHandle());
+        GL20.glEnableVertexAttribArray(0);
         if (glshader.getHandle() == ShaderProg.UNKNOWN) {
-            glshader.loadVertexShader();
-            System.out.println("The handle 2 : "+glshader.getHandle());
+            //glshader.loadVertexShader();
+            //TEST
+            System.out.println("The handle 2 : " + glshader.getHandle());
             try {
                 handle = ShaderUtils.attachShaders(glshader.getVertexSource(), glshader.getFragmentSource());
-                 System.out.println("The handle 4 : "+handle);
+                System.out.println("The handle 4 : " + handle);
                 glshader.setHandle(handle);
-                System.out.println("The handle 5  : "+glshader.getHandle());
+                System.out.println("The handle 5  : " + glshader.getHandle());
             } catch (Exception e) {
                 IJ.log("Error with the Shader");
             } //Compile, Link error
         }
 
-        ShaderUtils.updateShader(glshader);
+        //ShaderUtils.updateShader(glshader);
+        // TEST
         return glshader;
     }
 
