@@ -101,15 +101,18 @@ public class Geometry {
      * (coordinates, normal, colors,etc.).
      */
     public void addBuffer(String type, float[] data) {
-        //FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
+       // FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         //buf.put(data);
         //buf.rewind();
+
         VBO vbo = new VBO(type);
         //vbo.setFloatBuffer(type, buf);
-        //buffers.add(vbo);
         
+        System.out.println("VBO created !!!");
         buffdata=new BufferData(data);
         vbo.setBuffData(buffdata);
+        buffers.add(vbo);
+        
     }
 
     /**
@@ -150,6 +153,7 @@ public class Geometry {
         buf.rewind();
         IBO ibo = new IBO();
         ibo.setIntBuffer(buf);
+        System.out.println("IBO ajouté");
         buffers.add(ibo);
     }
 

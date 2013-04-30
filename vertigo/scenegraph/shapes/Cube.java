@@ -34,75 +34,65 @@ import vertigo.scenegraph.Shape;
  *
  * @author Jean-Christophe Taveau
  *
- **/
+ *
+ */
 public class Cube extends Shape {
 
     private int type;
     private float w_, h_, d_;
-
-    private float[] wireVertices = {  
+    private float[] wireVertices = {
         // Front face
-        -1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-   
-         // Back face
+        -1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f,
+        // Back face
         -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-         1.0f,  1.0f, -1.0f,
-         1.0f, -1.0f, -1.0f
+        -1.0f, 1.0f, -1.0f,
+        1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f
     };
-    private int[] wireIndices = {0,1,2,3,0,4,5,3,5,6,2,6,7,1,7,4};
-
+    private int[] wireIndices = {0, 1, 2, 3, 0, 4, 5, 3, 5, 6, 2, 6, 7, 1, 7, 4};
     private float[] flatvertices = {
-  // Front face: white
-  -1.0f, -1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
-   1.0f, -1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
-   1.0f,  1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
-  -1.0f,  1.0f,  1.0f, 1.0f,  1.0f,  1.0f,  1.0f,
-   
-  // Back face: red
-  -1.0f, -1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
-  -1.0f,  1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
-   1.0f,  1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
-   1.0f, -1.0f, -1.0f, 1.0f,  0.0f,  0.0f,  1.0f,
-   
-  // Top face: green
-  -1.0f,  1.0f, -1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
-  -1.0f,  1.0f,  1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
-   1.0f,  1.0f,  1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
-   1.0f,  1.0f, -1.0f, 0.0f,  1.0f,  0.0f,  1.0f,
-   
-  // Bottom face: blue
-  -1.0f, -1.0f, -1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
-   1.0f, -1.0f, -1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
-   1.0f, -1.0f,  1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
-  -1.0f, -1.0f,  1.0f, 0.0f,  0.0f,  1.0f,  1.0f,
-   
-  // Right face: yellow
-   1.0f, -1.0f, -1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
-   1.0f,  1.0f, -1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
-   1.0f,  1.0f,  1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
-   1.0f, -1.0f,  1.0f, 1.0f,  1.0f,  0.0f,  1.0f,
-   
-  // Left face: purple
-  -1.0f, -1.0f, -1.0f, 1.0f,  0.0f,  1.0f,  1.0f,
-  -1.0f, -1.0f,  1.0f, 1.0f,  0.0f,  1.0f,  1.0f,
-  -1.0f,  1.0f,  1.0f, 1.0f,  0.0f,  1.0f,  1.0f,
-  -1.0f,  1.0f, -1.0f, 1.0f,  0.0f,  1.0f,  1.0f
+        // Front face: white
+        -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        // Back face: red
+        -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        // Top face: green
+        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        // Bottom face: blue
+        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        // Right face: yellow
+        1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        // Left face: purple
+        -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f
     };
-
     float[] flatIndices = {
-       0,  1,  2,      0,  2,  3,    // front
-       4,  5,  6,      4,  6,  7,    // back
-       8,  9, 10,      8, 10, 11,   // top
-      12, 13, 14,     12, 14, 15,   // bottom
-      16, 17, 18,     16, 18, 19,   // right
-      20, 21, 22,     20, 22, 23    // left
+        0, 1, 2, 0, 2, 3, // front
+        4, 5, 6, 4, 6, 7, // back
+        8, 9, 10, 8, 10, 11, // top
+        12, 13, 14, 12, 14, 15, // bottom
+        16, 17, 18, 16, 18, 19, // right
+        20, 21, 22, 20, 22, 23 // left
     };
-
-
     public static final int WIRE = 0;
     public static final int FLAT = 1;
     public static final int CUBE = 2;
@@ -114,30 +104,27 @@ public class Cube extends Shape {
         w_ = 1.0f;
         h_ = 1.0f;
         d_ = 1.0f;
-}
+    }
 
     public Cube(String name) {
         super(name);
-        if (name.equals("Wire") ) {
+        if (name.equals("Wire")) {
             setDrawingStyle("LINES");
             setType(WIRE);
-        }
-        else if  (name.equals("Flat") ) {
+        } else if (name.equals("Flat")) {
             setDrawingStyle("TRIANGLES");
             setType(FLAT);
-        }
-        else if  (name.equals("Cube") ) {
-            setDrawingStyle("TRIANGLES"); 
+        } else if (name.equals("Cube")) {
+            setDrawingStyle("TRIANGLES");
             setType(CUBE);
-        }
-        else{
+        } else {
             setDrawingStyle("POINTS");
             setType(WIRE);
         }
         w_ = 1.0f;
         h_ = 1.0f;
         d_ = 1.0f;
-}
+    }
 
     public void setType(int type) {
         this.type = type;
@@ -151,21 +138,22 @@ public class Cube extends Shape {
 
     @Override
     public Geometry getGeometry() {
-        if (geo.getBuffers().isEmpty() )
-           switch (this.type) {
-           case WIRE : 
-               create_wirecube();
-               break;
-           case FLAT : 
-               create_flatcube();
-               break;
-           case CUBE : 
-               create_texcube();
-               break;
-           default : 
-               create_flatcube();
-               break;
-           }
+        if (geo.getBuffers().isEmpty()) {
+            switch (this.type) {
+                case WIRE:
+                    create_wirecube();
+                    break;
+                case FLAT:
+                    create_flatcube();
+                    break;
+                case CUBE:
+                    create_texcube();
+                    break;
+                default:
+                    create_flatcube();
+                    break;
+            }
+        }
         return geo;
     }
 
@@ -173,51 +161,47 @@ public class Cube extends Shape {
         System.out.println("Create wirecube");
         // 1- modify dimension
         if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
-/**
-            for (int i =0; i<wireVertices.length;i+=3) {
-               wireVertices[i  ] *= w_;
-               wireVertices[i+1] *= h_;
-               wireVertices[i+2] *= d_;
-            }
-**/
+            /**
+             * for (int i =0; i<wireVertices.length;i+=3) { wireVertices[i ] *=
+             * w_; wireVertices[i+1] *= h_; wireVertices[i+2] *= d_; }
+*
+             */
         }
-            for (int i =0; i<wireVertices.length;i+=3) 
-               System.out.println(wireVertices[i  ] +" "+wireVertices[i+1] +" "+wireVertices[i+2]);
+        for (int i = 0; i < wireVertices.length; i += 3) {
+            System.out.println(wireVertices[i] + " " + wireVertices[i + 1] + " " + wireVertices[i + 2]);
+        }
         // 2- create geometry
-              System.out.println("Create geometry");
-        geo.addBuffer("V3F",wireVertices);
+        System.out.println("Create geometry");
+        geo.addBuffer("V3F", wireVertices);
         System.out.println("geometry Created");
         geo.addIndices(wireIndices);
         // 3- create material
         // use default
-      
+
     }
 
     private void create_flatcube() {
-           if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
-            for (int i =0; i<flatvertices.length;i+=3) {
-               flatvertices[i  ] *= w_;
-               flatvertices[i+1] *= h_;
-               flatvertices[i+2] *= d_;
+        if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
+            for (int i = 0; i < flatvertices.length; i += 3) {
+                flatvertices[i] *= w_;
+                flatvertices[i + 1] *= h_;
+                flatvertices[i + 2] *= d_;
             }
         }
-           // 2- create geometry
-           geo.setVertices(new String[]{"V3F","C4F"},flatvertices);
-           // 3- create material
-           material.setShaderMaterial("flat");
+        // 2- create geometry
+        geo.setVertices(new String[]{"V3F", "C4F"}, flatvertices);
+        // 3- create material
+        material.setShaderMaterial("flat");
     }
 
     private void create_texcube() {
-           if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
-            for (int i =0; i<wireVertices.length;i+=3) {
-               wireVertices[i  ] *= w_;
-               wireVertices[i+1] *= h_;
-               wireVertices[i+2] *= d_;
+        if (w_ != 1.0f && h_ != 1.0f && d_ != 1.0f) {
+            for (int i = 0; i < wireVertices.length; i += 3) {
+                wireVertices[i] *= w_;
+                wireVertices[i + 1] *= h_;
+                wireVertices[i + 2] *= d_;
             }
         }
-           geo.setVertices("V3F",wireVertices);
+        geo.setVertices("V3F", wireVertices);
     }
-
-
-    
 } // End of class Cube
