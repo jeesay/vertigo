@@ -29,10 +29,13 @@ package vertigo.graphics.lwjgl;
 import java.awt.Dimension;
 import java.awt.PopupMenu;
 import java.util.concurrent.atomic.AtomicReference;
+import static org.lwjgl.util.glu.GLU.gluLookAt;
+import static org.lwjgl.util.glu.GLU.gluPerspective;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.World;
 
@@ -53,6 +56,8 @@ public class LWJGL_Renderer{
     private Camera cam;
     private Dimension newDim;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
+    private int display=0;
+    LWJGL_VisitorTwo LWJGLVisitor = null;
 
     public void setBackgroundColor(float red, float green, float blue) {
         System.out.println("Set Background Color");
@@ -76,8 +81,25 @@ public class LWJGL_Renderer{
         System.out.println("display Scene Visitor");
         GL11.glClearColor(red, green, blue, 1.0f);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+        
+        
+        //projection matrix
+       GL11.glMatrixMode(GL11.GL_PROJECTION_MATRIX);
+       GL11.glLoadIdentity();
+        gluPerspective(50, 800 / (float) 800, .1f, 50);
+        
+        
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+        gluLookAt(0.0f,0.0f,-0.5f,0.0f,0.0f,-1.0f,0.0f,1.0f,0.0f);
+         
         // visitor
-         world.accept(new LWJGL_Visitor());
+        if (display==0){
+            System.out.println("Display 0");
+           LWJGLVisitor = new LWJGL_VisitorTwo();  
+           display++;
+        }
+        world.accept(LWJGLVisitor);
     }
 
     void syncViewportSize(int i, int i0, int width, int height) {

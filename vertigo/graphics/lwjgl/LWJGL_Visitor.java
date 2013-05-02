@@ -153,7 +153,7 @@ public class LWJGL_Visitor implements Visitor {
     private void processShape(Shape obj) {
         boolean isIndexed = false;
         IBO ibo = null;
-        ShaderProg glshader = new ShaderProg();
+       ShaderProg glshader = new ShaderProg();
         // ShaderProg glshader = ShaderFactory.get("monochrome");
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
@@ -187,6 +187,9 @@ public class LWJGL_Visitor implements Visitor {
         // Use Program
         glshader = obj.getMaterial().getShaderMaterial();
         GL20.glUseProgram(glshader.getHandle());
+       
+        
+        
         ArrayList<Uniform> uniforms = glshader.getAllUniforms();
         for (Uniform uni : uniforms) {
             if (uni.getType().equals("view_matrix")) {
@@ -200,6 +203,7 @@ public class LWJGL_Visitor implements Visitor {
                 GL20.glUniformMatrix4(uni.getHandle(), false, obj.getMatrix().toBuffer());
             }
         }
+       
         // Update uniforms
         // GL30.glUniform2u(bo.getHandle(), vbo.getFloatBuffer());
 
@@ -240,7 +244,7 @@ public class LWJGL_Visitor implements Visitor {
 
 
         int a = 0;
-        while (a < atribute.size()) {
+       while (a < atribute.size()) {
             for (BO bo : obj.getGeometry().getBuffers()) {
                 if (bo instanceof VBO) {
                     VBO vbo = (VBO) bo;
