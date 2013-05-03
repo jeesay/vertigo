@@ -157,15 +157,15 @@ public class Vertigo_Viewer implements PlugIn {
 
         } else if (render.equals("LWJGL")) {
             try {
-              /*   graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
+              graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
                  graphWin.setBackgroundColor(red, green, blue);
                  graphWin.setDimension(window_width, window_height);
                  graphWin.setTitle(title_);
                  graphWin.setWorld(getWorld());
-                 graphWin.setVisible(true);*/
+                 graphWin.setVisible(true);
                 // TheQuadExampleDrawElements tqe= new TheQuadExampleDrawElements();
                // SimpleInterleavedVboExample s = new SimpleInterleavedVboExample();
-                Test t=new Test();
+                //Test t=new Test();
 
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download LWJGL or check your ClassPath.");
