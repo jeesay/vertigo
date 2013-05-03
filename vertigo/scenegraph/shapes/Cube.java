@@ -164,7 +164,7 @@ public class Cube extends Shape {
             /**
              * for (int i =0; i<wireVertices.length;i+=3) { wireVertices[i ] *=
              * w_; wireVertices[i+1] *= h_; wireVertices[i+2] *= d_; }
-*
+             *
              */
         }
         for (int i = 0; i < wireVertices.length; i += 3) {

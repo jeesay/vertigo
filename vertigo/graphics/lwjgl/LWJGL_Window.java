@@ -96,9 +96,7 @@ public class LWJGL_Window implements Window3D {
 
     }
 
-    public static void main(String args[]) {
-        LWJGL_Window lwjgl_Window = new LWJGL_Window();
-    }
+ 
 
     private void createWindow() {
         frame = new Frame(win_title);
