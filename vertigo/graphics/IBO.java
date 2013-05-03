@@ -40,6 +40,7 @@ public class IBO extends BO {
   
   public void setIntBuffer(IntBuffer buf) {
         buffer = buf;
+       // buffer.flip();
         this.type = "INDEX";
         this.stride = 0;
     }
