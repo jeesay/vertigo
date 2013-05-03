@@ -43,7 +43,9 @@ import ij.plugin.PlugIn;
 import ij.process.ImageProcessor;
 import java.util.ArrayList;
 import java.util.Iterator;
-
+import org.lwjgl.LWJGLException;
+import vertigo.graphics.lwjgl.Test;
+import vertigo.graphics.lwjgl.TheQuadExampleDrawElements;
 
 public class Vertigo_Viewer implements PlugIn {
 
@@ -106,7 +108,7 @@ public class Vertigo_Viewer implements PlugIn {
      * Displays the window and triggers the OpenGL rendering in an infinite
      * loop.
      */
-    public void show() {
+    public void show() throws LWJGLException {
         try {
             System.out.println("LWJGL Renderer created");
             graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
@@ -144,55 +146,56 @@ public class Vertigo_Viewer implements PlugIn {
      *
      * @param name of the rendering engine
      */
-    public void show(String render) {
+    public void show(String render) throws LWJGLException {
         if (render.equals("G2D")) {
             graphWin = (Window3D) new vertigo.graphics.G2D.G2D_Window();
             graphWin.setBackgroundColor(red, green, blue);
-        graphWin.setDimension(window_width, window_height);
-        graphWin.setTitle(title_);
-        graphWin.setWorld(getWorld());
-        graphWin.setVisible(true);
-            
+            graphWin.setDimension(window_width, window_height);
+            graphWin.setTitle(title_);
+            graphWin.setWorld(getWorld());
+            graphWin.setVisible(true);
+
         } else if (render.equals("LWJGL")) {
             try {
-                graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
+              /*   graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
                  graphWin.setBackgroundColor(red, green, blue);
-        graphWin.setDimension(window_width, window_height);
-        graphWin.setTitle(title_);
-        graphWin.setWorld(getWorld());
-        graphWin.setVisible(true);
+                 graphWin.setDimension(window_width, window_height);
+                 graphWin.setTitle(title_);
+                 graphWin.setWorld(getWorld());
+                 graphWin.setVisible(true);*/
+                // TheQuadExampleDrawElements tqe= new TheQuadExampleDrawElements();
+               // SimpleInterleavedVboExample s = new SimpleInterleavedVboExample();
+                Test t=new Test();
 
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download LWJGL or check your ClassPath.");
-               
             }
 
         } else if (render.equals("JOGL")) {
             try {
-       
+
                 graphWin = new vertigo.graphics.jogl.JOGL_Window();
-        
-                  graphWin.setBackgroundColor(red, green, blue);
-        graphWin.setDimension(window_width, window_height);
-        graphWin.setTitle(title_);
-        graphWin.setWorld(getWorld());
-        graphWin.setVisible(true);
-         
+
+                graphWin.setBackgroundColor(red, green, blue);
+                graphWin.setDimension(window_width, window_height);
+                graphWin.setTitle(title_);
+                graphWin.setWorld(getWorld());
+                graphWin.setVisible(true);
+
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
-                
+
             }
         } else if (render.equals("TEXT")) {
             graphWin = (Window3D) new vertigo.graphics.text.Text_Renderer(camera_, scene_);
             graphWin.setBackgroundColor(red, green, blue);
-        graphWin.setDimension(window_width, window_height);
-        graphWin.setTitle(title_);
-        graphWin.setWorld(getWorld());
-        graphWin.setVisible(true);
+            graphWin.setDimension(window_width, window_height);
+            graphWin.setTitle(title_);
+            graphWin.setWorld(getWorld());
+            graphWin.setVisible(true);
 
         }
     }
-
 
     /**
      * Gets the world (aka root) of the scene graph.
@@ -226,7 +229,7 @@ public class Vertigo_Viewer implements PlugIn {
         ve.setBackgroundColor(20, 200, 80);
         ve.setTitle("Mon titre");
         ve.show("LWJGL");
-        
+
         //test();
     }
 
@@ -314,7 +317,7 @@ public class Vertigo_Viewer implements PlugIn {
 
         world_.add(stage);
 
-       ArcBall mouseRot = new ArcBall();
+        ArcBall mouseRot = new ArcBall();
         stage.add(mouseRot);
         mouseRot.add(scene_);
         world_.add(bs);
@@ -327,5 +330,4 @@ public class Vertigo_Viewer implements PlugIn {
         lights.add(new Light("spot"));
 
     }
-
 }// end of class Vertigo_Viewer
