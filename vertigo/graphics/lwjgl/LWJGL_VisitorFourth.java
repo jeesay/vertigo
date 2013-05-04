@@ -4,29 +4,23 @@
  */
 package vertigo.graphics.lwjgl;
 
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Date;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.ARBBufferObject.GL_STATIC_DRAW_ARB;
 import static org.lwjgl.opengl.ARBBufferObject.glBindBufferARB;
 import static org.lwjgl.opengl.ARBBufferObject.glBufferDataARB;
-import static org.lwjgl.opengl.ARBBufferObject.glDeleteBuffersARB;
 import static org.lwjgl.opengl.ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB;
 import static org.lwjgl.opengl.ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB;
 import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.GL_VERTEX_ARRAY;
-import static org.lwjgl.opengl.GL11.glDisableClientState;
+import static org.lwjgl.opengl.GL11.glColorPointer;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL11.glVertexPointer;
 import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
 import vertigo.graphics.BO;
-import vertigo.graphics.BufferTools;
 import vertigo.graphics.IBO;
 import vertigo.graphics.VBO;
 import vertigo.graphics.Visitor;
@@ -41,17 +35,18 @@ import vertigo.scenegraph.Stage;
 import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
-import static org.lwjgl.util.glu.GLU.gluLookAt;
 
 /**
  *
- * @author tomo
+ * @author Clement DELESTRE
  */
 public class LWJGL_VisitorFourth implements Visitor {
 
     private Camera cam_;
     private boolean isIndexed = false;
     private int iboid;
+    private IBO ibo = null;
+    private VBO vbo3f = null;
 
     @Override
     public void visit(BackStage obj) {
@@ -128,7 +123,7 @@ public class LWJGL_VisitorFourth implements Visitor {
 
     private void processShape(Shape obj) {
         // boolean isIndexed = false;
-        IBO ibo = null;
+
 
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
@@ -136,18 +131,18 @@ public class LWJGL_VisitorFourth implements Visitor {
             obj.setDirty(Node.MATRIX, false);
         }
         // Geometry: VBO
-         // if (obj.isDirty(Node.VBO)) {
+        // if (obj.isDirty(Node.VBO)) {
         processBO(obj);
         obj.setDirty(Node.VBO, false);
-       // }
+        // }
 
     }
 
     private void processBO(Shape obj) {
-        
+
         ////// ROTATE
-        
-           int framerate_count = 0;
+
+        int framerate_count = 0;
         long framerate_timestamp = new Date().getTime();
         double rotate_x, rotate_y, rotate_z;
 
@@ -192,25 +187,26 @@ public class LWJGL_VisitorFourth implements Visitor {
                 0.0,
                 1.0);
 ///// END ROTATE
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
         int nbBO = obj.getGeometry().getNumberBO(); //return 2 for the cube (1 vbo + 1 ibo)
         IntBuffer ib = BufferUtils.createIntBuffer(nbBO);
         GL15.glGenBuffers(ib);
         System.out.println(" Number of BO is : " + nbBO);
 
-        IBO ibo = null;
+
+        int capacity = 0;
         int i = 0;
         for (BO bo : obj.getGeometry().getBuffers()) {
             int boHandle = ib.get(i);
@@ -225,19 +221,34 @@ public class LWJGL_VisitorFourth implements Visitor {
                 ibo = (IBO) bo;
                 glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, boHandle);
                 glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ibo.getIntBuffer(), GL_STATIC_DRAW_ARB);
-System.out.println("buff : "+ibo.getIntBuffer());
+                System.out.println("buff : " + ibo.getIntBuffer());
                 //glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 
             } else {
+
+
                 VBO vbo = (VBO) bo;
-                GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-                // bug risk here
+                enable(vbo);
+               /* if (vbo.getType().contains("V")) {
+                    vbo3f = vbo;
+                    GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+                    // bug risk here
+                }
+
+
+                if (vbo.getType().contains("C")) {
+                    GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+                    // Test the color
+                }*/
+
 
                 glBindBufferARB(GL_ARRAY_BUFFER_ARB, boHandle);
                 glBufferDataARB(GL_ARRAY_BUFFER_ARB, vbo.getFloatBuff(), GL_STATIC_DRAW_ARB);
-                glVertexPointer(vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
+                pointer(vbo);
+                // glVertexPointer(vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
                 System.out.println("Size of VBO : " + vbo.getSize() + " Stride of VBO : " + vbo.getStride());
-System.out.println("buff : "+vbo.getFloatBuff());
+                System.out.println("buff : " + vbo.getFloatBuff());
+                capacity = vbo.capacity();
                 //glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
             }
@@ -245,20 +256,22 @@ System.out.println("buff : "+vbo.getFloatBuff());
         if (isIndexed) { // draw with index
             System.out.println("isIndexed is true, style is " + obj.getDrawingStyle());
             System.out.println("Size of IBO :  " + ibo.getSize());
-            glDrawElements(GL11.GL_LINE_LOOP, /* elements */ ibo.getSize(), GL_UNSIGNED_INT, 0L);
+            glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), /* elements */ ibo.getSize(), GL_UNSIGNED_INT, 0L);
             // glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
             // glDisableClientState(GL_VERTEX_ARRAY);
-            System.out.println("Here for loop ! i=" + i);
+
 
         } else {
             // draw withouh index
 
-            System.out.println("isIndexed is false");
-            GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, obj.getGeometry().getCount());
+            System.out.println("isIndexed is false and capacity is " + capacity);
+            GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, capacity / vbo3f.getStride());
+
             //GL20.glDisableVertexAttribArray(0);
             // GL30.glBindVertexArray(0);
         }
-       // glDeleteBuffersARB(ib);
+        // glDeleteBuffersARB(ib);
+        System.out.println("Here for loop ! i=" + i);
     }
 
     private int getOpenGLStyle(String vertigo_style) {
@@ -269,6 +282,7 @@ System.out.println("buff : "+vbo.getFloatBuff());
             case 1116: // LINES_ADJACENCY
                 return GL32.GL_LINES_ADJACENCY;
             case 705: // LINE_LOOP
+                System.out.println("Here we have LINE_LOOP");
                 return GL11.GL_LINE_LOOP;
             case 793: // LINE_STRIP
                 return GL11.GL_LINE_STRIP;
@@ -306,4 +320,31 @@ System.out.println("buff : "+vbo.getFloatBuff());
         }
         return index;
     }
-}
+
+    /**
+     * Attrib the good type of pointer
+     * @param vbo
+     *
+     */
+    private void pointer(VBO vbo) {
+        if (vbo.getType().contains("V")) {
+            glVertexPointer(vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
+        } else if (vbo.getType().contains("C")) {
+            glColorPointer(vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
+        }
+    }
+
+    /**
+     * Enable the good type of VBO
+     * @param vbo
+     */
+    private void enable(VBO vbo) {
+        if (vbo.getType().contains("V")) {
+            vbo3f = vbo;
+            GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+        }
+        if (vbo.getType().contains("C")) {
+            GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+        }
+    }
+} // end of class LWJGL_Visitor

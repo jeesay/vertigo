@@ -33,6 +33,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -60,7 +62,7 @@ import vertigo.graphics.event.Signal;
 import vertigo.graphics.event.MouseSignal;
 import vertigo.graphics.event.TimerObserver;
 
-public class LWJGL_Window implements Window3D {
+public class LWJGL_Window implements Window3D, MouseWheelListener {
 
     private int width = 640;
     private int height = 480;
@@ -92,18 +94,18 @@ public class LWJGL_Window implements Window3D {
         mouse_event = new MouseSignal();
         key_event = new KeyboardSignal();
         allevent = new Signal();
+        //Mouse.setGrabbed(true);
+
         // loadObserver(); 
 
     }
-
- 
 
     private void createWindow() {
         frame = new Frame(win_title);
         frame.setLayout(new BorderLayout());
         final Canvas canvas = new Canvas();
         System.out.println("createWindow");
-
+        canvas.addMouseWheelListener(this);
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -229,21 +231,48 @@ public class LWJGL_Window implements Window3D {
     private void pollInput() {
 
 
+
         mouse_event.setWheel((int) Math.signum(Mouse.getDWheel()));
         mouse_event.setButton(0);
         mouse_event.setXY(Mouse.getX(), Mouse.getY());
 
         if (Mouse.isButtonDown(0)) {
+            int x = Mouse.getDX();
+            int y = Mouse.getDY();
+
             mouse_event.setButton(Signal.BUTTON_LEFT);
             mouse_event.setButtonStatus(Signal.PRESSED);
+            mouse_event.setWheel(0);
+
+
+            mouse_event.setXY(x, y);
+            mouse_event.setButton(Signal.BUTTON_LEFT);
+            System.out.println("dragged " +x + " " + y);
+            mouseDispatcher.fireUpdate(mouse_event);
+
             //System.out.println(mouse_event);
         } else if (Mouse.isButtonDown(1)) {
             mouse_event.setButton(Signal.BUTTON_RIGHT);
+            mouse_event.setWheel(0);
             //System.out.println(mouse_event);
         } else if (Mouse.isButtonDown(2)) {
             mouse_event.setButton(Signal.BUTTON_MIDDLE);
-            // System.out.println(mouse_event);
+            mouse_event.setWheel(0);
+            System.out.println(mouse_event);
+            System.out.println("MIDDLE");
         }
+
+
+
+        System.out.println("Grab" + Mouse.isGrabbed());
+        int dWheel = Mouse.getDWheel(); //don't work
+        System.out.println("The WHEEL : " + dWheel);
+        if (dWheel < 0) {
+            System.out.println("DOWN");
+        } else if (dWheel > 0) {
+            System.out.println("UP");
+        }
+
 
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
@@ -307,5 +336,24 @@ public class LWJGL_Window implements Window3D {
         for (Node child : obj.getChildren()) {
             loadObserver(child);
         }
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent mwe) {
+        System.out.println("HERE ************************     1    ");
+        if (mwe.getWheelRotation() < 0) {
+            System.out.println("HERE ************************     2");
+            System.out.println("Rotated Up... " + mwe.getWheelRotation());
+            mouse_event.setWheel(Signal.WHEEL_UP);
+            mouse_event.setButton(0);
+            System.out.println(mouse_event);
+        } else {
+            System.out.println("Rotated Down... " + mwe.getWheelRotation());
+            mouse_event.setWheel(Signal.WHEEL_DOWN);
+            mouse_event.setButton(0);
+            System.out.println(mouse_event);
+            System.out.println("HERE ************************    3");
+        }
+        mouseDispatcher.fireUpdate(mouse_event);
     }
 } // end of class LWJGL_Window

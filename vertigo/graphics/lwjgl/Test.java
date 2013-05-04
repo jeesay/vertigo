@@ -135,8 +135,6 @@ public class Test {
         vBuffer.put(-0.5f).put(0.5f).put(-0.5f);
         vBuffer.put(0.5f).put(0.5f).put(-0.5f);
         vBuffer.put(0.5f).put(-0.5f).put(-0.5f);
-
-
         vBuffer.flip();
 
         //
@@ -171,7 +169,7 @@ public class Test {
         //int iHandle = ib.get(2);
         int iHandle = ib.get(1);
 
-
+        System.out.println(vHandle + " : vHandle et iHandle vaut : " + iHandle);
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         // glEnableClientState(GL11.GL_COLOR_ARRAY);
 
@@ -182,7 +180,7 @@ public class Test {
 
         //      glBindBufferARB(GL_ARRAY_BUFFER_ARB, cHandle);
 //        glBufferDataARB(GL_ARRAY_BUFFER_ARB, cBuffer, GL_STATIC_DRAW_ARB);
-        //    glColorPointer(3, GL_FLOAT, /* stride */ 3 << 2, 0L);
+           // glColorPointer(3, GL_FLOAT, /* stride */ 3 << 2, 0L);
 
 
         glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, iHandle);
@@ -192,16 +190,20 @@ public class Test {
         glDrawElements(GL11.GL_LINE_LOOP, /* elements */ 16, GL_UNSIGNED_INT, 0L);
         //gluLookAt(0.0f, -1.0f, 4.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15.0f);
 
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-        glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+        // glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+        //glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
         // glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-
+        //glDisableClientState(GL_VERTEX_ARRAY);
+        System.out.println("Debug print : " + iBuffer + vBuffer);
         // cleanup VBO handles
-        ib.put(0, vHandle);
+
+        //ib.put(0, vHandle);
+
+
         // ib.put(1, cHandle);
         //ib.put(2, cHandle);
-        glDeleteBuffersARB(ib);
+
+        //glDeleteBuffersARB(ib);
     }
 } // end of Test
 // www.tgustafson.com/2012/03/a-simple-lwjgl-interleaved-vbo-example/
