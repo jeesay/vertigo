@@ -30,16 +30,7 @@ import vertigo.scenegraph.Shape;
 
 /**
  * Class Pyramid
- *
- * @author Florin Buga
- * @author Olivier Catoliquot
- * @author Clement Delestre
- * @version 0.1
- *
-<<<<<<< HEAD
  * @author Jean-Christophe Taveau
-=======
->>>>>>> e679ec07b42b376145c0f6d07941e8d680408633
  */
 
 public class Pyramid extends Shape {
@@ -52,24 +43,24 @@ public class Pyramid extends Shape {
 
     float[] vertices = {
             // Front face
-             0.0f,  1.0f,  0.0f,
-            -1.0f, -1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f,
+             0.0f,  0.5f,  0.0f,
+            -0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f,  0.5f,
 
             // Right face
-             0.0f,  1.0f,  0.0f,
-             1.0f, -1.0f,  1.0f,
-             1.0f, -1.0f, -1.0f,
+             0.0f,  0.5f,  0.0f,
+             0.5f, -0.5f,  0.5f,
+             0.5f, -0.5f, -0.5f,
 
             // Back face
-             0.0f,  1.0f,  0.0f,
-             1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
+             0.0f,  0.5f,  0.0f,
+             0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
 
             // Left face
-             0.0f,  1.0f,  0.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f
+             0.0f,  0.5f,  0.0f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f,  0.5f
     };
 
     float[] colors = {
@@ -101,6 +92,7 @@ public class Pyramid extends Shape {
         w_ = 1.0f;
         h_ = 1.0f;
         d_ = 1.0f;
+        create_wirepyramid();
 }
 
     public Pyramid(String name) {
@@ -118,11 +110,12 @@ public class Pyramid extends Shape {
         h_ = 1.0f;
         d_ = 1.0f;
     }
-<<<<<<< HEAD
 
-    public void setType(int type) {
+
+public void setType(int type) {
         switch (type) {
         case WIRE:
+            type=WIRE;
             create_wirepyramid(); 
             break;
         default:
@@ -152,7 +145,6 @@ public class Pyramid extends Shape {
     private void create_pyramid() {
     }
 
-}
-=======
+
 } // End of class Pyramid
->>>>>>> e679ec07b42b376145c0f6d07941e8d680408633
+
