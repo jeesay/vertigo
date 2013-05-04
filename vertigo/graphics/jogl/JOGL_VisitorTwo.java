@@ -13,6 +13,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.util.glu.GLU;
 import vertigo.graphics.BO;
 import vertigo.graphics.BufferTools;
@@ -120,54 +121,39 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
     private void processShape(Shape obj) {
         // boolean isIndexed = false;
         IBO ibo = null;
-
+System.out.println("Process Shape");
         // PreProcessing
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
             obj.setDirty(Node.MATRIX, false);
         }
         // Geometry: VBO
-        if (obj.isDirty(Node.VBO)) {
+       // if (obj.isDirty(Node.VBO)) {
             processBO(obj);
             obj.setDirty(Node.VBO, false);
-        }
+       // }
 
-        for (BO bo : obj.getGeometry().getBuffers()) {
-            // GL gl = drawable.getGL();
-            if (bo instanceof IBO) {
-                if (isIndexed) {
-                    ibo = (IBO) bo;
-                    System.out.println("isIndexed is true");
-                    // gl.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getIntBuffer());
-                    // gl.gluLookAt(0.0f, 15.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-                    gl.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getSize(), gl.GL_UNSIGNED_INT, 0l);
-
-
-                } else {
-                    System.out.println("isIndexed is false");
-                    gl.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, obj.getGeometry().getCount());
-                }
-            }
-        }
 
     }
 
     private void processBO(Shape obj) {
         //IBO ibon = null;
-        int count = obj.getGeometry().getCount();
-        IntBuffer bufferid = BufferTools.newIntBuffer(count);
-        System.out.println(" count is : " + count + " and bufferid : " + bufferid);
-        // gl.glGenBuffers(bufferid);
-        gl.glGenBuffers(1, bufferid);
+        
+          int nbBO = obj.getGeometry().getNumberBO(); //return 2 for the cube (1 vbo + 1 ibo)
+    
+         System.out.println(" Number of BO is : " + nbBO);
+        //int[] buffer = new int[nbBO]; 
+        IntBuffer buffer = IntBuffer.allocate(nbBO); 
+
+   
         int i = 0;
+        
         for (BO bo : obj.getGeometry().getBuffers()) {
             // get ID
-            int handle = bufferid.get(i);
-            System.out.println("ID is : " + handle);
-            bo.setHandle(handle);
-            //or bo.setHandle(i); ??
+            gl.glGenBuffers(nbBO, buffer);
+            gl.glBindBuffer(GL.GL_ARRAY_BUFFER, buffer[i]); 
             i++;
-            System.out.println("Handle is ! : " + bo.getHandle());
+           // System.out.println("Buffer test : " + buffer[i]);
 
             if (bo instanceof IBO) {
 
@@ -180,7 +166,7 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
                 int numBytes = ibo.getIntBuffer().capacity() * bytesPerInt;
 
                 // bind a buffer
-                gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, handle);
+                //gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, handle);
                 System.out.println("Bind buffer IBO ");
                 gl.glBufferData(gl.GL_ELEMENT_ARRAY_BUFFER, numBytes, ibo.getIntBuffer(), gl.GL_STATIC_DRAW);
 
@@ -200,7 +186,7 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
 
                 System.out.println(" The VBO is stride : " + vbo.getStride() + " offset :  " + vbo.getOffset());
                 // bind a buffer
-                gl.glBindBuffer(gl.GL_ARRAY_BUFFER, handle);
+              //  gl.glBindBuffer(gl.GL_ARRAY_BUFFER, handle);
                 System.out.println(" test --");
                 gl2.glVertexPointer(vbo.getSize(), gl.GL_FLOAT, vbo.getStride(), 0);
              
@@ -289,4 +275,9 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
     public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    void setGLDrawable(GLAutoDrawable drawable) {
+        System.out.println("drawable");
+    }
 } // end of class JOGL Visitor
+// http://forum.jogamp.org/Can-someone-please-help-me-complete-this-sample-code-td3207414.html

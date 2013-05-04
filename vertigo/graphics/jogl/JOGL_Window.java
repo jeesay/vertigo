@@ -41,7 +41,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Observer;
 import vertigo.graphics.MouseDispatcher;
-import vertigo.graphics.OGL_Window;
+import vertigo.graphics.Window3D;
 import vertigo.graphics.event.KeyboardObserver;
 import vertigo.graphics.event.MouseObserver;
 import vertigo.graphics.event.Signal;
@@ -50,7 +50,7 @@ import vertigo.graphics.event.TimerObserver;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.World;
 
-public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListener, KeyListener, MouseWheelListener {
+public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener, KeyListener, MouseWheelListener {
 
     private int width = 400;
     private int height = 400;
@@ -167,8 +167,6 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
         
         System.out.println("Mouse pressed; # of clicks: " + me.getClickCount());
         if (me.getButton() == MouseEvent.BUTTON1) {
-            
-           
             mouse_event.setButton(Signal.BUTTON_LEFT);
             mouse_event.setWheel(0);
             System.out.println(mouse_event);
@@ -212,7 +210,6 @@ public class JOGL_Window implements OGL_Window, MouseMotionListener, MouseListen
         char press = ke.getKeyChar();
         mouseDispatcher.fireUpdate(mouse_event);
         System.out.println("You have pressed " + press);
-
     }
 
     @Override
