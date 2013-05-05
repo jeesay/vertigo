@@ -16,18 +16,18 @@ var vertices = [
    0.5, -0.5, -0.5
 ];
 
-var vertices = [
+var color = [
   // Front face
-  -0.5, -0.5,  0.5,
-   0.5, -0.5,  0.5,
-   0.5,  0.5,  0.5,
-  -0.5,  0.5,  0.5,
+  0.0, 0.0,  0.5,
+   0.0, 0.5,  0.0,
+   0.0,  0.5,  0.0,
+  0.0,  0.5,  0.0,
    
   // Back face
-  -0.5, -0.5, -0.5,
-  -0.5,  0.5, -0.5,
-   0.5,  0.5, -0.5,
-   0.5, -0.5, -0.5
+  0.5, 0.0, 0.0,
+  0.5,  0.5, 0.0,
+   0.0,  0.0, 0.5,
+   0.0, 0.0, 0.5
 ];
 
 // Creation and init viewer
@@ -43,6 +43,7 @@ IJ.log(scene);
 var cube = scene.addNewNode("Shape");
 cube.setName("Cube");
 cube.setGeometry("V3F",vertices);
+cube.setGeometry("C3F",color);
 cube.setDrawingStyle("LINE_LOOP");
 // Render
 viewer.show();
