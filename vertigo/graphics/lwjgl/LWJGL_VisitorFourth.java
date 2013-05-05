@@ -348,3 +348,4 @@ public class LWJGL_VisitorFourth implements Visitor {
         }
     }
 } // end of class LWJGL_Visitor
+// http://www.java-gaming.org/index.php?topic=24272.0
