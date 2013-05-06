@@ -56,7 +56,7 @@ public class JOGL_Renderer implements GLEventListener {
 
     public JOGL_Renderer() {
         System.out.println("JOGL_Renderer created");
-        visitor = new JOGL_VisitorTwo();
+        // visitor = new JOGL_VisitorTwo();
     }
 
     public void setBackgroundColor(float red, float green, float blue) {
@@ -73,11 +73,7 @@ public class JOGL_Renderer implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         // Do nothing
-    
-
     }
-
-
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
@@ -86,15 +82,19 @@ public class JOGL_Renderer implements GLEventListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-        System.out.println("Display" + red + " " + green + " " + blue);
+        System.out.println("Display " + red + " " + green + " " + blue);
         GL3 gl = drawable.getGL().getGL3();  // up to OpenGL 3
         gl.glClearColor(red, green, blue, 1.0f);
         gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
-        
- 
+
+
         // Render via Visitor
+        System.out.println("Before visitor");
+        visitor = new JOGL_VisitorTwo();
         visitor.setGLDrawable(drawable);
-         world.accept(visitor);
+        System.out.println("After visitor");
+        world.accept(visitor);
+        System.out.println("After accept");
 
     }
 

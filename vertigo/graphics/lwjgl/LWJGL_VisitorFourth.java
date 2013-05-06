@@ -47,7 +47,11 @@ public class LWJGL_VisitorFourth implements Visitor {
     private int iboid;
     private IBO ibo = null;
     private VBO vbo3f = null;
+    private int capacity=0;
 
+    
+   
+   
     @Override
     public void visit(BackStage obj) {
         // do nothing
@@ -131,7 +135,7 @@ public class LWJGL_VisitorFourth implements Visitor {
             obj.setDirty(Node.MATRIX, false);
         }
         // Geometry: VBO
-        // if (obj.isDirty(Node.VBO)) {
+      //  if (obj.isDirty(Node.VBO)) {
         processBO(obj);
         obj.setDirty(Node.VBO, false);
         // }
@@ -141,7 +145,7 @@ public class LWJGL_VisitorFourth implements Visitor {
     private void processBO(Shape obj) {
 
         ////// ROTATE
-
+/*
         int framerate_count = 0;
         long framerate_timestamp = new Date().getTime();
         double rotate_x, rotate_y, rotate_z;
@@ -187,6 +191,7 @@ public class LWJGL_VisitorFourth implements Visitor {
                 0.0,
                 1.0);
 ///// END ROTATE
+* */
 
 
 
@@ -206,7 +211,7 @@ public class LWJGL_VisitorFourth implements Visitor {
         System.out.println(" Number of BO is : " + nbBO);
 
 
-        int capacity = 0;
+  
         int i = 0;
         for (BO bo : obj.getGeometry().getBuffers()) {
             int boHandle = ib.get(i);
@@ -229,17 +234,6 @@ public class LWJGL_VisitorFourth implements Visitor {
 
                 VBO vbo = (VBO) bo;
                 enable(vbo);
-               /* if (vbo.getType().contains("V")) {
-                    vbo3f = vbo;
-                    GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-                    // bug risk here
-                }
-
-
-                if (vbo.getType().contains("C")) {
-                    GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
-                    // Test the color
-                }*/
 
 
                 glBindBufferARB(GL_ARRAY_BUFFER_ARB, boHandle);
@@ -248,7 +242,7 @@ public class LWJGL_VisitorFourth implements Visitor {
                 // glVertexPointer(vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
                 System.out.println("Size of VBO : " + vbo.getSize() + " Stride of VBO : " + vbo.getStride());
                 System.out.println("buff : " + vbo.getFloatBuff());
-                capacity = vbo.capacity();
+                // capacity = vbo.capacity();
                 //glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
             }
@@ -341,7 +335,9 @@ public class LWJGL_VisitorFourth implements Visitor {
     private void enable(VBO vbo) {
         if (vbo.getType().contains("V")) {
             vbo3f = vbo;
+             capacity = vbo.capacity();
             GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+            
         }
         if (vbo.getType().contains("C")) {
             GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);

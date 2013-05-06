@@ -38,7 +38,8 @@ public class Signal {
     public static final int BUTTON_RIGHT = 3;
     public static final int WHEEL_UP = 1;
     public static final int WHEEL_DOWN = -1;
-    public static final int PRESSED = 101;
+    public static final int NONE = 100;
+   public static final int PRESSED = 101;
     public static final int RELEASED = 102;
     public static final int CLICKED = 103; 
     public static final int MOVED = 104; 

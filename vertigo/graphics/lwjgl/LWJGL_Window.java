@@ -61,6 +61,8 @@ import vertigo.graphics.event.MouseObserver;
 import vertigo.graphics.event.Signal;
 import vertigo.graphics.event.MouseSignal;
 import vertigo.graphics.event.TimerObserver;
+import vertigo.graphics.event.ViewportObserver;
+import vertigo.graphics.event.ViewportSignal;
 
 public class LWJGL_Window implements Window3D, MouseWheelListener {
 
@@ -75,8 +77,10 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
     private final KeyboardDispatcher keyboardDispatcher;
     private final MouseDispatcher mouseDispatcher;
     private final TimerDispatcher timerDispatcher;
+    private final ViewportDispatcher vpDispatcher;
     private MouseSignal mouse_event;
     private KeyboardSignal key_event;
+    private ViewportSignal vp_event;
     private Signal allevent;
 //recup matrice avec le visiteur
     // VBO pour tous les cas (boucle)  une ou deux passes si une marche pas (isDirty), matrice parent x fils
@@ -89,6 +93,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         mouseDispatcher = MouseDispatcher.getInstance();
         keyboardDispatcher = KeyboardDispatcher.getInstance();
         timerDispatcher = TimerDispatcher.getInstance();
+        vpDispatcher = ViewportDispatcher.getInstance();
         closeRequested = false;
         renderer = new LWJGL_Renderer();
         mouse_event = new MouseSignal();
@@ -233,21 +238,23 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
 
 
         mouse_event.setWheel((int) Math.signum(Mouse.getDWheel()));
-        mouse_event.setButton(0);
+        mouse_event.setButton(Signal.NO_BUTTON);
+        mouse_event.setButtonStatus(Signal.NONE);
         mouse_event.setXY(Mouse.getX(), Mouse.getY());
+        int x = Mouse.getDX();
+        int y = Mouse.getDY();
+
+        if (x != 0 && y != 0) {
+            mouse_event.setButtonStatus(Signal.MOVED);
+            //System.out.println("dragged " + x + " " + y);
+        }
 
         if (Mouse.isButtonDown(0)) {
-            int x = Mouse.getDX();
-            int y = Mouse.getDY();
 
             mouse_event.setButton(Signal.BUTTON_LEFT);
-            mouse_event.setButtonStatus(Signal.PRESSED);
             mouse_event.setWheel(0);
 
 
-            mouse_event.setXY(x, y);
-            mouse_event.setButton(Signal.BUTTON_LEFT);
-            System.out.println("dragged " +x + " " + y);
             mouseDispatcher.fireUpdate(mouse_event);
 
             //System.out.println(mouse_event);
@@ -328,9 +335,14 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         System.out.println("Load Observer observer " + obj);
         if (obj instanceof MouseObserver) {
             mouseDispatcher.addObserver((Observer) obj);
-        } else if (obj instanceof TimerObserver) {
+        }
+        if (obj instanceof ViewportObserver) {
+            viewportDispatcher.addObserver((Observer) obj);
+        }
+        if (obj instanceof TimerObserver) {
             timerDispatcher.addObserver((Observer) obj);
-        } else if (obj instanceof KeyboardObserver) {
+        }
+        if (obj instanceof KeyboardObserver) {
             keyboardDispatcher.addObserver((Observer) obj);
         }
         for (Node child : obj.getChildren()) {
