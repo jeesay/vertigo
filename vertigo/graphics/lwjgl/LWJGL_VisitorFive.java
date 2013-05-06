@@ -4,6 +4,7 @@
  */
 package vertigo.graphics.lwjgl;
 
+import ij.IJ;
 import java.nio.IntBuffer;
 import java.util.Date;
 import org.lwjgl.BufferUtils;
@@ -18,6 +19,7 @@ import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
 import vertigo.graphics.BO;
 import vertigo.graphics.IBO;
+import vertigo.graphics.ShaderProg;
 import vertigo.graphics.VBO;
 import vertigo.graphics.Visitor;
 import vertigo.scenegraph.BackStage;
@@ -36,17 +38,15 @@ import vertigo.scenegraph.World;
  *
  * @author Clement DELESTRE
  */
-public class LWJGL_VisitorFourth implements Visitor{
-      private Camera cam_;
+public class LWJGL_VisitorFive implements Visitor {
+
+    private Camera cam_;
     private boolean isIndexed = false;
     private int iboid;
     private IBO ibo = null;
     private VBO vbo3f = null;
-    private int capacity=0;
+    private int capacity = 0;
 
-    
-   
-   
     @Override
     public void visit(BackStage obj) {
         // do nothing
@@ -130,10 +130,40 @@ public class LWJGL_VisitorFourth implements Visitor{
             obj.setDirty(Node.MATRIX, false);
         }
         // Geometry: VBO
-      //  if (obj.isDirty(Node.VBO)) {
+        //  if (obj.isDirty(Node.VBO)) {
         processBO(obj);
         obj.setDirty(Node.VBO, false);
         // }
+        if (obj.isDirty(Node.SHADER)) {
+            processShader(obj);
+            obj.setDirty(Node.SHADER, false);
+        }
+        ShaderUtils.useShader(obj.getMaterial().getShaderMaterial().getHandle()); //use the shader
+        
+        
+        
+    }
+
+    private void processShader(Shape obj) {
+        //ShaderProg or void ?
+        int handle;
+        ShaderProg glshader = obj.getMaterial().getShaderMaterial();
+        // compile once
+        System.out.println("The handle 1 : " + glshader.getHandle());
+        if (glshader.getHandle() == ShaderProg.UNKNOWN) {
+            //TEST
+            System.out.println("The handle 2 : " + glshader.getHandle());
+            try {
+                handle = ShaderUtils.attachShaders(glshader.getVertexSource(), glshader.getFragmentSource());
+                System.out.println("The handle 4 : " + handle);
+                glshader.setHandle(handle);
+                System.out.println("The handle 5  : " + glshader.getHandle());
+            } catch (Exception e) {
+                IJ.log("Error with the Shader " + e);
+            } //Compile, Link error
+        }
+        //ShaderUtils.updateShader(glshader);
+        // TEST
 
     }
 
@@ -141,52 +171,52 @@ public class LWJGL_VisitorFourth implements Visitor{
 
         ////// ROTATE
 /*
-        int framerate_count = 0;
-        long framerate_timestamp = new Date().getTime();
-        double rotate_x, rotate_y, rotate_z;
+         int framerate_count = 0;
+         long framerate_timestamp = new Date().getTime();
+         double rotate_x, rotate_y, rotate_z;
 
-        // increment frame rate counter, and display current frame rate
-        // if it is time to do so
-        framerate_count++;
+         // increment frame rate counter, and display current frame rate
+         // if it is time to do so
+         framerate_count++;
 
-        Date d = new Date();
-        long this_framerate_timestamp = d.getTime();
+         Date d = new Date();
+         long this_framerate_timestamp = d.getTime();
 
-        if ((this_framerate_timestamp - framerate_timestamp) >= 1000) {
-            System.err.println("Frame Rate: " + framerate_count);
-            framerate_count = 0;
-            framerate_timestamp = this_framerate_timestamp;
-        }
+         if ((this_framerate_timestamp - framerate_timestamp) >= 1000) {
+         System.err.println("Frame Rate: " + framerate_count);
+         framerate_count = 0;
+         framerate_timestamp = this_framerate_timestamp;
+         }
 
-        // clear the display
-        //GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+         // clear the display
+         //GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-        // perform rotation transformations
-        //GL11.glPushMatrix();
+         // perform rotation transformations
+         //GL11.glPushMatrix();
 
-        rotate_x = ((double) this_framerate_timestamp / 300.0) % 360.0;
-        rotate_y = ((double) this_framerate_timestamp / 200.0) % 360.0;
-        rotate_z = ((double) this_framerate_timestamp / 100.0) % 360.0;
+         rotate_x = ((double) this_framerate_timestamp / 300.0) % 360.0;
+         rotate_y = ((double) this_framerate_timestamp / 200.0) % 360.0;
+         rotate_z = ((double) this_framerate_timestamp / 100.0) % 360.0;
 
-        GL11.glRotated(
-                rotate_x,
-                1.0,
-                0.0,
-                0.0);
+         GL11.glRotated(
+         rotate_x,
+         1.0,
+         0.0,
+         0.0);
 
-        GL11.glRotated(
-                rotate_y,
-                0.0,
-                1.0,
-                0.0);
+         GL11.glRotated(
+         rotate_y,
+         0.0,
+         1.0,
+         0.0);
 
-        GL11.glRotated(
-                rotate_z,
-                0.0,
-                0.0,
-                1.0);
-///// END ROTATE
-* */
+         GL11.glRotated(
+         rotate_z,
+         0.0,
+         0.0,
+         1.0);
+         ///// END ROTATE
+         * */
 
 
 
@@ -206,7 +236,7 @@ public class LWJGL_VisitorFourth implements Visitor{
         System.out.println(" Number of BO is : " + nbBO);
 
 
-  
+
         int i = 0;
         for (BO bo : obj.getGeometry().getBuffers()) {
             int boHandle = ib.get(i);
@@ -312,6 +342,7 @@ public class LWJGL_VisitorFourth implements Visitor{
 
     /**
      * Attrib the good type of pointer
+     *
      * @param vbo
      *
      */
@@ -325,14 +356,15 @@ public class LWJGL_VisitorFourth implements Visitor{
 
     /**
      * Enable the good type of VBO
+     *
      * @param vbo
      */
     private void enable(VBO vbo) {
         if (vbo.getType().contains("V")) {
             vbo3f = vbo;
-             capacity = vbo.capacity();
+            capacity = vbo.capacity();
             GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-            
+
         }
         if (vbo.getType().contains("C")) {
             GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);

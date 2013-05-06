@@ -50,6 +50,7 @@ import vertigo.graphics.KeyboardDispatcher;
 import vertigo.graphics.MouseDispatcher;
 import vertigo.graphics.Window3D;
 import vertigo.graphics.TimerDispatcher;
+import vertigo.graphics.ViewportDispatcher;
 import vertigo.graphics.event.KeyboardObserver;
 import vertigo.graphics.event.MouseObserver;
 import vertigo.graphics.event.TimerObserver;
@@ -98,7 +99,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         renderer = new LWJGL_Renderer();
         mouse_event = new MouseSignal();
         key_event = new KeyboardSignal();
-        allevent = new Signal();
+        vp_event = new ViewportSignal();
         //Mouse.setGrabbed(true);
 
         // loadObserver(); 
@@ -178,7 +179,10 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         while (!Display.isCloseRequested() && !closeRequested) {
             newDim = newCanvasSize.getAndSet(null);
             if (newDim != null) {
+                vp_event.setSize(newDim.width, newDim.height);
                 GL11.glViewport(0, 0, newDim.width, newDim.height);
+                vpDispatcher.fireUpdate(vp_event);
+                
                 //renderer.syncViewportSize(0, 0, newDim.width, newDim.height);
             }
             Display.sync(60);
@@ -337,7 +341,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
             mouseDispatcher.addObserver((Observer) obj);
         }
         if (obj instanceof ViewportObserver) {
-            viewportDispatcher.addObserver((Observer) obj);
+            vpDispatcher.addObserver((Observer) obj);
         }
         if (obj instanceof TimerObserver) {
             timerDispatcher.addObserver((Observer) obj);

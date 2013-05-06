@@ -28,9 +28,7 @@ import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 import static org.lwjgl.util.glu.GLU.gluLookAt;
-import static org.lwjgl.opengl.ARBBufferObject.*;
-import static org.lwjgl.opengl.ARBVertexBufferObject.*;
-import static org.lwjgl.opengl.GL11.*;
+
 
 /**
  *
@@ -196,7 +194,6 @@ public class LWJGL_VisitorTwo implements Visitor {
                     ibo = (IBO) bo;
                     System.out.println("isIndexed is true");
                     GL11.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getIntBuffer());
-                    gluLookAt(0.0f, 15.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15.0f);
                 } else {
                     System.out.println("isIndexed is false");
                     GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, obj.getGeometry().getCount());
@@ -246,7 +243,7 @@ public class LWJGL_VisitorTwo implements Visitor {
                 //GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, handle);
                 // glBindBufferARB(GL15.GL_ARRAY_BUFFER, handle);
 
-                glBindBufferARB(GL_ARRAY_BUFFER_ARB, handle);
+                GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, handle);
 
                 System.out.println(" test --");
                 GL11.glVertexPointer(vbo.getSize(), GL11.GL_FLOAT, vbo.getStride(), 0);

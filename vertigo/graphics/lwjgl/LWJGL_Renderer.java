@@ -58,7 +58,7 @@ public class LWJGL_Renderer{
     private Dimension newDim;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
     private int display=0;
-    LWJGL_VisitorFourth LWJGLVisitor = null;
+    LWJGL_VisitorFive LWJGLVisitor = null;
 
     public void setBackgroundColor(float red, float green, float blue) {
         System.out.println("Set Background Color");
@@ -97,7 +97,7 @@ public class LWJGL_Renderer{
         // visitor
        // if (display==0){
             //System.out.println("Display 0");
-           LWJGLVisitor = new LWJGL_VisitorFourth();  
+           LWJGLVisitor = new LWJGL_VisitorFive();  
        //    display++;
        // }
         world.accept(LWJGLVisitor);

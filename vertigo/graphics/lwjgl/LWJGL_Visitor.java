@@ -393,7 +393,8 @@ public class LWJGL_Visitor implements Visitor {
         ShaderProg glshader = obj.getMaterial().getShaderMaterial();
         // compile once
         System.out.println("The handle 1 : " + glshader.getHandle());
-        GL20.glEnableVertexAttribArray(0);
+      //  GL20.glEnableVertexAttribArray(0);
+        
         if (glshader.getHandle() == ShaderProg.UNKNOWN) {
             //glshader.loadVertexShader();
             //TEST

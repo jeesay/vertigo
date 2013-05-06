@@ -36,6 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ij.IJ;
+import org.lwjgl.LWJGLException;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -72,53 +73,36 @@ public final class ShaderUtils {
         int vertexShaderProgram;
         int fragmentShaderProgram;
         int shaderprogram;
-        
-        vertexShaderProgram = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-        fragmentShaderProgram = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        System.out.println("We re here. VSP : " + vertexShaderProgram + " and FSP : " + fragmentShaderProgram);
-        GL20.glShaderSource(vertexShaderProgram, vertexCode);
-        GL20.glCompileShader(vertexShaderProgram);
-        //System.out.println("We re here. VC : "+vertexCode+" and FC : "+fragmentCode);
-        GL20.glShaderSource(fragmentShaderProgram, fragmentCode);
-        GL20.glCompileShader(fragmentShaderProgram);
+        String log = "";
+
+        vertexShaderProgram = compileShader(vertexCode, GL20.GL_VERTEX_SHADER);
+        fragmentShaderProgram = compileShader(fragmentCode, GL20.GL_FRAGMENT_SHADER);
+    
         shaderprogram = GL20.glCreateProgram();
-        System.out.println("Create program seem be ok. Shader program is : " + shaderprogram);
-        //
         GL20.glAttachShader(shaderprogram, vertexShaderProgram);
         GL20.glAttachShader(shaderprogram, fragmentShaderProgram);
         GL20.glLinkProgram(shaderprogram);
+        
+        //grab our info log
+	String infoLog = GL20.glGetProgramInfoLog(shaderprogram, GL20.glGetProgrami(shaderprogram, GL20.GL_INFO_LOG_LENGTH));
+	
+	//if some log exists, append it 
+	if (infoLog!=null && infoLog.trim().length()!=0)
+		log += infoLog;
+	
+	//if the link failed, throw some sort of exception
+	if (GL20.glGetProgrami(shaderprogram, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
+		throw new LWJGLException(
+				"Failure in linking program. Error log:\n" + infoLog);
+	
+	//detach and delete the shaders which are no longer needed
+	GL20.glDetachShader(shaderprogram, vertexShaderProgram);
+	GL20.glDetachShader(shaderprogram, fragmentShaderProgram);
+	GL20.glDeleteShader(vertexShaderProgram);
+	GL20.glDeleteShader(fragmentShaderProgram);
+        
         GL20.glValidateProgram(shaderprogram);
-        System.out.println("ValidateProgram seem be ok");
-        IntBuffer intBuffer = IntBuffer.allocate(1);
-        System.out.println("capacity is : "+intBuffer.capacity());
-        System.out.println("Allocate seem be ok");
-        System.out.println("Try get program with : " + shaderprogram + " " + GL20.GL_LINK_STATUS + " " + intBuffer);
-        //GL20.glGetProgram(shaderprogram, GL20.GL_LINK_STATUS, intBuffer);
-        //TEST
-        //GL20.GL_LINK_STATUS or GL_INFO_LOG_LENGTH ?
-        if (GL20.glGetProgrami(shaderprogram, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
-            System.out.println("Problem here with get program");
-        }
-        System.out.println("Get program seem be ok");
-        if (intBuffer.get(0) != 1) {
-            System.out.println("Try get program (in the if) with : " + shaderprogram + " " + GL20.GL_INFO_LOG_LENGTH + " " + intBuffer);
-           // GL20.glGetProgram(shaderprogram, GL20.GL_INFO_LOG_LENGTH, intBuffer);
-   
-            //int size = intBuffer.get(0); // capacity ??
-            // TEST
-            int size = intBuffer.capacity();  
-            System.err.println("Program link error: "+size);
-            if (size > 0) {
-                ByteBuffer byteBuffer = ByteBuffer.allocate(size);
-                GL20.glGetProgramInfoLog(shaderprogram, intBuffer, byteBuffer);
-               for (byte b : byteBuffer.array()) {
-                    System.err.print((char) b);
-                }
-            } else {
-                System.out.println("Unknown");
-            }
-            System.exit(1);
-        }
+       
         return shaderprogram;
     }
 
@@ -228,4 +212,27 @@ public final class ShaderUtils {
         return shaderprogram;
 
     }
+
+    private static int compileShader(String source, int type) throws Exception {
+        String log = "";
+
+        int shaderProgram = GL20.glCreateShader(type);
+        GL20.glShaderSource(shaderProgram, source);
+        GL20.glCompileShader(shaderProgram);
+
+        //if info/warnings are found, append it to our shader log
+        String infoLog = GL20.glGetShaderInfoLog(shaderProgram, GL20.glGetShaderi(shaderProgram, GL20.GL_INFO_LOG_LENGTH));
+        if (infoLog != null && infoLog.trim().length() != 0) {
+            log += "Vertex Shader : " + infoLog + "\n";
+        }
+
+        //if the compiling was unsuccessful, throw an exception
+        if (GL20.glGetShaderi(shaderProgram, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+            throw new LWJGLException("Failure in compiling Vertex Shader. Error log:\n" + infoLog);
+        }
+
+        return shaderProgram;
+    }
 } // End of class ShaderUtils
+
+//https://github.com/mattdesl/lwjgl-basics/wiki/ShaderProgram-Utility
