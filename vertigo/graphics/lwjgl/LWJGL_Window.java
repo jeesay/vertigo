@@ -182,7 +182,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
                 vp_event.setSize(newDim.width, newDim.height);
                 GL11.glViewport(0, 0, newDim.width, newDim.height);
                 vpDispatcher.fireUpdate(vp_event);
-                
+
                 //renderer.syncViewportSize(0, 0, newDim.width, newDim.height);
             }
             Display.sync(60);
@@ -241,48 +241,56 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
 
 
 
-        mouse_event.setWheel((int) Math.signum(Mouse.getDWheel()));
+        //mouse_event.setWheel((int) Math.signum(Mouse.getDWheel()));
+
         mouse_event.setButton(Signal.NO_BUTTON);
         mouse_event.setButtonStatus(Signal.NONE);
+        mouse_event.setWheel(0);
         mouse_event.setXY(Mouse.getX(), Mouse.getY());
         int x = Mouse.getDX();
         int y = Mouse.getDY();
 
         if (x != 0 && y != 0) {
             mouse_event.setButtonStatus(Signal.MOVED);
-            //System.out.println("dragged " + x + " " + y);
         }
 
         if (Mouse.isButtonDown(0)) {
 
             mouse_event.setButton(Signal.BUTTON_LEFT);
-            mouse_event.setWheel(0);
 
-
-            mouseDispatcher.fireUpdate(mouse_event);
+            
 
             //System.out.println(mouse_event);
-        } else if (Mouse.isButtonDown(1)) {
+        }  if (Mouse.isButtonDown(1)) {
             mouse_event.setButton(Signal.BUTTON_RIGHT);
-            mouse_event.setWheel(0);
+
             //System.out.println(mouse_event);
-        } else if (Mouse.isButtonDown(2)) {
+        }  if (Mouse.isButtonDown(2)) {
+
             mouse_event.setButton(Signal.BUTTON_MIDDLE);
-            mouse_event.setWheel(0);
+
             System.out.println(mouse_event);
             System.out.println("MIDDLE");
         }
 
+            System.out.println("Grab" + Mouse.isGrabbed());
+            int dWheel = Mouse.getDWheel(); //don't work
+            System.out.println("The WHEEL : " + dWheel);
+            
+            if (dWheel < 0) {
+               // mouse_event.setButtonStatus(Signal.NONE);
+                System.out.println("WHEEL DOWN");
+                mouse_event.setWheel(-1);
+            } else if (dWheel > 0) {
+                
+                mouse_event.setWheel(1);
+               // mouse_event.setButtonStatus(Signal.NONE);
+                System.out.println("WHEEL UP");
+            }
+mouseDispatcher.fireUpdate(mouse_event);
 
 
-        System.out.println("Grab" + Mouse.isGrabbed());
-        int dWheel = Mouse.getDWheel(); //don't work
-        System.out.println("The WHEEL : " + dWheel);
-        if (dWheel < 0) {
-            System.out.println("DOWN");
-        } else if (dWheel > 0) {
-            System.out.println("UP");
-        }
+
 
 
 
