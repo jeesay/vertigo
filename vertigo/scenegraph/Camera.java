@@ -311,6 +311,7 @@ public class Camera extends Node implements MouseObserver, ViewportObserver {
             MouseSignal e = (MouseSignal) o1;
             // if Mouse Wheel
             this.zoom += ZOOM_FACTOR * e.getWheel();
+            System.out.println("WHEEL "+e.getWheel());
             setDirty(Node.PROJMATRIX,true);
         } 
         else if (o1 instanceof ViewportSignal) {
