@@ -177,7 +177,7 @@ public class ShaderProg {
 
     public void addAttribute(String attr, String type) {
         //attributes.put(attr, -1);
-        attributes.add(new Attribute(name, type));
+        attributes.add(new Attribute(attr, type));
     }
 
     public void setAttributeLocation(String name, int attributeToken) {

@@ -84,7 +84,8 @@ public class LWJGL_Visitor implements Visitor {
         setModelMatrix(obj);
 
         //glGetUniformLocation 
-        //GL20.glUniformMatrix4(level, true, view);
+        //GL20.glUniformMatrix4(level, true, view);  
+        //location (int) transpose (boolean) matrice (float buffer)
 
     }
 

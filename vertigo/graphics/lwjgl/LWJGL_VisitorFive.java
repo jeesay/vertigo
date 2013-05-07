@@ -6,6 +6,7 @@ package vertigo.graphics.lwjgl;
 
 import ij.IJ;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.Date;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -15,13 +16,17 @@ import static org.lwjgl.opengl.GL11.glColorPointer;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL11.glVertexPointer;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL32;
 import org.lwjgl.opengl.GL40;
+import vertigo.graphics.Attribute;
 import vertigo.graphics.BO;
 import vertigo.graphics.IBO;
 import vertigo.graphics.ShaderProg;
+import vertigo.graphics.Uniform;
 import vertigo.graphics.VBO;
 import vertigo.graphics.Visitor;
+import vertigo.math.Matrix4;
 import vertigo.scenegraph.BackStage;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Light;
@@ -46,6 +51,10 @@ public class LWJGL_VisitorFive implements Visitor {
     private IBO ibo = null;
     private VBO vbo3f = null;
     private int capacity = 0;
+    private Matrix4 viewMatrix;
+    private Matrix4 projectionMatrix;
+    private ShaderProg glshader;
+    private ArrayList<Attribute> attribute;
 
     @Override
     public void visit(BackStage obj) {
@@ -56,6 +65,9 @@ public class LWJGL_VisitorFive implements Visitor {
     public void visit(Camera obj) {
         cam_ = obj;
         setModelMatrix(obj);
+        // get matrix for the shader
+        viewMatrix = cam_.getViewMatrix();
+        projectionMatrix = cam_.getProjection();
     }
 
     @Override
@@ -129,25 +141,34 @@ public class LWJGL_VisitorFive implements Visitor {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
             obj.setDirty(Node.MATRIX, false);
         }
+
+        //    if (obj.isDirty(Node.SHADER)) {
+        processShader(obj);
+        System.out.println("The HANDLE : " + glshader.getHandle());
+        processUniform(obj); //here ?
+        obj.setDirty(Node.SHADER, false);
+        //   }
+
         // Geometry: VBO
         //  if (obj.isDirty(Node.VBO)) {
         processBO(obj);
         obj.setDirty(Node.VBO, false);
         // }
-        if (obj.isDirty(Node.SHADER)) {
-            processShader(obj);
-            obj.setDirty(Node.SHADER, false);
-        }
+
+
+
+
+
         ShaderUtils.useShader(obj.getMaterial().getShaderMaterial().getHandle()); //use the shader
-        
-        
-        
+
+
     }
 
     private void processShader(Shape obj) {
         //ShaderProg or void ?
         int handle;
-        ShaderProg glshader = obj.getMaterial().getShaderMaterial();
+
+        glshader = obj.getMaterial().getShaderMaterial();
         // compile once
         System.out.println("The handle 1 : " + glshader.getHandle());
         if (glshader.getHandle() == ShaderProg.UNKNOWN) {
@@ -162,8 +183,9 @@ public class LWJGL_VisitorFive implements Visitor {
                 IJ.log("Error with the Shader " + e);
             } //Compile, Link error
         }
-        //ShaderUtils.updateShader(glshader);
+       // ShaderUtils.updateShader(glshader);
         // TEST
+        //return glshader;
 
     }
 
@@ -252,23 +274,55 @@ public class LWJGL_VisitorFive implements Visitor {
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, boHandle);
                 GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, ibo.getIntBuffer(), GL15.GL_STATIC_DRAW);
                 System.out.println("buff : " + ibo.getIntBuffer());
-                //glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
+                //GL15.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 
             } else {
 
-
+                System.out.println("Here VBO ! ");
                 VBO vbo = (VBO) bo;
-                enable(vbo);
+
+
+                //enable(vbo);
 
 
                 GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, boHandle);
-                GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vbo.getFloatBuff(), GL15.GL_STATIC_DRAW);
-                pointer(vbo);
+                System.out.println("before arrayList ");
+                attribute = glshader.getAllAttributes();
+                System.out.println("before for ");
+                for (Attribute attrib : attribute) {
+                    // manque un if
+
+                    int alocation = GL20.glGetAttribLocation(glshader.getHandle(), attrib.getName());
+                    System.out.println(" Type : " + attrib.getType() + " Name : " + attrib.getName() + " Size " + attrib.getSize() + " handle " + glshader.getHandle() + " location : " + alocation);
+                   
+                    GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vbo.getFloatBuff(), GL15.GL_STATIC_DRAW);
+                   // GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, vbo.getOffset(), vbo.getFloatBuff()); //not sure
+                    
+                    GL20.glEnableVertexAttribArray(alocation);
+                    
+                    
+                   GL20.glVertexAttribPointer(alocation, attrib.getSize(), GL11.GL_FLOAT, false, vbo.getStride()<<2, 0L);
+                    //GL20.glVertexAttribPointer(alocation, attrib.getSize(), false, vbo.getOffset(), vbo.getFloatBuff());
+                    
+                    //vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
+                    //GL20.glvertexattribpoi
+                    // GL20.glVertexAttribPoi
+                }
+
+
+
+
+                // GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vbo.getFloatBuff(), GL15.GL_STATIC_DRAW);
+                //pointer(vbo);
+                // TEST
+
+
+
                 // glVertexPointer(vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
                 System.out.println("Size of VBO : " + vbo.getSize() + " Stride of VBO : " + vbo.getStride());
                 System.out.println("buff : " + vbo.getFloatBuff());
                 // capacity = vbo.capacity();
-                //glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+                //GL15.glBindBuffer(GL_ARRAY_BUFFER_ARB, 0);
 
             }
         }
@@ -368,6 +422,27 @@ public class LWJGL_VisitorFive implements Visitor {
         }
         if (vbo.getType().contains("C")) {
             GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+        }
+    }
+
+    private void processUniform(Shape obj) {
+
+        ArrayList<Uniform> uniforms = glshader.getAllUniforms();
+        for (Uniform uni : uniforms) {
+            System.out.println(" Type : " + uni.getType() + " Name : " + uni.getName() + " Handle : " + glshader.getHandle() + " Matrix buff : " + obj.getMatrix().toBuffer() + " cam : " + cam_.getProjection().toBuffer() + " " + cam_.getViewMatrix().toBuffer());
+            if (uni.getType().equals("view_matrix")) {
+                int vlocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
+                // System.out.println(" Location : "+vlocation);
+                GL20.glUniformMatrix4(vlocation, false, cam_.getProjection().toBuffer());
+            } else if (uni.getType().equals("proj_matrix")) {
+                int plocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
+                //System.out.println(" Location : "+plocation);
+                GL20.glUniformMatrix4(plocation, false, cam_.getViewMatrix().toBuffer());
+            } else if (uni.getType().equals("matrix")) {
+                int mlocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
+                // System.out.println(" Location : "+mlocation);
+                GL20.glUniformMatrix4(mlocation, false, obj.getMatrix().toBuffer());
+            }
         }
     }
 } // end of class LWJGL_Visitor

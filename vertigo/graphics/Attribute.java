@@ -39,22 +39,24 @@ public class Attribute {
     private String name;
     private int handle = -1;
     private static HashMap<String, String> table;
-    private  String type;
+    private String type;
 
     public Attribute(String name) {
         this.name = name;
         initTable();
     }
 
-        public Attribute(String name,String type) {
+    public Attribute(String name, String type) {
         this.name = name;
-        this.type=type;
+        this.type = type;
+        System.out.println(" Name is "+name+" and type : "+type+" **** ");
         //initTable();
     }
-    public String getType(){
+
+    public String getType() {
         return type;
     }
-        
+
     public Attribute(String name, int handle) {
         this.name = name;
         this.handle = handle;
@@ -100,4 +102,15 @@ public class Attribute {
      }
 
      }*/
+    public int getSize() {
+
+        if (type.contains("4")) {
+            return 4;
+        } else if (type.contains("3")) {
+            return 3;
+        } else if (type.contains("2")) {
+            return 2;
+        }
+        return 4;
+    }
 } // end of class Attribute

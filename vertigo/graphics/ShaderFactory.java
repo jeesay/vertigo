@@ -92,10 +92,10 @@ public class ShaderFactory {
         System.out.println("We create a monochrome here");
         shader.loadVertexShader();
         shader.loadFragmentShader();
-        shader.addUniform("uModelMatrix", "matrix");
-        shader.addUniform("uViewMatrix", "view_matrix");
-        shader.addUniform("uProjMatrix", "proj_matrix");
-        shader.addUniform("uColor", "C4F");
+        shader.addUniform("M_Matrix", "matrix");
+        shader.addUniform("V_Matrix", "view_matrix");
+        shader.addUniform("P_Matrix", "proj_matrix");
+       // shader.addUniform("uColor", "C4F");
         shader.addAttribute("aVertexPosition", "V3F");
 
         return shader;
