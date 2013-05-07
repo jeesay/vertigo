@@ -45,18 +45,16 @@ public class ShaderFactory {
             case 1079: // monochrome
                 if (table.get(1079) == null) {
                     table.put(1079, create_monochrome());
-                    System.out.println("We create a monochrome "+name);
+                    System.out.println("We create a monochrome " + name);
                 }
                 shader = table.get(1079);
                 break;
             case 423: // flat
-                shader = new ShaderProg("flat");
-                shader.loadVertexShader();
-                shader.loadFragmentShader();
-                shader.addUniform("uModelMatrix", "matrix");
-                shader.addUniform("uViewMatrix", "view_matrix");
-                shader.addUniform("uProjMatrix", "proj_matrix");
-                shader.addAttribute("aVertexPosition", "V3F");
+                if (table.get(423) == null) {
+                    table.put(423, create_flat());
+                    System.out.println("We create a monochrome " + name);
+                }
+                shader = table.get(423);
                 break;
             case 540: // phong
                 shader = new ShaderProg("phong");
@@ -89,13 +87,26 @@ public class ShaderFactory {
 
     private static ShaderProg create_monochrome() {
         ShaderProg shader = new ShaderProg("monochrome");
+        shader.loadVertexShader();
+        shader.loadFragmentShader();
+        shader.addUniform("M_Matrix", "matrix");
+        shader.addUniform("V_Matrix", "view_matrix");
+        shader.addUniform("P_Matrix", "proj_matrix");
+        shader.addUniform("uColor", "C4F");
+        shader.addAttribute("aVertexPosition", "V3F");
+
+        return shader;
+    }
+
+    private static ShaderProg create_flat() {
+        ShaderProg shader = new ShaderProg("monochrome");
         System.out.println("We create a monochrome here");
         shader.loadVertexShader();
         shader.loadFragmentShader();
         shader.addUniform("M_Matrix", "matrix");
         shader.addUniform("V_Matrix", "view_matrix");
         shader.addUniform("P_Matrix", "proj_matrix");
-       // shader.addUniform("uColor", "C4F");
+        shader.addUniform("uColor", "C4F");
         shader.addAttribute("aVertexPosition", "V3F");
 
         return shader;

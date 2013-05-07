@@ -51,8 +51,7 @@ public class LWJGL_VisitorFive implements Visitor {
     private IBO ibo = null;
     private VBO vbo3f = null;
     private int capacity = 0;
-    private Matrix4 viewMatrix;
-    private Matrix4 projectionMatrix;
+
     private ShaderProg glshader;
     private ArrayList<Attribute> attribute;
 
@@ -64,10 +63,8 @@ public class LWJGL_VisitorFive implements Visitor {
     @Override
     public void visit(Camera obj) {
         cam_ = obj;
-        setModelMatrix(obj);
         // get matrix for the shader
-        viewMatrix = cam_.getViewMatrix();
-        projectionMatrix = cam_.getProjection();
+       
     }
 
     @Override
@@ -87,7 +84,10 @@ public class LWJGL_VisitorFive implements Visitor {
 
     @Override
     public void visit(Shape obj) {
-        mulModelMatrix(obj);
+        if (obj.isDirty(Node.MATRIX)) {
+            obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix());
+            obj.setDirty(Node.MATRIX, false);
+        }
         drawShape(obj);
     }
 
@@ -98,6 +98,10 @@ public class LWJGL_VisitorFive implements Visitor {
 
     @Override
     public void visit(Transform obj) {
+        if (obj.isDirty(Node.MATRIX)) {
+            obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix());
+            obj.setDirty(Node.MATRIX, false);
+        }
         // do nothing
     }
 
@@ -114,14 +118,7 @@ public class LWJGL_VisitorFive implements Visitor {
     private void setModelMatrix(Node obj) {
         if (obj.isDirty(Node.MATRIX)) {
             obj.setModelMatrix(obj.getParent().getModelMatrix());
-            obj.setDirty(Node.MATRIX, true);
-        }
-    }
-
-    private void mulModelMatrix(Node obj) {
-        if (obj.isDirty(Node.MATRIX)) {
-            obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
-            obj.setDirty(Node.MATRIX, true);
+            obj.setDirty(Node.MATRIX, false);
         }
     }
 
@@ -133,39 +130,31 @@ public class LWJGL_VisitorFive implements Visitor {
     }
 
     private void processShape(Shape obj) {
-        // boolean isIndexed = false;
-
 
         // PreProcessing
-        if (obj.isDirty(Node.MATRIX)) {
-            obj.getModelMatrix().mul(obj.getParent().getModelMatrix());
-            obj.setDirty(Node.MATRIX, false);
+
+        if (obj.isDirty(Node.SHADER)) {
+
+            processShader(obj);
+            System.out.println("The HANDLE : " + glshader.getHandle());
+
+            obj.setDirty(Node.SHADER, false);
         }
-
-        //    if (obj.isDirty(Node.SHADER)) {
-        processShader(obj);
-        System.out.println("The HANDLE : " + glshader.getHandle());
-        processUniform(obj); //here ?
-        obj.setDirty(Node.SHADER, false);
-        //   }
-
+        GL20.glUseProgram(obj.getMaterial().getShaderMaterial().getHandle());
+        processUniform(obj); //here ?       
         // Geometry: VBO
         //  if (obj.isDirty(Node.VBO)) {
         processBO(obj);
         obj.setDirty(Node.VBO, false);
         // }
 
-
-
-
-
-        ShaderUtils.useShader(obj.getMaterial().getShaderMaterial().getHandle()); //use the shader
+        GL20.glUseProgram(0);
+        // ShaderUtils.useShader(obj.getMaterial().getShaderMaterial().getHandle()); //use the shader
 
 
     }
 
     private void processShader(Shape obj) {
-        //ShaderProg or void ?
         int handle;
 
         glshader = obj.getMaterial().getShaderMaterial();
@@ -183,73 +172,13 @@ public class LWJGL_VisitorFive implements Visitor {
                 IJ.log("Error with the Shader " + e);
             } //Compile, Link error
         }
-       // ShaderUtils.updateShader(glshader);
+        // ShaderUtils.updateShader(glshader);
         // TEST
         //return glshader;
 
     }
 
     private void processBO(Shape obj) {
-
-        ////// ROTATE
-/*
-         int framerate_count = 0;
-         long framerate_timestamp = new Date().getTime();
-         double rotate_x, rotate_y, rotate_z;
-
-         // increment frame rate counter, and display current frame rate
-         // if it is time to do so
-         framerate_count++;
-
-         Date d = new Date();
-         long this_framerate_timestamp = d.getTime();
-
-         if ((this_framerate_timestamp - framerate_timestamp) >= 1000) {
-         System.err.println("Frame Rate: " + framerate_count);
-         framerate_count = 0;
-         framerate_timestamp = this_framerate_timestamp;
-         }
-
-         // clear the display
-         //GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-         // perform rotation transformations
-         //GL11.glPushMatrix();
-
-         rotate_x = ((double) this_framerate_timestamp / 300.0) % 360.0;
-         rotate_y = ((double) this_framerate_timestamp / 200.0) % 360.0;
-         rotate_z = ((double) this_framerate_timestamp / 100.0) % 360.0;
-
-         GL11.glRotated(
-         rotate_x,
-         1.0,
-         0.0,
-         0.0);
-
-         GL11.glRotated(
-         rotate_y,
-         0.0,
-         1.0,
-         0.0);
-
-         GL11.glRotated(
-         rotate_z,
-         0.0,
-         0.0,
-         1.0);
-         ///// END ROTATE
-         * */
-
-
-
-
-
-
-
-
-
-
-
 
 
         int nbBO = obj.getGeometry().getNumberBO(); //return 2 for the cube (1 vbo + 1 ibo)
@@ -294,16 +223,16 @@ public class LWJGL_VisitorFive implements Visitor {
 
                     int alocation = GL20.glGetAttribLocation(glshader.getHandle(), attrib.getName());
                     System.out.println(" Type : " + attrib.getType() + " Name : " + attrib.getName() + " Size " + attrib.getSize() + " handle " + glshader.getHandle() + " location : " + alocation);
-                   
+
                     GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vbo.getFloatBuff(), GL15.GL_STATIC_DRAW);
-                   // GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, vbo.getOffset(), vbo.getFloatBuff()); //not sure
-                    
+                    // GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, vbo.getOffset(), vbo.getFloatBuff()); //not sure
+
                     GL20.glEnableVertexAttribArray(alocation);
-                    
-                    
-                   GL20.glVertexAttribPointer(alocation, attrib.getSize(), GL11.GL_FLOAT, false, vbo.getStride()<<2, 0L);
+
+
+                    GL20.glVertexAttribPointer(alocation, attrib.getSize(), GL11.GL_FLOAT, false, vbo.getStride() << 2, 0L);
                     //GL20.glVertexAttribPointer(alocation, attrib.getSize(), false, vbo.getOffset(), vbo.getFloatBuff());
-                    
+
                     //vbo.getSize(), GL11.GL_FLOAT, /* stride */ vbo.getStride() << 2, 0L);
                     //GL20.glvertexattribpoi
                     // GL20.glVertexAttribPoi
@@ -431,17 +360,20 @@ public class LWJGL_VisitorFive implements Visitor {
         for (Uniform uni : uniforms) {
             System.out.println(" Type : " + uni.getType() + " Name : " + uni.getName() + " Handle : " + glshader.getHandle() + " Matrix buff : " + obj.getMatrix().toBuffer() + " cam : " + cam_.getProjection().toBuffer() + " " + cam_.getViewMatrix().toBuffer());
             if (uni.getType().equals("view_matrix")) {
+                
                 int vlocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
                 // System.out.println(" Location : "+vlocation);
-                GL20.glUniformMatrix4(vlocation, false, cam_.getProjection().toBuffer());
+                GL20.glUniformMatrix4(vlocation, false, cam_.getViewMatrix().toColumnBuffer());
+                 System.out.println(cam_.getViewMatrix());
             } else if (uni.getType().equals("proj_matrix")) {
+               
                 int plocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
                 //System.out.println(" Location : "+plocation);
-                GL20.glUniformMatrix4(plocation, false, cam_.getViewMatrix().toBuffer());
+                GL20.glUniformMatrix4(plocation, false, cam_.getProjection().toColumnBuffer());
             } else if (uni.getType().equals("matrix")) {
                 int mlocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
                 // System.out.println(" Location : "+mlocation);
-                GL20.glUniformMatrix4(mlocation, false, obj.getMatrix().toBuffer());
+                GL20.glUniformMatrix4(mlocation, false, obj.getModelMatrix().toColumnBuffer());
             }
         }
     }

@@ -44,7 +44,7 @@ import vertigo.graphics.MouseDispatcher;
 import vertigo.graphics.TimerDispatcher;
 import vertigo.graphics.ViewportDispatcher;
 
-import vertigo.graphics.OGL_Window;
+import vertigo.graphics.Window3D;
 import vertigo.graphics.event.KeyboardObserver;
 import vertigo.graphics.event.MouseObserver;
 import vertigo.graphics.event.TimerObserver;
@@ -58,7 +58,7 @@ import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.transform.ArcBall;
 import vertigo.scenegraph.World;
 
-public class G2D_Window implements OGL_Window, MouseMotionListener, MouseListener, KeyListener, MouseWheelListener{
+public class G2D_Window implements Window3D, MouseMotionListener, MouseListener, KeyListener, MouseWheelListener{
 
     private int width = 320;
     private int height = 240;

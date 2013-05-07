@@ -80,7 +80,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Sets The title of the Window
      *     
-* @param a_title A string containing the title
+* @param  a_title A string containing the title
      */
     public void setTitle(String a_title) {
         title_ = a_title;
@@ -146,27 +146,19 @@ public class Vertigo_Viewer implements PlugIn {
      *
      * @param name of the rendering engine
      */
-    public void show(String render) throws LWJGLException {
+    public void show(String render)  {
         if (render.equals("G2D")) {
             graphWin = (Window3D) new vertigo.graphics.G2D.G2D_Window();
-            graphWin.setBackgroundColor(red, green, blue);
-            graphWin.setDimension(window_width, window_height);
-            graphWin.setTitle(title_);
-            graphWin.setWorld(getWorld());
-            graphWin.setVisible(true);
+            initWindow();
 
         } else if (render.equals("LWJGL")) {
             try {
-              graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
-                 graphWin.setBackgroundColor(red, green, blue);
-                 graphWin.setDimension(window_width, window_height);
-                 graphWin.setTitle(title_);
-                 graphWin.setWorld(getWorld());
-                 graphWin.setVisible(true);
-                // TheQuadExampleDrawElements tqe= new TheQuadExampleDrawElements();
-               // SimpleInterleavedVboExample s = new SimpleInterleavedVboExample();
-                //Test t=new Test();
+                graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
 
+                // TheQuadExampleDrawElements tqe= new TheQuadExampleDrawElements();
+                // SimpleInterleavedVboExample s = new SimpleInterleavedVboExample();
+                //Test t=new Test();
+                initWindow();
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download LWJGL or check your ClassPath.");
             }
@@ -176,23 +168,14 @@ public class Vertigo_Viewer implements PlugIn {
 
                 graphWin = new vertigo.graphics.jogl.JOGL_Window();
 
-                graphWin.setBackgroundColor(red, green, blue);
-                graphWin.setDimension(window_width, window_height);
-                graphWin.setTitle(title_);
-                graphWin.setWorld(getWorld());
-                graphWin.setVisible(true);
-
+                initWindow();
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download JOGL or check your ClassPath.");
 
             }
         } else if (render.equals("TEXT")) {
             graphWin = (Window3D) new vertigo.graphics.text.Text_Renderer(camera_, scene_);
-            graphWin.setBackgroundColor(red, green, blue);
-            graphWin.setDimension(window_width, window_height);
-            graphWin.setTitle(title_);
-            graphWin.setWorld(getWorld());
-            graphWin.setVisible(true);
+            initWindow();
 
         }
     }
@@ -200,6 +183,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Gets the world (aka root) of the scene graph.
      *
+     * @return world
      */
     public World getWorld() {
         return world_;
@@ -223,7 +207,7 @@ public class Vertigo_Viewer implements PlugIn {
         return camera_;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws LWJGLException {
         System.out.println("main");
         Vertigo_Viewer ve = new Vertigo_Viewer();
         ve.setBackgroundColor(20, 200, 80);
@@ -329,5 +313,13 @@ public class Vertigo_Viewer implements PlugIn {
         lights.add(new Light("sun"));
         lights.add(new Light("spot"));
 
+    }
+
+    private void initWindow() {
+        graphWin.setBackgroundColor(red, green, blue);
+        graphWin.setDimension(window_width, window_height);
+        graphWin.setTitle(title_);
+        graphWin.setWorld(getWorld());
+        graphWin.setVisible(true);
     }
 }// end of class Vertigo_Viewer

@@ -58,7 +58,11 @@ public class LWJGL_Renderer{
     private Dimension newDim;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
     private int display=0;
-    LWJGL_VisitorFive LWJGLVisitor = null;
+    LWJGL_VisitorFive LWJGLVisitor ;
+    
+    public LWJGL_Renderer(){
+         LWJGLVisitor=new LWJGL_VisitorFive();
+    }
 
     public void setBackgroundColor(float red, float green, float blue) {
         System.out.println("Set Background Color");
@@ -82,24 +86,9 @@ public class LWJGL_Renderer{
         System.out.println("display Scene Visitor");
         GL11.glClearColor(red, green, blue, 1.0f);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT );
-        
-        
-        //projection matrix
-       GL11.glMatrixMode(GL11.GL_PROJECTION_MATRIX);
-       GL11.glLoadIdentity();
-       // gluPerspective(50, 800 / (float) 800, .1f, 50);
-        
-        
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
-        //gluLookAt(0.0f,0.0f,-0.5f,0.0f,0.0f,-1.0f,0.0f,1.0f,0.0f);
-         
+      
         // visitor
-       // if (display==0){
-            //System.out.println("Display 0");
-           LWJGLVisitor = new LWJGL_VisitorFive();  
-       //    display++;
-       // }
+
         world.accept(LWJGLVisitor);
     }
 
