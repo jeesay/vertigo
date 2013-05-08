@@ -206,67 +206,7 @@ public class Vertigo_Viewer implements PlugIn {
     public Camera getCamera() {
         return camera_;
     }
-
-    public static void main(String[] args) throws LWJGLException {
-        System.out.println("main");
-        Vertigo_Viewer ve = new Vertigo_Viewer();
-        ve.setBackgroundColor(20, 200, 80);
-        ve.setTitle("Mon titre");
-        ve.show("LWJGL");
-
-        //test();
-    }
-
-    private static void test() {
-        /**
-         * *****
-         * Scene scene = new Scene(); Light light = new Light();
-         * scene.add(light); // test getName and default Name
-         * System.out.println("La scène se nomme : " + scene.getName());
-         *
-         * light.traverseDown();
-         *
-         * // add the second light Light two = new Light(); scene.add(two);
-         *
-         * Camera cam = new Camera(); cam.add(scene); Shape first_shape = new
-         * Shape(); scene.add(first_shape);
-         *
-         *
-         * Shape parent_shape = new Shape();
-         * parent_shape.setName("parent_shape"); Shape son_shape = new Shape();
-         * son_shape.setName("son_shape"); Shape daughter_shape = new Shape();
-         * daughter_shape.setName("daughter_shape"); // add son & daughter to
-         * parent parent_shape.add(son_shape); parent_shape.add(daughter_shape);
-         *
-         * Shape s = new Shape(); Shape ac = new Shape(); ac.setName("Another
-         * child."); s.add(ac); scene.add(s);
-         *
-         * scene.add(parent_shape); cam.traverseDownT(); // traverseDownT is
-         * better than traverseDown
-         *
-         * // World's test World w = new World(); w.setName("World"); BackStage
-         * bs = new BackStage(); bs.setName("BackStage"); Stage stage = new
-         * Stage(); stage.setName("Stage");
-         *
-         * w.add(stage); // Add stage before backstage w.add(bs);
-         *
-         * //w.traverseDownT(); Node test = w.getChild(0); //get the first
-         * child if (test instanceof Stage) { System.out.println("stage"); }
-         * else { System.out.println("backstage"); }
-         *
-         * Viewing viewing = new Viewing(); Lighting lighting = new Lighting();
-         * bs.add(lighting); bs.add(viewing); w.traverseDownT(); test =
-         * bs.getChild(0);
-         *
-         * if (test instanceof Viewing) { System.out.println("viewing"); } else
-         * { System.out.println("lighting"); }
-         *
-         *
-         * Node newnode = w.getNode("BackStage"); System.out.println("Le nom du
-         * newnode est " + newnode.getName()); ****
-         */
-    }
-
+    
     public Node getNode(String name) {
         Node a_node = searchName(world_, name);
         if (a_node == null) {

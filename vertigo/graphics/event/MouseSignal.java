@@ -35,19 +35,8 @@ package vertigo.graphics.event;
 
 public class MouseSignal extends Signal {
 
-
-    
- 
-    
-    // CTRL SHIFT ALT
-    
-    // DRAG MOVE
-    
-
-    // LEFT MIDDLE RIGHT
     private int button;
 
-    //WHEEL UP DOWN
     private int wheel;
     private int status;
     private int mouse_x;

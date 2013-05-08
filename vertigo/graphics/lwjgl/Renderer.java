@@ -29,12 +29,13 @@ package vertigo.graphics.lwjgl;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.LWJGLException;
-
+    /**
+     * refreshes the windows till closeRequested
+     */
 
 class Renderer  { 
 
-    //public Renderer(){} 
-    //singleton
+
     public void initShader(){
 	
     }

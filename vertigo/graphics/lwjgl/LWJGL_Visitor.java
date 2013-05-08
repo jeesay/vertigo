@@ -174,17 +174,6 @@ public class LWJGL_Visitor implements Visitor {
             obj.setDirty(Node.SHADER, false);
         }
 
-        /*
-         GL11.glBegin(GL11.GL_POINTS);
-         GL11.glVertex3f(0f, 1f, 0f);
-         GL11.glVertex3f(-1f, 0f, 0f);
-         GL11.glVertex3f(-0.7f, 0f, 0f);
-         GL11.glVertex3f(-0.6f, 0f, 0f);
-         GL11.glVertex3f(-0.5f, 0f, 0f);
-         GL11.glVertex3f(1f, 0f, 0f);
-         GL11.glEnd();
-         */
-
         // Use Program
         glshader = obj.getMaterial().getShaderMaterial();
         GL20.glUseProgram(glshader.getHandle());

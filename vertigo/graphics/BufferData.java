@@ -47,8 +47,6 @@ public BufferData(){
      }
      
          public  BufferData(FloatBuffer data){
-         //BufferData();
-         //buff=BufferTools.newFloatBuffer(data.length);
          buff.put(data);
          buff.flip();
      }

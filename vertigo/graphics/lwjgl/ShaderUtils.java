@@ -44,7 +44,10 @@ import vertigo.graphics.Attribute;
 import vertigo.graphics.BufferTools;
 import vertigo.graphics.ShaderProg;
 import vertigo.graphics.Uniform;
-
+/**
+ * 
+ * @author
+ */
 public final class ShaderUtils {
 
     public String[] vsrc;

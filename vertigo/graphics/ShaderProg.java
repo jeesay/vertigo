@@ -218,7 +218,6 @@ public class ShaderProg {
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line = null;
-            //System.out.println("BR is : "+br.readLine());
             while ((line = br.readLine()) != null) {
                 sb.append(line).append('\n');
             }

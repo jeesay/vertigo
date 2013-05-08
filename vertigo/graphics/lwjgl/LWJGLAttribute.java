@@ -59,25 +59,6 @@ public class LWJGLAttribute extends Attribute {
         }
 
     }
-    /*
-     public void bindVBO(VBO vbo, int i) {
-      
-            if (compare(vbo)) {
-                GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo.getHandle());
-                GL20.glGetAttribLocation(this.handle, name);
-                GL20.glEnableVertexAttribArray(i); //set the vertex's position
-
-                //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                GL20.glVertexAttribPointer(i, vbo.capacity(), false, vbo.getStride(name), vbo.getFloatBuffer());
-                //GL20.glVertexAttribPointer(i, vbo.capacity(), vbo.getSize(), false, vbo.getStride(),vbo.getFloatBuffer());
-                //GL20.glVertexAttribPoin
-            
-                
-                ShaderUtils.useShader(this.handle);
-            }
-    }*/
-
-
     private int getSize(String type) {
         if (type.contains("color")) {
             return 4;

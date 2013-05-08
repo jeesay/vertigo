@@ -129,7 +129,7 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                frame.dispose();  // Ferme l'application si on clic sur la croix en haut à droite
+                frame.dispose(); 
             }
         });
 
@@ -149,7 +149,7 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
         canvas.addGLEventListener(renderer);
 
         frame.add(canvas);
-        frame.setVisible(true); // Make the frame visible
+        frame.setVisible(true); 
 
 
     }

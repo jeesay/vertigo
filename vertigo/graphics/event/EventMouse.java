@@ -34,17 +34,9 @@ package vertigo.graphics.event;
  */
 public class EventMouse extends Event {
     
-    // PUSH, RELEASED, CLICK,DOUBLE_CLICK
+
     private int buttonStatus;
-    
-    // LEFT MIDDLE RIGHT
- 
-    
-    // CTRL SHIFT ALT
-    
-    // DRAG MOVE
-    
-    //WHEEL UP DOWN
+
  public EventMouse(){
      
  }

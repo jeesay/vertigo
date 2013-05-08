@@ -83,10 +83,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
     private KeyboardSignal key_event;
     private ViewportSignal vp_event;
     private Signal allevent;
-//recup matrice avec le visiteur
-    // VBO pour tous les cas (boucle)  une ou deux passes si une marche pas (isDirty), matrice parent x fils
-    //public LWJGL_Window(){} 
-    //singleton
+
     private World world;
 
     public LWJGL_Window() {
@@ -100,7 +97,6 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         mouse_event = new MouseSignal();
         key_event = new KeyboardSignal();
         vp_event = new ViewportSignal();
-        //Mouse.setGrabbed(true);
 
         // loadObserver(); 
 
@@ -152,18 +148,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
             frame.dispose();
             System.out.println("ERROR HERE.");
         }
-        /**
-         * **
-         * // JButton button = new JButton("Exit"); // Create a new canvas and
-         * its size. Canvas canvas = new Canvas(); canvas.setSize(width,
-         * height); // The setParent method attaches the // opengl window to the
-         * awt canvas. try { Display.setParent(canvas); } catch (Exception e) {
-         * e.printStackTrace(); System.exit(0); } frame.setBackground(new
-         * Color(red,green,blue)); // Construct the GUI as normal
-         * //frame.add(button, BorderLayout.NORTH); frame.add(canvas,
-         * BorderLayout.CENTER); frame.pack(); frame.setVisible(true);
-         *
-         */
+
     }
 
     public void initShader() {
@@ -174,8 +159,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
 
     public void display() {
         System.out.println("Display  method.");
-        // Make sure you run the game, which
-        // executes on a separate thread.
+
         while (!Display.isCloseRequested() && !closeRequested) {
             newDim = newCanvasSize.getAndSet(null);
             if (newDim != null) {
@@ -183,7 +167,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
                 GL11.glViewport(0, 0, newDim.width, newDim.height);
                 vpDispatcher.fireUpdate(vp_event);
 
-                //renderer.syncViewportSize(0, 0, newDim.width, newDim.height);
+
             }
             Display.sync(60);
             pollInput();
@@ -193,11 +177,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         System.out.println("exit");
         Display.destroy();
         frame.dispose();
-        //process dirty
-        // display scenegraph
-        //camera
-        //scene nodes
-        //boucle for(Shape)
+
     }
 
     public void dispose() {
@@ -205,10 +185,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
     }
 
     private void displayScene() {
-
-        //System.out.println("Display Scene method.");
         renderer.display();
-
     }
 
     @Override
@@ -238,9 +215,6 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
     }
 
     private void pollInput() {
-
-
-
         //mouse_event.setWheel((int) Math.signum(Mouse.getDWheel()));
 
         mouse_event.setButton(Signal.NO_BUTTON);

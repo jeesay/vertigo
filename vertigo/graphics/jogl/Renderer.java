@@ -43,8 +43,7 @@ public class Renderer  {
     private void newInstance(Scene a_scene) {
         
     }
-    //public Renderer(){} 
-    //singleton
+ 
     public void initShader(){
 	
     }
@@ -54,7 +53,6 @@ public class Renderer  {
 
     public void display(){
 
-	//boucle for(Shape)
 
     }
 } //end of class Renderer
