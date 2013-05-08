@@ -317,8 +317,7 @@ public class Camera extends Node implements MouseObserver, ViewportObserver {
         else if (o1 instanceof ViewportSignal) {
             ViewportSignal e = (ViewportSignal) o1;
             setViewport(e.getWidth(), e.getHeight() );
-            // System.out.println("Signal Viewport " + e.getWidth() +" " + e.getHeight() );
-
+           
         }
     }
 

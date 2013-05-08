@@ -82,19 +82,16 @@ public class JOGL_Renderer implements GLEventListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-        System.out.println("Display " + red + " " + green + " " + blue);
         GL3 gl = drawable.getGL().getGL3();  // up to OpenGL 3
         gl.glClearColor(red, green, blue, 1.0f);
         gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
 
 
         // Render via Visitor
-        System.out.println("Before visitor");
         visitor = new JOGL_VisitorTwo();
         visitor.setGLDrawable(drawable);
-        System.out.println("After visitor");
         world.accept(visitor);
-        System.out.println("After accept");
+
 
     }
 

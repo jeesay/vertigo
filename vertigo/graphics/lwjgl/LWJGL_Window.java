@@ -83,11 +83,9 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
     private KeyboardSignal key_event;
     private ViewportSignal vp_event;
     private Signal allevent;
-
     private World world;
 
     public LWJGL_Window() {
-        System.out.println("constructor");
         mouseDispatcher = MouseDispatcher.getInstance();
         keyboardDispatcher = KeyboardDispatcher.getInstance();
         timerDispatcher = TimerDispatcher.getInstance();
@@ -158,7 +156,6 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
     }
 
     public void display() {
-        System.out.println("Display  method.");
 
         while (!Display.isCloseRequested() && !closeRequested) {
             newDim = newCanvasSize.getAndSet(null);
@@ -209,9 +206,7 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
     public void setWorld(World _world) {
         world = _world;
         renderer.setWorld(_world);
-        System.out.println("entrée dans load observer");
         loadObserver(_world);
-        System.out.println("sortie de load observer");
     }
 
     private void pollInput() {
@@ -232,14 +227,12 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
 
             mouse_event.setButton(Signal.BUTTON_LEFT);
 
-            
-
-            //System.out.println(mouse_event);
-        }  if (Mouse.isButtonDown(1)) {
+        }
+        if (Mouse.isButtonDown(1)) {
             mouse_event.setButton(Signal.BUTTON_RIGHT);
 
-            //System.out.println(mouse_event);
-        }  if (Mouse.isButtonDown(2)) {
+        }
+        if (Mouse.isButtonDown(2)) {
 
             mouse_event.setButton(Signal.BUTTON_MIDDLE);
 
@@ -247,21 +240,21 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
             System.out.println("MIDDLE");
         }
 
-            System.out.println("Grab" + Mouse.isGrabbed());
-            int dWheel = Mouse.getDWheel(); //don't work
-            System.out.println("The WHEEL : " + dWheel);
-            
-            if (dWheel < 0) {
-               // mouse_event.setButtonStatus(Signal.NONE);
-                System.out.println("WHEEL DOWN");
-                mouse_event.setWheel(-1);
-            } else if (dWheel > 0) {
-                
-                mouse_event.setWheel(1);
-               // mouse_event.setButtonStatus(Signal.NONE);
-                System.out.println("WHEEL UP");
-            }
-mouseDispatcher.fireUpdate(mouse_event);
+        System.out.println("Grab" + Mouse.isGrabbed());
+        int dWheel = Mouse.getDWheel(); //don't work
+        System.out.println("The WHEEL : " + dWheel);
+
+        if (dWheel < 0) {
+            // mouse_event.setButtonStatus(Signal.NONE);
+            System.out.println("WHEEL DOWN");
+            mouse_event.setWheel(-1);
+        } else if (dWheel > 0) {
+
+            mouse_event.setWheel(1);
+            // mouse_event.setButtonStatus(Signal.NONE);
+            System.out.println("WHEEL UP");
+        }
+        mouseDispatcher.fireUpdate(mouse_event);
 
 
 
@@ -338,20 +331,17 @@ mouseDispatcher.fireUpdate(mouse_event);
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent mwe) {
-        System.out.println("HERE ************************     1    ");
-        if (mwe.getWheelRotation() < 0) {
-            System.out.println("HERE ************************     2");
+             if (mwe.getWheelRotation() < 0) {
             System.out.println("Rotated Up... " + mwe.getWheelRotation());
             mouse_event.setWheel(Signal.WHEEL_UP);
             mouse_event.setButton(0);
             System.out.println(mouse_event);
-        } else {
+           } else {
             System.out.println("Rotated Down... " + mwe.getWheelRotation());
             mouse_event.setWheel(Signal.WHEEL_DOWN);
             mouse_event.setButton(0);
             System.out.println(mouse_event);
-            System.out.println("HERE ************************    3");
-        }
+            }
         mouseDispatcher.fireUpdate(mouse_event);
     }
 } // end of class LWJGL_Window

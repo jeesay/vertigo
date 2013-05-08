@@ -80,13 +80,10 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
     public void setWorld(World _world) {
         world = _world;
         renderer.setWorld(_world);
-        System.out.println("entrée dans load observer");
         loadObserver(_world);
-        System.out.println("sortie de load observer");
     }
 
     private void loadObserver(Node obj) {
-        System.out.println("Load Observer observer " + obj);
         if (obj instanceof MouseObserver) {
             mouseDispatcher.addObserver((Observer) obj);
         } else if (obj instanceof TimerObserver) {
@@ -123,8 +120,6 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
     }
 
     private void createWindow() {
-        System.out.println("create window");
-
         frame = new Frame();
         frame.addWindowListener(new WindowAdapter() {
             @Override
