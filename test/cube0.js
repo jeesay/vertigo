@@ -4,12 +4,11 @@ viewer.setBackgroundColor(50,200,0);
 
 // Get Camera and translate it 
 var cam = viewer.getCamera();
-cam.setPosition(0.0,0.0,8.0);
+cam.setPosition(0,0,8);
 
 // Get Scene 
 var scene = viewer.getScene();
 var cube=scene.addNewNode("WireCube");
-cube.setColor(100,100,50);
 
 viewer.show("LWJGL");
 

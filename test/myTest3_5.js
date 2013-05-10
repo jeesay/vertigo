@@ -44,9 +44,16 @@ var viewer = newInstance("Vertigo_Viewer");
 viewer.setTitle("My Test");
 viewer.setBackgroundColor(0,250,0);
 viewer.setDimension(900,900);
+
+// Get Camera and translate it 
+var cam = viewer.getCamera();
+cam.setPosition(0.0,0.0,4.0);
+
 // Get Scene 
 var scene = viewer.getScene();
 IJ.log(scene);
+
+
 
 //Create and add a shape entitled "Cube" to the scene
 // Use of default material
