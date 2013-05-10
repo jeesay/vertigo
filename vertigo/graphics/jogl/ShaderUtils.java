@@ -24,9 +24,7 @@
  * Olivier Catoliquot
  * Clement Delestre
  */
-
 package vertigo.graphics.jogl;
-
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -39,11 +37,13 @@ import ij.IJ;
 
 import vertigo.graphics.ShaderProg;
 import javax.media.opengl.GL3;
+import vertigo.graphics.Attribute;
+import vertigo.graphics.Uniform;
 
 public class ShaderUtils {
 
-  public String[] vsrc;
-  public String[] fsrc;
+    public String[] vsrc;
+    public String[] fsrc;
 
     // loads the shaders
     // in this example we assume that the shader is a file located in the applications JAR file.
@@ -77,10 +77,25 @@ public class ShaderUtils {
         int shaderprogram;
         vertexShaderProgram = gl.glCreateShader(GL3.GL_VERTEX_SHADER);
         fragmentShaderProgram = gl.glCreateShader(GL3.GL_FRAGMENT_SHADER);
-        gl.glShaderSource(vertexShaderProgram, 1, vertexCode, null, 0);
+/*
+        IntBuffer vintBuffer = IntBuffer.allocate(vertexCode.length);
+        vintBuffer.rewind();
+
+        IntBuffer fintBuffer = IntBuffer.allocate(fragmentCode.length);
+        fintBuffer.rewind();*/
+        
+
+        gl.glShaderSource(vertexShaderProgram, 1, vertexCode, (int[]) null, 0);
+        //  or
+        //  gl.glShaderSource(vertexShaderProgram, vertexCode.length, vertexCode, (IntBuffer)null); 
+
         gl.glCompileShader(vertexShaderProgram);
-        gl.glShaderSource(fragmentShaderProgram, 1, fragmentCode, null, 0);
+
+        gl.glShaderSource(fragmentShaderProgram, 1, fragmentCode, (int[]) null, 0);
+        // or 
+        // gl.glShaderSource(vertexShaderProgram, fragmentCode.length, fragmentCode, (IntBuffer)null); 
         gl.glCompileShader(fragmentShaderProgram);
+
         shaderprogram = gl.glCreateProgram();
         //
         gl.glAttachShader(shaderprogram, vertexShaderProgram);
@@ -88,17 +103,21 @@ public class ShaderUtils {
         gl.glLinkProgram(shaderprogram);
         gl.glValidateProgram(shaderprogram);
         IntBuffer intBuffer = IntBuffer.allocate(1);
+        intBuffer.rewind();
         gl.glGetProgramiv(shaderprogram, GL3.GL_LINK_STATUS, intBuffer);
 
-        if (intBuffer.get(0) != 1) {
+        if (intBuffer.get(0) != 0) {
+            System.out.println("Int Buffer : " + intBuffer.get(0));
             gl.glGetProgramiv(shaderprogram, GL3.GL_INFO_LOG_LENGTH, intBuffer);
             int size = intBuffer.get(0);
+            System.out.println("Size is :  " + size);
             System.err.println("Program link error: ");
             if (size > 0) {
                 ByteBuffer byteBuffer = ByteBuffer.allocate(size);
                 gl.glGetProgramInfoLog(shaderprogram, size, intBuffer, byteBuffer);
                 for (byte b : byteBuffer.array()) {
                     System.err.print((char) b);
+                    System.out.println("In the if, size is :  " + size);
                 }
             } else {
                 System.out.println("Unknown");
@@ -121,7 +140,7 @@ public class ShaderUtils {
         gl.glUseProgram(0);
     }
 
-      public static ShaderProg updateShader(GL3 gl,ShaderProg prog) {
+    public static ShaderProg updateShader(GL3 gl, ShaderProg prog) {
         int progID = -1;
         if (prog.isDirty()) {
             try {
@@ -129,19 +148,19 @@ public class ShaderUtils {
             } catch (Exception ex) {
                 Logger.getLogger(JOGL_Renderer.class.getName()).log(Level.SEVERE, null, ex);
             }
-            prog.setProgram(progID);
+            prog.setHandle(progID);
 
             gl.glUseProgram(progID);
             for (Uniform uniform : prog.getAllUniforms()) {
-                uniform.setLocation(gl.glGetUniformLocation(progID, uniform.getName()));
+                prog.setUniformLocation(uniform.getName(), gl.glGetUniformLocation(progID, uniform.getName()));
             }
             for (Attribute attribute : prog.getAllAttributes()) {
-                attribute.setLocation(gl.glGetAttribLocation(progID, attribute.getName()));
+                prog.setAttributeLocation(attribute.getName(), gl.glGetAttribLocation(progID, attribute.getName()));
             }
             gl.glUseProgram(0);
 
         }
-          return prog;
+        return prog;
     }
 
     // This compiles and loads the shader to the video card.
@@ -183,6 +202,4 @@ public class ShaderUtils {
         }
         return shaderprogram;
     }
-
-
 } // End of class ShaderUtils

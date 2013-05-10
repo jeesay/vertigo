@@ -26,18 +26,10 @@
  */
 package vertigo.graphics.jogl;
 
-import java.awt.Frame;
-import java.awt.Panel;
-import java.util.Observer;
-import javax.media.opengl.GL;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
 import vertigo.scenegraph.Camera;
-import vertigo.scenegraph.Node;
 import vertigo.scenegraph.World;
 
 /**
