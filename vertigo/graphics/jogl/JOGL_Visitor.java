@@ -91,7 +91,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix());
             obj.setDirty(Node.MATRIX, false);
         }
-        drawShape(obj);
+        drawShape(obj, gl);
     }
 
     @Override
@@ -124,9 +124,9 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
         }
     }
 
-    private void drawShape(Shape obj) {
+    private void drawShape(Shape obj, GL3 gl) {
         if (obj.isDirty(Node.SHADER)) {
-            processShader(obj);
+            processShader(obj, gl);
             System.out.println("The HANDLE : " + glshader.getHandle());
             obj.setDirty(Node.SHADER, false);
         }
@@ -355,7 +355,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
      }
      }
      */
-    private void processShader(Shape obj) {
+    private void processShader(Shape obj, GL3 gl) {
         int handle;
 
         glshader = obj.getMaterial().getShaderMaterial();
@@ -369,15 +369,30 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
                  for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
                  fragment[i] = Character.toString(glshader.getFragmentSource().charAt(i));
                  }*/
-                String[] vertex = new String[glshader.getVertexSource().length()];
-                for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
-                    vertex[i] = Character.toString(glshader.getVertexSource().charAt(i));
+                /*      String[] vertex = new String[glshader.getVertexSource().length()];
+                 for (int i = 0; i < glshader.getVertexSource().length(); i++) {
+                 vertex[i] = Character.toString(glshader.getVertexSource().charAt(i));
+                 }
+
+
+                 String[] fragment = new String[glshader.getFragmentSource().length()];
+                 for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
+                 fragment[i] = Character.toString(glshader.getFragmentSource().charAt(i));
+                 }
+                 */
+                String[] vertex = glshader.getVertexSource().split(System.getProperty("line.separator"));
+                String[] fragment = glshader.getFragmentSource().split(System.getProperty("line.separator"));
+                for (int i = 0; i < fragment.length; i++) {
+                    System.out.println("fragment : " + fragment[i]);
                 }
 
-                String[] fragment = new String[]{glshader.getFragmentSource()};
+                // String[] vertex = glshader.getVertexSource().split(System.getProperty("line.separator"));
                 //String[] vertex = new String[]{glshader.getVertexSource()};
                 System.out.println(" VERTEX SOURCE : " + vertex);
                 System.out.println(" FRAGMENT SOURCE : " + fragment);
+
+
+
                 handle = ShaderUtils.attachShaders(gl, vertex, fragment);
                 System.out.println("The handle 3 : " + handle);
                 glshader.setHandle(handle);
@@ -391,10 +406,10 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
 
     private void processUniform(Shape obj) {
         ArrayList<Uniform> uniforms = glshader.getAllUniforms();
+        System.out.println("version " + gl.glGetString(gl.GL_VERSION));
         for (Uniform uni : uniforms) {
-            System.out.println("Handle : "+glshader.getHandle() + " name " + uni.getName());
+            System.out.println("Handle : " + glshader.getHandle() + " name [" + uni.getName() + "]");
             if (uni.getType().equals("view_matrix")) {
-
                 int vlocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
                 System.out.println(" View : " + vlocation);
                 gl.glUniformMatrix4fv(vlocation, 16, false, cam_.getViewMatrix().toColumnBuffer());
