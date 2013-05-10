@@ -27,7 +27,6 @@
 
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Camera;
-import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Light;
 import vertigo.scenegraph.World;
 import vertigo.scenegraph.Stage;
@@ -40,12 +39,8 @@ import vertigo.graphics.Window3D;
 
 import ij.IJ;
 import ij.plugin.PlugIn;
-import ij.process.ImageProcessor;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.lwjgl.LWJGLException;
-import vertigo.graphics.lwjgl.Test;
-import vertigo.graphics.lwjgl.TheQuadExampleDrawElements;
 
 public class Vertigo_Viewer implements PlugIn {
 
@@ -65,7 +60,7 @@ public class Vertigo_Viewer implements PlugIn {
         default_scenegraph();
         window_width = 512;
         window_height = 512;
-        title_ = "Vertigo";
+        title_ = " ";
     }
 
     @Override
@@ -108,7 +103,7 @@ public class Vertigo_Viewer implements PlugIn {
      * Displays the window and triggers the OpenGL rendering in an infinite
      * loop.
      */
-    public void show() throws LWJGLException {
+    public void show()  {
         try {
             System.out.println("LWJGL Renderer created");
             graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
@@ -123,7 +118,7 @@ public class Vertigo_Viewer implements PlugIn {
                     graphWin = (Window3D) new vertigo.graphics.text.Text_Renderer();
                     show("TEXT");
                 } catch (ExceptionInInitializerError eie) {
-                    IJ.showMessage("Vertigo ERROR", "<html>Please download JOGL or LWJGL.</html>");
+                    IJ.showMessage("Vertigo ERROR", "Please download JOGL or LWJGL.");
                 }
             }
         }
@@ -131,7 +126,6 @@ public class Vertigo_Viewer implements PlugIn {
             graphWin.setBackgroundColor(red, green, blue);
             graphWin.setDimension(window_width, window_height);
             graphWin.setTitle(title_);
-
             graphWin.setVisible(true);
 
         } catch (NullPointerException nullp) {
@@ -154,10 +148,6 @@ public class Vertigo_Viewer implements PlugIn {
         } else if (render.equals("LWJGL")) {
             try {
                 graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
-
-                // TheQuadExampleDrawElements tqe= new TheQuadExampleDrawElements();
-                // SimpleInterleavedVboExample s = new SimpleInterleavedVboExample();
-                //Test t=new Test();
                 initWindow();
             } catch (ExceptionInInitializerError e) {
                 IJ.showMessage("Vertigo ERROR", "Can't create a graphics window. Please download LWJGL or check your ClassPath.");
@@ -181,7 +171,7 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     /**
-     * Gets the world (aka root) of the scene graph.
+     * Gets the world (a.k.a. root) of the scene graph.
      *
      * @return world
      */
@@ -238,9 +228,7 @@ public class Vertigo_Viewer implements PlugIn {
         scene_ = new Scene();
         BackStage bs = new BackStage();
         Stage stage = new Stage();
-
         world_.add(stage);
-
         ArcBall mouseRot = new ArcBall();
         stage.add(mouseRot);
         mouseRot.add(scene_);

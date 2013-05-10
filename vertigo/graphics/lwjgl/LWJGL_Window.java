@@ -44,16 +44,12 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import vertigo.graphics.KeyboardDispatcher;
 import vertigo.graphics.MouseDispatcher;
 import vertigo.graphics.Window3D;
 import vertigo.graphics.TimerDispatcher;
 import vertigo.graphics.ViewportDispatcher;
-import vertigo.graphics.event.KeyboardObserver;
-import vertigo.graphics.event.MouseObserver;
-import vertigo.graphics.event.TimerObserver;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.World;
 import vertigo.graphics.event.KeyboardObserver;
@@ -65,7 +61,7 @@ import vertigo.graphics.event.TimerObserver;
 import vertigo.graphics.event.ViewportObserver;
 import vertigo.graphics.event.ViewportSignal;
 
-public class LWJGL_Window implements Window3D, MouseWheelListener {
+public class LWJGL_Window implements Window3D {
 
     private int width = 640;
     private int height = 480;
@@ -105,7 +101,6 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         frame.setLayout(new BorderLayout());
         final Canvas canvas = new Canvas();
         System.out.println("createWindow");
-        canvas.addMouseWheelListener(this);
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -171,14 +166,15 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
             displayScene();
             Display.update();
         }
-        System.out.println("exit");
+
+        this.dispose();
         Display.destroy();
         frame.dispose();
 
     }
 
     public void dispose() {
-        // Do nothing
+        renderer.dispose();
     }
 
     private void displayScene() {
@@ -257,10 +253,6 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         mouseDispatcher.fireUpdate(mouse_event);
 
 
-
-
-
-
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
             System.out.println("space bar");
         } else if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -329,19 +321,5 @@ public class LWJGL_Window implements Window3D, MouseWheelListener {
         }
     }
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent mwe) {
-             if (mwe.getWheelRotation() < 0) {
-            System.out.println("Rotated Up... " + mwe.getWheelRotation());
-            mouse_event.setWheel(Signal.WHEEL_UP);
-            mouse_event.setButton(0);
-            System.out.println(mouse_event);
-           } else {
-            System.out.println("Rotated Down... " + mwe.getWheelRotation());
-            mouse_event.setWheel(Signal.WHEEL_DOWN);
-            mouse_event.setButton(0);
-            System.out.println(mouse_event);
-            }
-        mouseDispatcher.fireUpdate(mouse_event);
-    }
+
 } // end of class LWJGL_Window

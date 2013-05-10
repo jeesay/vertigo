@@ -27,16 +27,8 @@
 package vertigo.graphics.lwjgl;
 
 import java.awt.Dimension;
-import java.awt.PopupMenu;
 import java.util.concurrent.atomic.AtomicReference;
-import static org.lwjgl.util.glu.GLU.gluLookAt;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
-import org.lwjgl.opengl.GL15;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.World;
 
@@ -54,11 +46,10 @@ public class LWJGL_Renderer {
     private Camera cam;
     private Dimension newDim;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
-    private int display = 0;
-    LWJGL_VisitorFive LWJGLVisitor;
+    LWJGL_Visitor LWJGLVisitor;
 
     public LWJGL_Renderer() {
-        LWJGLVisitor = new LWJGL_VisitorFive();
+        LWJGLVisitor = new LWJGL_Visitor();
     }
 
     public void setBackgroundColor(float red, float green, float blue) {
@@ -86,5 +77,9 @@ public class LWJGL_Renderer {
 
     void syncViewportSize(int i, int i0, int width, int height) {
         GL11.glViewport(0, 0, newDim.width, newDim.height);
+    }
+    
+    public void dispose(){
+        LWJGLVisitor.dispose();
     }
 } // end of class LWJGL_Renderer
