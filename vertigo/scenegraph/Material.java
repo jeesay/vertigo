@@ -36,6 +36,8 @@ public class Material {
     
     public Material() {
         shader = ShaderFactory.get("monochrome");
+        color=new float[4];
+        this.setColor(0.0f,0.0f,0.0f);
     }
 
     public void setShaderMaterial(String shaderName) {
