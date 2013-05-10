@@ -26,26 +26,15 @@
 */
 package vertigo.graphics;
 
-import vertigo.scenegraph.World;
-
 /**
  *
  * @author Clement Delestre
  */
 
 public interface Renderer {
-   
-    public void createWindow();
-    
-    public void init(World _world);
     
     public void display();
     
-    public void setDimension(int w,int h);
-    
-    public void setTitle(String title);
-    
-    public void setBackgroundColor(int red, int green, int blue);
+    public void setBackgroundColor(float red, float green, float blue);
 
-
-}
+} // end of interface Renderer

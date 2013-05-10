@@ -26,7 +26,6 @@
  */
 package vertigo.graphics;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import vertigo.graphics.event.Signal;
 import vertigo.scenegraph.Transform;

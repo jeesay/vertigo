@@ -33,12 +33,14 @@ import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.World;
+import vertigo.graphics.Renderer;
+
 
 /**
  *
  * @author Florin Buga Olivier Catoliquot Clement Delestre
  */
-public class JOGL_Renderer implements GLEventListener {
+public class JOGL_Renderer implements GLEventListener, Renderer {
 
     // private GLCanvas canvas;
     private Camera cam;
@@ -53,6 +55,7 @@ public class JOGL_Renderer implements GLEventListener {
         // visitor = new JOGL_Visitor();
     }
 
+    @Override
     public void setBackgroundColor(float red, float green, float blue) {
         this.red = red;
         this.green = green;
@@ -125,8 +128,12 @@ public class JOGL_Renderer implements GLEventListener {
         for (Node child : obj.getChildren()) {
             loadDrawables(child);
         }
-    }
 
+    @Override
+    public void display() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    }
 private void processUniform(GLAutoDrawable drawable,Shape shape) {
 
 cam_.getViewMatrix

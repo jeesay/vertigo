@@ -33,8 +33,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -78,7 +76,6 @@ public class LWJGL_Window implements Window3D {
     private MouseSignal mouse_event;
     private KeyboardSignal key_event;
     private ViewportSignal vp_event;
-    private Signal allevent;
     private World world;
 
     public LWJGL_Window() {
@@ -91,9 +88,6 @@ public class LWJGL_Window implements Window3D {
         mouse_event = new MouseSignal();
         key_event = new KeyboardSignal();
         vp_event = new ViewportSignal();
-
-        // loadObserver(); 
-
     }
 
     private void createWindow() {
@@ -143,13 +137,6 @@ public class LWJGL_Window implements Window3D {
         }
 
     }
-
-    public void initShader() {
-    }
-
-    public void initVBO() {
-    }
-
     public void display() {
 
         while (!Display.isCloseRequested() && !closeRequested) {
@@ -158,7 +145,6 @@ public class LWJGL_Window implements Window3D {
                 vp_event.setSize(newDim.width, newDim.height);
                 GL11.glViewport(0, 0, newDim.width, newDim.height);
                 vpDispatcher.fireUpdate(vp_event);
-
 
             }
             Display.sync(60);
@@ -170,7 +156,6 @@ public class LWJGL_Window implements Window3D {
         this.dispose();
         Display.destroy();
         frame.dispose();
-
     }
 
     public void dispose() {
@@ -206,8 +191,6 @@ public class LWJGL_Window implements Window3D {
     }
 
     private void pollInput() {
-        //mouse_event.setWheel((int) Math.signum(Mouse.getDWheel()));
-
         mouse_event.setButton(Signal.NO_BUTTON);
         mouse_event.setButtonStatus(Signal.NONE);
         mouse_event.setWheel(0);
@@ -241,7 +224,6 @@ public class LWJGL_Window implements Window3D {
         System.out.println("The WHEEL : " + dWheel);
 
         if (dWheel < 0) {
-            // mouse_event.setButtonStatus(Signal.NONE);
             System.out.println("WHEEL DOWN");
             mouse_event.setWheel(-1);
         } else if (dWheel > 0) {
@@ -251,7 +233,6 @@ public class LWJGL_Window implements Window3D {
             System.out.println("WHEEL UP");
         }
         mouseDispatcher.fireUpdate(mouse_event);
-
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
             System.out.println("space bar");
@@ -281,7 +262,6 @@ public class LWJGL_Window implements Window3D {
                 }
             }
         }
-
 
         if (!mouse_event.isEmpty()) {
             mouseDispatcher.fireUpdate(mouse_event);
@@ -320,6 +300,5 @@ public class LWJGL_Window implements Window3D {
             loadObserver(child);
         }
     }
-
-
+    
 } // end of class LWJGL_Window

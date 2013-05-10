@@ -40,13 +40,18 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Observer;
+import vertigo.graphics.KeyboardDispatcher;
 import vertigo.graphics.MouseDispatcher;
+import vertigo.graphics.TimerDispatcher;
+import vertigo.graphics.ViewportDispatcher;
 import vertigo.graphics.Window3D;
 import vertigo.graphics.event.KeyboardObserver;
+import vertigo.graphics.event.KeyboardSignal;
 import vertigo.graphics.event.MouseObserver;
 import vertigo.graphics.event.Signal;
 import vertigo.graphics.event.MouseSignal;
 import vertigo.graphics.event.TimerObserver;
+import vertigo.graphics.event.ViewportSignal;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.World;
 
@@ -54,26 +59,28 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
 
     private int width = 400;
     private int height = 400;
-    private String WIN_TITLE = "Vertigo JOGL - ";
-    //private String win_title;
+    private String win_title = "Vertigo JOGL - ";
     private World world;
     private Frame frame;
     private JOGL_Renderer renderer;
-    // private MouseDispatcher eventDispatcher;
     private MouseSignal mouse_event;
-    private Signal allevent;
-    private final MouseDispatcher keyboardDispatcher;
+    private final KeyboardDispatcher keyboardDispatcher;
     private final MouseDispatcher mouseDispatcher;
-    private final MouseDispatcher timerDispatcher;
+    private final TimerDispatcher timerDispatcher;
+    private final KeyboardSignal key_event;
+    private final ViewportSignal vp_event;
+    private final ViewportDispatcher vpDispatcher;
 
     public JOGL_Window() {
         System.out.println("JOGL WINDOW    ");
         renderer = new JOGL_Renderer();
         mouseDispatcher = MouseDispatcher.getInstance();
-        keyboardDispatcher = MouseDispatcher.getInstance();
-        timerDispatcher = MouseDispatcher.getInstance();
+        keyboardDispatcher = KeyboardDispatcher.getInstance();
+        timerDispatcher = TimerDispatcher.getInstance();
+        vpDispatcher = ViewportDispatcher.getInstance();
         mouse_event = new MouseSignal();
-        allevent = new Signal();
+       key_event = new KeyboardSignal();
+        vp_event = new ViewportSignal();
     }
 
     @Override
@@ -109,7 +116,7 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
 
     @Override
     public void setTitle(String title) {
-        WIN_TITLE += title;
+        win_title += title;
     }
 
     @Override
@@ -129,10 +136,9 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
         });
 
         // Set the title
-        frame.setTitle(WIN_TITLE);
+        frame.setTitle(win_title);
         //Set the size
         frame.setSize(width, height);
-
         GLProfile glp = GLProfile.getDefault();
         GLProfile.initSingleton();
         GLCapabilities caps = new GLCapabilities(glp);
