@@ -1,8 +1,8 @@
 /**
  * $Id:$
  *
- * Vertigo: 3D Viewer Plugin for ImageJ. Copyright (C) 2013
- * Jean-Christophe Taveau.
+ * Vertigo: 3D Viewer Plugin for ImageJ. Copyright (C) 2013 Jean-Christophe
+ * Taveau.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,10 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  *
- * Authors : 
- * Florin Buga 
- * Olivier Catoliquot 
- * Clement Delestre
+ * Authors : Florin Buga Olivier Catoliquot Clement Delestre
  */
 package vertigo.scenegraph;
 
@@ -40,51 +37,51 @@ public class Geometry {
 
     private ArrayList<BO> buffers;
     private BufferData buffdata;
-    
+
     public Geometry() {
         buffers = new ArrayList<BO>();
         System.out.println("Une geometry est créée.");
     }
 
-    public void presente(){
-        System.out.println("number of BO "+buffers.size()+" size of :  BufferData "+buffdata.getCapacity());
-        
+    public void presente() {
+        System.out.println("number of BO " + buffers.size() + " size of :  BufferData " + buffdata.getCapacity());
+
     }
-    
-    public BufferData getBufferData(){
+
+    public BufferData getBufferData() {
         return buffdata;
     }
-    
-    public ArrayList <BO> getBuffers(){
+
+    public ArrayList<BO> getBuffers() {
         return buffers;
-}
-    
-    public int getCount(){
+    }
+
+    public int getCount() {
         return buffdata.getCapacity();
     }
-    
-     public void addBuffert(String[] types, float[] data) {
-         buffdata=new BufferData(data);
-         int stride = 0;
-         int offset=0;
-     for (int i = 0; i < types.length; i++) {
+
+    public void addBuffert(String[] types, float[] data) {
+        buffdata = new BufferData(data);
+        int stride = 0;
+        int offset = 0;
+        for (int i = 0; i < types.length; i++) {
             stride += getSize(types[i]);
         }
-     
-     
-      for (int i = 0; i < types.length; i++) {
-            VBO vbo = new VBO (stride,offset,types[i]);
+
+
+        for (int i = 0; i < types.length; i++) {
+            VBO vbo = new VBO(stride, offset, types[i]);
             vbo.setBuffData(buffdata);
             buffers.add(vbo);
-            offset+=getSize(types[i]);
+            offset += getSize(types[i]);
         }
-     }
-     
-     public int getNumberBO(){
-         return buffers.size();
-     }
-     
-      private int getSize(String type) {
+    }
+
+    public int getNumberBO() {
+        return buffers.size();
+    }
+
+    private int getSize(String type) {
         if (type.contains("3")) {
             return 3;
         } else if (type.contains("2")) {
@@ -92,7 +89,7 @@ public class Geometry {
         }
         return 4;
     }
-    
+
     /**
      * Sets the geometry
      *
@@ -101,18 +98,18 @@ public class Geometry {
      * (coordinates, normal, colors,etc.).
      */
     public void addBuffer(String type, float[] data) {
-       // FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
+        // FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         //buf.put(data);
         //buf.rewind();
 
         VBO vbo = new VBO(type);
         //vbo.setFloatBuffer(type, buf);
-        
+
         System.out.println("VBO created !!!");
-        buffdata=new BufferData(data);
+        buffdata = new BufferData(data);
         vbo.setBuffData(buffdata);
         buffers.add(vbo);
-        
+
     }
 
     /**
@@ -131,7 +128,7 @@ public class Geometry {
         FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
         buf.put(data);
         buf.rewind();
-      //  PackedVBO vbo = new PackedVBO();
+        VBO vbo = new VBO();
         vbo.setFloatBuffer(types, buf);
         buffers.add(vbo);
     }
@@ -144,9 +141,9 @@ public class Geometry {
      * (coordinates, normal, colors,etc.).
      */
     public void setVertices(String type, float[] data) {
-        addBuffer(type,data);
+        addBuffer(type, data);
     }
- 
+
     public void addIndices(int[] indexes) {
         IntBuffer buf = BufferTools.newIntBuffer(indexes.length);
         buf.put(indexes);
@@ -156,7 +153,6 @@ public class Geometry {
         System.out.println("IBO ajouté");
         buffers.add(ibo);
     }
-
 
     /**
      * Sets the whole geometry in one single buffer. Ex: X Y Z R G B X Y Z R ...
@@ -171,7 +167,7 @@ public class Geometry {
      * Vertex, Color, Normal and finally TexCoords data for each vertex.
      */
     public void setVertices(String[] types, float[] data) {
-        addBuffer(types,data);
+        addBuffer(types, data);
     }
 
     public void setIndices(int[] indexes) {
@@ -183,5 +179,4 @@ public class Geometry {
         // HACK: for (BO bo : buffers) System.out.println("Geom. buffer "+bo);
         return buffers.get(index);
     }
-
 } // end of class Geometry
