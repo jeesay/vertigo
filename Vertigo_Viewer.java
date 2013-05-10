@@ -197,6 +197,12 @@ public class Vertigo_Viewer implements PlugIn {
         return camera_;
     }
     
+    /**
+     * Gets a node of the scene graph. 
+     * 
+     * @param node's name
+     * 
+     */
     public Node getNode(String name) {
         Node a_node = searchName(world_, name);
         if (a_node == null) {
