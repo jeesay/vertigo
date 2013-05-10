@@ -44,11 +44,11 @@ public class JOGL_Renderer implements GLEventListener {
     private float red;
     private float green;
     private float blue;
-    private JOGL_VisitorTwo visitor;
+    private JOGL_Visitor visitor;
 
     public JOGL_Renderer() {
         System.out.println("JOGL_Renderer created");
-        // visitor = new JOGL_VisitorTwo();
+        // visitor = new JOGL_Visitor();
     }
 
     public void setBackgroundColor(float red, float green, float blue) {
@@ -80,7 +80,7 @@ public class JOGL_Renderer implements GLEventListener {
 
 
         // Render via Visitor
-        visitor = new JOGL_VisitorTwo();
+        visitor = new JOGL_Visitor();
         visitor.setGLDrawable(drawable);
         world.accept(visitor);
 
