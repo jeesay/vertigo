@@ -30,6 +30,8 @@ import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import vertigo.scenegraph.Camera;
+import vertigo.scenegraph.Node;
+import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.World;
 
 /**
@@ -65,6 +67,7 @@ public class JOGL_Renderer implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         // Do nothing
+        loadDrawables(this.world);
     }
 
     @Override
@@ -79,10 +82,17 @@ public class JOGL_Renderer implements GLEventListener {
         gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
 
 
-        // Render via Visitor
+        // Update matrices via Visitor
         visitor = new JOGL_Visitor();
-        visitor.setGLDrawable(drawable);
         world.accept(visitor);
+        
+        for (Shape shape : shapes() ) {
+                // shape
+               processShader( drawable,shape.getMaterial());
+               processUniform( drawable,shape );
+               drawShape(drawable,shape);
+        }
+        
 
 
     }
@@ -98,4 +108,29 @@ public class JOGL_Renderer implements GLEventListener {
     private void update() {
         // nothing to update yet
     }
+    
+    
+        private void loadDrawables(Node obj) {
+        if (obj instanceof Camera) {
+        System.out.println("G2D_Rend: Load camera " + obj);
+            cam_ = (Camera) obj;
+        } else if (obj instanceof Shape) {
+        System.out.println("G2D_Rend: Load drawables " + obj);
+            shapes.add((Shape) obj);
+        }
+        } else if (obj instanceof Light) {
+        System.out.println("G2D_Rend: Load drawables " + obj);
+            lights.add((Shape) obj);
+        }
+        for (Node child : obj.getChildren()) {
+            loadDrawables(child);
+        }
+    }
+
+private void processUniform(GLAutoDrawable drawable,Shape shape) {
+
+cam_.getViewMatrix
+cam_.getProjection();
+}
+
 } //end of class JOGL_Renderer

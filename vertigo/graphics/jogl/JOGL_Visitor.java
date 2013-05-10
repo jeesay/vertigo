@@ -132,7 +132,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
         }
 
         gl.glUseProgram(obj.getMaterial().getShaderMaterial().getHandle());
-        processUniform(obj);
+        //processUniform(obj);
 
         // boolean isIndexed = false;
         // PreProcessing
@@ -207,6 +207,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
 
                 for (Attribute attrib : attribute) {
                     int alocation = gl.glGetAttribLocation(glshader.getHandle(), attrib.getName());
+                    System.out.println(" alocation : "+alocation+" name " +attrib.getName());
                     gl.glEnableVertexAttribArray(alocation);
                     gl.glVertexAttribPointer(alocation, attrib.getSize(), gl.GL_FLOAT, false, vbo.getStride() * bytesPerFloat, 0L);
                 }
@@ -393,7 +394,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
 
 
 
-                handle = ShaderUtils.attachShaders(gl, vertex, fragment);
+                handle = ShaderUtils.attachShaders(gl, vertex, fragment,glshader);
                 System.out.println("The handle 3 : " + handle);
                 glshader.setHandle(handle);
                 System.out.println("The handle 4  : " + glshader.getHandle());

@@ -71,30 +71,45 @@ public class ShaderUtils {
     // This compiles and loads the shader to the video card.
     // if there is a problem with the source the program will exit at this point.
     //
-    public static int attachShaders(GL3 gl, String[] vertexCode, String[] fragmentCode) throws Exception {
+    public static int attachShaders(GL3 gl, String[] vertexCode, String[] fragmentCode, ShaderProg shader) throws Exception {
         int vertexShaderProgram;
         int fragmentShaderProgram;
         int shaderprogram;
+        IntBuffer intBuffer = IntBuffer.allocate(1);
+        intBuffer.rewind();
+
         vertexShaderProgram = gl.glCreateShader(GL3.GL_VERTEX_SHADER);
         fragmentShaderProgram = gl.glCreateShader(GL3.GL_FRAGMENT_SHADER);
-/*
-        IntBuffer vintBuffer = IntBuffer.allocate(vertexCode.length);
-        vintBuffer.rewind();
+        /*
+         IntBuffer vintBuffer = IntBuffer.allocate(vertexCode.length);
+         vintBuffer.rewind();
 
-        IntBuffer fintBuffer = IntBuffer.allocate(fragmentCode.length);
-        fintBuffer.rewind();*/
-        
+         IntBuffer fintBuffer = IntBuffer.allocate(fragmentCode.length);
+         fintBuffer.rewind();*/
 
-        gl.glShaderSource(vertexShaderProgram, 1, vertexCode, (int[]) null, 0);
+
+        // gl.glShaderSource(vertexShaderProgram, 1, vertexCode, (int[]) null, 0);
         //  or
-        //  gl.glShaderSource(vertexShaderProgram, vertexCode.length, vertexCode, (IntBuffer)null); 
+        gl.glShaderSource(vertexShaderProgram, vertexCode.length, vertexCode, (IntBuffer) null);
 
         gl.glCompileShader(vertexShaderProgram);
+        int err = gl.glGetError();
+        if (err != gl.GL_NO_ERROR) {
+            System.out.println("createAndCompileShader: CompileShader failed, GL Error: 0x" + Integer.toHexString(err));
+        }
 
-        gl.glShaderSource(fragmentShaderProgram, 1, fragmentCode, (int[]) null, 0);
+
+
+        //gl.glShaderSource(fragmentShaderProgram, 1, fragmentCode, (int[]) null, 0);
         // or 
-        // gl.glShaderSource(vertexShaderProgram, fragmentCode.length, fragmentCode, (IntBuffer)null); 
+        gl.glShaderSource(vertexShaderProgram, fragmentCode.length, fragmentCode, (IntBuffer) null);
         gl.glCompileShader(fragmentShaderProgram);
+
+
+
+        //if the compiling was unsuccessful, throw an exception
+
+
 
         shaderprogram = gl.glCreateProgram();
         //
@@ -102,8 +117,7 @@ public class ShaderUtils {
         gl.glAttachShader(shaderprogram, fragmentShaderProgram);
         gl.glLinkProgram(shaderprogram);
         gl.glValidateProgram(shaderprogram);
-        IntBuffer intBuffer = IntBuffer.allocate(1);
-        intBuffer.rewind();
+
         gl.glGetProgramiv(shaderprogram, GL3.GL_LINK_STATUS, intBuffer);
 
         if (intBuffer.get(0) != 0) {
@@ -124,6 +138,8 @@ public class ShaderUtils {
             }
             System.exit(1);
         }
+     shader.setHandle(shaderprogram);
+        updateShader(gl,shader);
         return shaderprogram;
     }
 
@@ -142,13 +158,7 @@ public class ShaderUtils {
 
     public static ShaderProg updateShader(GL3 gl, ShaderProg prog) {
         int progID = -1;
-        if (prog.isDirty()) {
-            try {
-                progID = attachVFShaders(gl, prog);
-            } catch (Exception ex) {
-                Logger.getLogger(JOGL_Renderer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            prog.setHandle(progID);
+
 
             gl.glUseProgram(progID);
             for (Uniform uniform : prog.getAllUniforms()) {
@@ -159,7 +169,14 @@ public class ShaderUtils {
             }
             gl.glUseProgram(0);
 
-        }
+/***        if (prog.isDirty()) {
+            try {
+                progID = attachVFShaders(gl, prog);
+            } catch (Exception ex) {
+                Logger.getLogger(JOGL_Renderer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            prog.setHandle(progID);        }
+            * ***/
         return prog;
     }
 
