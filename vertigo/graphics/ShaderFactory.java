@@ -52,7 +52,7 @@ public class ShaderFactory {
             case 423: // flat
                 if (table.get(423) == null) {
                     table.put(423, create_flat());
-                    System.out.println("We create a monochrome " + name);
+                    System.out.println("We create a flat " + name);
                 }
                 shader = table.get(423);
                 break;
