@@ -254,7 +254,6 @@ public class LWJGL_Visitor implements Visitor {
             case 1116: // LINES_ADJACENCY
                 return GL32.GL_LINES_ADJACENCY;
             case 705: // LINE_LOOP
-                System.out.println("Here we have LINE_LOOP");
                 return GL11.GL_LINE_LOOP;
             case 793: // LINE_STRIP
                 return GL11.GL_LINE_STRIP;
@@ -351,6 +350,9 @@ public class LWJGL_Visitor implements Visitor {
         }
     }
 
+    /*
+     * Delete Buffers and Shader when the window is closed.
+     */
     public void dispose() {
         GL15.glDeleteBuffers(ib);
         glshader.setHandle(ShaderProg.UNKNOWN);
