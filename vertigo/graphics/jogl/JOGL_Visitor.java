@@ -56,8 +56,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
     private ArrayList<Attribute> attribute;
     // r
     // rotate
-    static float speedPyramid = 2.0f; // rotational speed for pyramid
-    static float speedCube = -1.5f;
+
 
     @Override
     public void visit(BackStage obj) {
@@ -91,7 +90,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix());
             obj.setDirty(Node.MATRIX, false);
         }
-        drawShape(obj, gl);
+       // drawShape(obj, gl);
     }
 
     @Override
@@ -123,7 +122,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
             obj.setDirty(Node.MATRIX, false);
         }
     }
-
+/*
     private void drawShape(Shape obj, GL3 gl) {
         if (obj.isDirty(Node.SHADER)) {
             processShader(obj, gl);
@@ -156,7 +155,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
         System.out.println("Number of BO is : " + nbBO);
         /*
          //int[] buffer = new int[nbBO]; 
-         IntBuffer buffer = IntBuffer.allocate(nbBO); */
+         IntBuffer buffer = IntBuffer.allocate(nbBO); 
         // Generate VBO
 
         IntBuffer buf = Buffers.newDirectIntBuffer(nbBO);
@@ -195,7 +194,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
                  System.out.println("Buffer data IBO ");
                  // release ibo
                  gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, 0);
-                 System.out.println("Released IBO ! ");*/
+                 System.out.println("Released IBO ! ");
             } else {
                 System.out.println("Here VBO ! ");
                 VBO vbo = (VBO) bo;
@@ -234,7 +233,24 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
                  // GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
                  System.out.println("Released VBO");*/
 
+    @Override
+    public void init(GLAutoDrawable glad) {
+        
+    }
 
+    @Override
+    public void dispose(GLAutoDrawable glad) {
+    }
+
+    @Override
+    public void display(GLAutoDrawable glad) {
+    }
+
+    @Override
+    public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
+    }
+
+/*
             }
             System.out.println("Here for loop ! i=" + i);
         }
@@ -247,14 +263,14 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
             gl.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, capacity / vbo3f.getStride());
         }
     }
-
+/*
     private int getOpenGLStyle(String vertigo_style) {
         int style = calcIndex(vertigo_style);
         switch (style) {
             case 379: // LINES
                 return GL.GL_LINES;
             /*   case 1116: // LINES_ADJACENCY
-             return GL.GL_LINES_ADJACENCY;*/
+             return GL.GL_LINES_ADJACENCY;
             case 705: // LINE_LOOP
                 return GL.GL_LINE_LOOP;
             case 793: // LINE_STRIP
@@ -262,30 +278,30 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
             /*  case 1530: // LINE_STRIP_ADJACENCY
              return GL.GL_LINE_STRIP_ADJACENCY;*/
             /* case 520: // PATCHES
-             return GL.GL_PATCHES;*/
+             return GL.GL_PATCHES;
             case 477: // POINTS
                 return GL.GL_POINTS;
             case 681: // TRIANGLES
                 return GL.GL_TRIANGLES;
             /* case 1418: // TRIANGLES_ADJACENCY
-             return GL.GL_TRIANGLES_ADJACENCY;*/
+             return GL.GL_TRIANGLES_ADJACENCY;
             case 906: // TRIANGLE_FAN
                 return GL.GL_TRIANGLE_FAN;
             case 1095: // TRIANGLE_STRIP
                 return GL.GL_TRIANGLE_STRIP;
             /*  case 1832: // TRIANGLE_STRIP_ADJACENCY
-             return GL.GL_TRIANGLE_STRIP_ADJACENCY;*/
+             return GL.GL_TRIANGLE_STRIP_ADJACENCY;
             default: // Do nothing  
                 return -1;
         }
-    }
+    }*/
 
     /**
      * Calc index by summing all the Unicode values in the string 'name'
      *
      * @param name
      * @return index
-     */
+     *//*
     private static int calcIndex(String name) {
         int index = 0;
         for (int i = 0; i < name.length(); i++) {
@@ -319,7 +335,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
     public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
         // do nothing
     }
-
+/*
     void setGLDrawable(GLAutoDrawable drawable) {
         // System.out.println("drawable");
         gl = drawable.getGL().getGL3();
@@ -330,6 +346,8 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
      *
      * @param vbo
      */
+    
+    /*
     private void enable(VBO vbo) {
         if (vbo.getType().contains("V")) {
             vbo3f = vbo;
@@ -355,7 +373,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
      gl.glColorPointer(vbo.getSize(), GL.GL_FLOAT, vbo.getStride() * bytesPerFloat, vbo.getSize() * bytesPerFloat);
      }
      }
-     */
+     *//*
     private void processShader(Shape obj, GL3 gl) {
         int handle;
 
@@ -380,7 +398,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
                  for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
                  fragment[i] = Character.toString(glshader.getFragmentSource().charAt(i));
                  }
-                 */
+                 
                 String[] vertex = glshader.getVertexSource().split(System.getProperty("line.separator"));
                 String[] fragment = glshader.getFragmentSource().split(System.getProperty("line.separator"));
                 for (int i = 0; i < fragment.length; i++) {
@@ -404,7 +422,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
         }
 
     }
-
+/*
     private void processUniform(Shape obj) {
         ArrayList<Uniform> uniforms = glshader.getAllUniforms();
         System.out.println("version " + gl.glGetString(gl.GL_VERSION));
@@ -429,5 +447,7 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
             }
         }
     }
+    
+    */
 } // end of class JOGL Visitor
 // http://forum.jogamp.org/Can-someone-please-help-me-complete-this-sample-code-td3207414.html

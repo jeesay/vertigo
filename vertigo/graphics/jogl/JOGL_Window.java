@@ -72,7 +72,7 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
     private final ViewportDispatcher vpDispatcher;
 
     public JOGL_Window() {
-        System.out.println("JOGL WINDOW    ");
+        System.out.println("JOGL WINDOW");
         renderer = new JOGL_Renderer();
         mouseDispatcher = MouseDispatcher.getInstance();
         keyboardDispatcher = KeyboardDispatcher.getInstance();

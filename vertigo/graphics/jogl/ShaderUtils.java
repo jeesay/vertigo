@@ -83,11 +83,8 @@ public class ShaderUtils {
         /*
          IntBuffer vintBuffer = IntBuffer.allocate(vertexCode.length);
          vintBuffer.rewind();
-
          IntBuffer fintBuffer = IntBuffer.allocate(fragmentCode.length);
          fintBuffer.rewind();*/
-
-
         // gl.glShaderSource(vertexShaderProgram, 1, vertexCode, (int[]) null, 0);
         //  or
         gl.glShaderSource(vertexShaderProgram, vertexCode.length, vertexCode, (IntBuffer) null);
@@ -98,18 +95,12 @@ public class ShaderUtils {
             System.out.println("createAndCompileShader: CompileShader failed, GL Error: 0x" + Integer.toHexString(err));
         }
 
-
-
         //gl.glShaderSource(fragmentShaderProgram, 1, fragmentCode, (int[]) null, 0);
         // or 
         gl.glShaderSource(vertexShaderProgram, fragmentCode.length, fragmentCode, (IntBuffer) null);
         gl.glCompileShader(fragmentShaderProgram);
 
-
-
         //if the compiling was unsuccessful, throw an exception
-
-
 
         shaderprogram = gl.glCreateProgram();
         //
@@ -139,7 +130,7 @@ public class ShaderUtils {
             System.exit(1);
         }
      shader.setHandle(shaderprogram);
-        updateShader(gl,shader);
+      //  updateShader(gl,shader);
         return shaderprogram;
     }
 
