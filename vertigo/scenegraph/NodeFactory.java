@@ -27,8 +27,6 @@
 package vertigo.scenegraph;
 
 import ij.IJ;
-import java.util.List;
-import java.util.Arrays;
 
 import vertigo.scenegraph.shapes.Cube;
 import vertigo.scenegraph.shapes.Pyramid;
@@ -103,6 +101,7 @@ public class NodeFactory {
                 a_node = new Cube("Wire");
                 break;
             case 1133: // WirePyramid
+                 a_node = new Pyramid("Wire");
                 break;
             case 1022: // WireSphere
                 break;

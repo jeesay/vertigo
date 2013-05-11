@@ -89,6 +89,7 @@ public class Shape extends Node {
      */
     public void setGeometry(String type, float[] data) {
         geo.setVertices(type, data);
+        
         if (type.equals("V3F")) {
             bbox.expand(data);
             setDirty(Node.AABB,false);
