@@ -34,6 +34,7 @@ public class VBO extends BO {
     private FloatBuffer buffer;
     private Hashtable<String, Props> props;
     private BufferData Buffdata;
+    private int offset;
 
     public VBO() {
         super();

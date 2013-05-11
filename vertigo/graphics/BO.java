@@ -35,7 +35,6 @@ public class BO {
 
     protected int handle;
     protected int stride;
-    protected int offset;
     protected String type;
 
     public BO() {
