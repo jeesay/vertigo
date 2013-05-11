@@ -56,7 +56,7 @@ public class Uniform {
         return handle;
     }
 
-    public Object getType() {
+    public String getType() {
         return type;
     }
 } // end of class Uniform

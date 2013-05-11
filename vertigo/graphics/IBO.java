@@ -30,17 +30,16 @@ import java.nio.IntBuffer;
 
 public class IBO extends BO {
   
-  IntBuffer buffer;
-  String type;
-  int stride;
+  private IntBuffer buffer;
+
   
   public IBO() {
     super();
+    offset=0;
   }
   
   public void setIntBuffer(IntBuffer buf) {
         buffer = buf;
-       // buffer.flip();
         this.type = "INDEX";
         this.stride = 0;
     }
