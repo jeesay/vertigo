@@ -45,11 +45,11 @@ import java.util.Iterator;
 public class Vertigo_Viewer implements PlugIn {
 
     private String title_;
-    private int window_width;
-    private int window_height;
-    private int red;
-    private int green;
-    private int blue;
+    private int window_width= 512;
+    private int window_height= 512;
+    private int red=0;
+    private int green=0;
+    private int blue=0;
     private Scene scene_;
     private Camera camera_;
     private Window3D graphWin;
@@ -58,8 +58,6 @@ public class Vertigo_Viewer implements PlugIn {
 
     public Vertigo_Viewer() {
         default_scenegraph();
-        window_width = 512;
-        window_height = 512;
         title_ = " ";
     }
 
