@@ -124,13 +124,12 @@ public class LWJGL_Visitor implements Visitor {
 
         // PreProcessing
         if (obj.isDirty(Node.SHADER)) {
-
             processShader(obj);
             System.out.println("The HANDLE : " + glshader.getHandle());
             obj.setDirty(Node.SHADER, false);
         }
         GL20.glUseProgram(obj.getMaterial().getShaderMaterial().getHandle());
-        processUniform(obj); //here ?       
+        processUniform(obj);       
         // Geometry: VBO
         //  if (obj.isDirty(Node.VBO)) {
         processBO(obj);
@@ -341,7 +340,7 @@ public class LWJGL_Visitor implements Visitor {
                 GL20.glUniformMatrix4(plocation, false, cam_.getProjection().toColumnBuffer());
             } else if (uni.getType().equals("matrix")) {
                 int mlocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
-                // System.out.println(" Location : "+mlocation);
+                System.out.println(" Location : "+mlocation+" Type : " + uni.getType());
                 GL20.glUniformMatrix4(mlocation, false, obj.getModelMatrix().toColumnBuffer());
             } else if (uni.getType().equals("C4F")) {
                 int clocation = GL20.glGetUniformLocation(glshader.getHandle(), uni.getName());
