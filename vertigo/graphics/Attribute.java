@@ -26,33 +26,52 @@
  */
 package vertigo.graphics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  * Class Attribute
  *
- * @author Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class Attribute {
 
+    /**
+     * The attribute's name
+     *
+     * @see Attribute#getName()
+     */
     private String name;
+    /**
+     * The attribute's handle
+     *
+     * @see Attribute#setHandle(int)
+     * @see Attribute#getHandle()
+     */
     private int handle = -1;
-    private static HashMap<String, String> table;
+    /**
+     * The attribute's type
+     *
+     * @see Attribute#getType()
+     */
     private String type;
 
     public Attribute(String name) {
         this.name = name;
-        initTable();
     }
 
     public Attribute(String name, String type) {
         this.name = name;
         this.type = type;
-        System.out.println(" Name is "+name+" and type : "+type+" **** ");
-        //initTable();
+        System.out.println(" Name is " + name + " and type : " + type + " **** ");
     }
 
+    /**
+     * Gets Attribute's type
+     *
+     * @return type
+     */
     public String getType() {
         return type;
     }
@@ -60,50 +79,50 @@ public class Attribute {
     public Attribute(String name, int handle) {
         this.name = name;
         this.handle = handle;
-        initTable();
     }
 
-    private static void initTable() {
-        // define the VBO/Attribute pair
-        table.put("aPositionVertex", "V3F");
-        table.put("aColorVertex", "C4F");
-        table.put("aNormalVertex", "N3F");
-    }
-
+    /**
+     * Sets Attribute's handle
+     *
+     * @param handle
+     */
     public void setHandle(int handle) {
         this.handle = handle;
     }
 
+    /**
+     * Gets Attribute's handle
+     *
+     * @return handle
+     */
     public int getHandle() {
         return handle;
     }
 
+    /**
+     * Gets Attribute's type
+     *
+     * @return type
+     */
     public String getVBOtype(String type) {
         return table.get(type);
     }
 
+    /**
+     * Gets Attribute's name
+     *
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
-    /* public void bindVBO(ArrayList<BO> buffer) {
-     for (BO bo : buffer) {
-     VBO vbo = (VBO) bo;
-     String VBOtype = vbo.getType();
-     if (name.equals(vbo.getType())) {
-
-     /* GL20.glGetAttribLocation(glshader.getHandle(), "aVertexPosition");
-     GL20.glEnableVertexAttribArray(i); //set the vertex's position
-
-     //  GL20.glenableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-     GL20.glVertexAttribPointer(i, vbo.capacity(), false, getSize(attribute), vbo.getFloatBuffer());
-     ShaderUtils.useShader(glshader.getHandle());
-     }
-     }
-
-     }*/
+    /**
+     * Gets Attribute's size
+     *
+     * @return size
+     */
     public int getSize() {
-
         if (type.contains("4")) {
             return 4;
         } else if (type.contains("3")) {
