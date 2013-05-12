@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import vertigo.graphics.AABB;
 import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
-import vertigo.math.Vector3;
-import java.util.Iterator;
 
 /**
  * Class Node
@@ -44,14 +42,41 @@ import java.util.Iterator;
  */
 public abstract class Node {
 
+    /**
+     * Node's parent
+     *
+     * @see Node#setParent(vertigo.scenegraph.Node)
+     */
     private Node parent;
+    /**
+     * Node's children. Node can have 0 or several children.
+     *
+     * @see Node#add(vertigo.scenegraph.Node)
+     * @see Node#getChildren()
+     * @see Node#getChild(int)
+     */
     protected ArrayList<Node> children;
-    // World coordinate matrix
+    /**
+     * Node's coordinate Matrix4
+     *
+     * @see Node#getModelMatrix()
+     * @see Node#setModelMatrix(vertigo.math.Matrix4)
+     */
     private Matrix4 modelMatrix;
+    /**
+     * Node's AABB
+     */
     protected AABB bbox;
     private byte dirty_;
     protected boolean drawable_;
+    /**
+     * The Node's name
+     * @see Node#setName(java.lang.String) 
+     * @see Node#getName() 
+     */
     protected String name;
+    
+    
     public static byte MATRIX = 0x1;
     public static byte AABB = 0x2;
     public static byte VBO = 0x4;
@@ -66,23 +91,24 @@ public abstract class Node {
         default_create();
     }
 
-    public Node(String name){
+    public Node(String name) {
         default_create();
-        this.name=name; 
+        this.name = name;
     }
+
     /**
-     * Set Node name
+     * Sets Node name
      *
-     * @param String
+     * @param name
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Get Node name
+     * Gets Node name
      *
-     * @return String
+     * @return name
      */
     public String getName() {
         return this.name;
@@ -91,7 +117,7 @@ public abstract class Node {
     /**
      * Set node's Parent
      *
-     * @param Node
+     * @param parent
      */
     public void setParent(Node a_node) {
         this.parent = a_node;
@@ -100,7 +126,7 @@ public abstract class Node {
     /**
      * Method for add one child.
      *
-     * @param Node anode
+     * @param child
      */
     public void add(Node a_node) {
         System.out.println("add " + a_node);
@@ -125,16 +151,15 @@ public abstract class Node {
     /**
      * Remove one child.
      *
-     * @param Node anode
+     * @param a Node
      */
     public void remove(Node a_node) {
         children.remove(a_node);
     }
 
     /**
-     * Get the Node's children.
+     * Gets the Node's children.
      *
-     * @param Node anode
      * @return ArrayList<Node>
      */
     public ArrayList<Node> getChildren() {
@@ -142,46 +167,47 @@ public abstract class Node {
     }
 
     /**
-     * Get a node's child.
+     * Gets a node's child.
      *
      * @param index
-     * @return Node
+     * @return child
      */
     public Node getChild(int index) {
         return children.get(index);
     }
 
     /**
-     * Get the Node's parent
+     * Gets the Node's parent
      *
-     * @return Node.
+     * @param parent.
      */
     public Node getParent() {
         return parent;
     }
 
     /**
-     * Get a node from the scenegraph of a given name.
+     * Gets a node from the scenegraph of a given name.
      *
      * @params node_name : Node name.
      * @return Node.
      */
     public Node getNode(String node_name) {
-        if (this.getName().equals(node_name) )
-           return this;
-        else {
-            Node n=null;
+        if (this.getName().equals(node_name)) {
+            return this;
+        } else {
+            Node n = null;
             for (Node child : getChildren()) {
                 n = child.getNode(node_name);
-                if ( n != null)
+                if (n != null) {
                     return n;
+                }
             }
         }
         return null;
     }
 
     /**
-     * Get the node's number of children.
+     * Gets the node's number of children.
      *
      * @return int.
      */
@@ -190,7 +216,7 @@ public abstract class Node {
     }
 
     /**
-     * Get the Bounding Box
+     * Gets the Bounding Box
      *
      * @return AABB.
      */
@@ -212,11 +238,10 @@ public abstract class Node {
         setDirty(AABB, false);
     }
 
-
     /**
      * Get the model matrix from local to world coordinates
      *
-     * @return Node.
+     * @return Node's matrix.
      */
     public Matrix4 getModelMatrix() {
         return modelMatrix;
@@ -269,21 +294,18 @@ public abstract class Node {
      * @param Only check the status of a given properties: MATRIX, VBO, SHADER
      * @return Flag giving the status of this node
      */
-     public void setAllDirty(byte flag, boolean value) {
-         setDirty(flag, value);
-         for (Node n : children)
-             n.setAllDirty(flag,value);
-     }
-
+    public void setAllDirty(byte flag, boolean value) {
+        setDirty(flag, value);
+        for (Node n : children) {
+            n.setAllDirty(flag, value);
+        }
+    }
 
     public boolean check() {
         return true; // TODO
     }
 
-
     public abstract void accept(Visitor visitor);
-
-
 
     public boolean isDrawable() {
         return drawable_;
@@ -300,101 +322,4 @@ public abstract class Node {
         dirty_ = (byte) 0xff;
         drawable_ = false;
     }
-
-/****
-
-
-    public void setTranslation(float tx, float ty, float tz) {
-        matrix.setTranslation(new Vector3(tx, ty, tz));
-    }
-
-
-    public void setPosition(float tx, float ty, float tz) {
-        setTranslation(tx, ty, tz);
-    }
-
-
-    public void setDirection(float x, float y, float z) {
-        //TODO with Matrix4 (look at)
-    }
-
-
-    public void setScale(float s) {
-        //TODO
-        matrix.setScale(s);
-    }
-
-
-    public Matrix4 getMatrix() {
-        return matrix;
-    }
-
-
-    public Node traverseUp() {
-        if (parent == null) {
-            System.out.println("La racine a été trouvée ! Elle se nomme " + this.getName());
-            return this;
-        } else {
-            Node a_node = this.getParent();
-            a_node.traverseUp();
-        }
-        return null;
-    }
-
-
-    public void traverseDown() {
-        if (children.isEmpty()) {
-            System.out.println("Une feuille a été trouvée ! Elle se nomme " + this.getName());
-
-        } else {
-            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-                Node nodetemp = it.next();
-                nodetemp.traverseDown();
-            }
-        }
-
-    }
-
-    public void traverseDownT() {
-        this.traverseDownT(this, 0);
-
-    }
-
-    public void traverseDownT(Node a_node, int loop) {
-        String arrow = "";
-        for (int i = 0; i < loop; i++) {
-            arrow += "-";
-        }
-        arrow += "->";
-        System.out.println(arrow + " " + a_node.getName());
-        if (!a_node.children.isEmpty()) {
-            loop++;
-            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-                Node nodetemp = it.next();
-                nodetemp.traverseDownT(nodetemp, loop);
-            }
-
-        }
-    }
-    // Local matrix
-    protected Matrix4 matrix;
-
-
-    public Node getNode(String _name){
-        if (  _name.equals(name)){
-               return this;
-        }
-        else if (!children.isEmpty()) {
-            for (Node nodetemp :  children) {
-                Node gn=nodetemp.getNode(_name);
-                if (gn !=null){ //gn for getNode
-                    return gn;
-                }
-            }
-         }
-        return null;
-    }
-
-*****/
-
 } // End of class Node

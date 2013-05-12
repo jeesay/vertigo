@@ -83,7 +83,8 @@ public class Shape extends Node {
     /**
      * Sets the Geometry
      *
-     * @param types, data as float[]
+     * @param types
+     * @param data as float[]
      */
     public void setGeometry(String type, float[] data) {
         geo.setVertices(type, data);
@@ -98,8 +99,8 @@ public class Shape extends Node {
     /**
      * Sets the Geometry
      *
-     * @param types, data as float[]
-     *
+     * @param types
+     * @param data as float[]
      */
     public void setGeometry(String[] types, float[] data) {
         if (types.length == 1 && types[0].equals("V3F")) {
@@ -119,8 +120,8 @@ public class Shape extends Node {
     /**
      * Sets the Indexed Geometry
      *
-     * @param types, data as float[], indices as int []
-     *
+     * @param types, data as float[] 
+     *@param indices as int []
      */
     public void setIndexedGeometry(String type, float[] data, int[] indices) {
         setGeometry(type, data);
@@ -130,8 +131,8 @@ public class Shape extends Node {
     /**
      * Sets the Indexed Geometry
      *
-     * @param types, data as float[], indices as int []
-     *
+     * @param  data as float[] 
+     * @param indices as int []
      */
     public void setIndexedGeometry(String[] types, float[] data, int[] indices) {
         setGeometry(types, data);
@@ -149,18 +150,22 @@ public class Shape extends Node {
     }
 
     /**
-     * Sets the Color
+     * Sets the Color (RGBA format)
      *
-     * @param float red, float green, float blue, float alpha (RGBA)
+     * @param  red : float value between 0 and 1
+     * @param  green : float value between 0 and 1
+     * @param  blue : float value between 0 and 1
+     * @param alpha : float value between 0 and 1
      */
     public void setColor(float red, float green, float blue, float alpha) {
         material.setColor(red, green, blue, alpha);
     }
 
     /**
-     * Sets the Color
-     *
-     * @param float red, float green, float blue (RGB)
+     * Sets the Color (RGB format)
+      * @param  red : float value between 0 and 1
+     * @param  green : float value between 0 and 1
+     * @param  blue : float value between 0 and 1
      */
     public void setColor(float red, float green, float blue) {
         material.setColor(red, green, blue);
@@ -216,7 +221,9 @@ public class Shape extends Node {
     /**
      * Translate this shape
      *
-     * @param tx,ty,tz as floats
+     * @param tx as floats
+     * @param ty as floats
+     * @param ty as floats
      */
     public void translate(float tx, float ty, float tz) {
         matrix.setTranslation(new Vector3(tx, ty, tz));

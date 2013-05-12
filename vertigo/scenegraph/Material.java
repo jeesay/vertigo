@@ -28,7 +28,15 @@ package vertigo.scenegraph;
 
 import vertigo.graphics.ShaderProg;
 import vertigo.graphics.ShaderFactory;
-
+/**
+ * Class Material
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
 public class Material {
 
     private float[] color;
@@ -39,14 +47,29 @@ public class Material {
         color=new float[4];
         this.setColor(0.0f,0.0f,0.0f);
     }
-
+ /**
+     * Sets the shader
+     *
+     * @param shader's name
+     */
     public void setShaderMaterial(String shaderName) {
         shader = ShaderFactory.get(shaderName);
     }
-    
+    /**
+     * Gets the shader
+     *
+     * @return ShaderProg
+     */
     public ShaderProg getShaderMaterial() {
         return shader;
     }
+    
+       /**
+     * Sets the Color (RGB format)
+      * @param  red : float value between 0 and 1
+     * @param  green : float value between 0 and 1
+     * @param  blue : float value between 0 and 1
+     */
     
     public void setColor(float red, float green, float blue) {
         color[0] = red;
@@ -54,14 +77,25 @@ public class Material {
         color[2] = blue;
         color[3] = 1.0f;
     }
-
+ /**
+     * Sets the Color (RGBA format)
+     *
+     * @param  red : float value between 0 and 1
+     * @param  green : float value between 0 and 1
+     * @param  blue : float value between 0 and 1
+     * @param alpha : float value between 0 and 1
+     */
     public void setColor(float red, float green, float blue, float alpha) {
         color[0] = red;
         color[1] = green;
         color[2] = blue;
         color[3] = alpha;
     }
-
+ /**
+     * Gets the Material's color
+     *
+     * @return  color[]
+     */
     public float[] getColor() {
         return color;
     }
