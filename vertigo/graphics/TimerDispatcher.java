@@ -32,13 +32,14 @@ import vertigo.scenegraph.Transform;
 
 /**
  *
- * @author Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
  */
 public class TimerDispatcher extends Observable {
 
-   
     private static TimerDispatcher INSTANCE = new TimerDispatcher();
-
 
     private TimerDispatcher() {
         // Do nothing

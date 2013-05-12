@@ -35,7 +35,7 @@ import java.nio.ShortBuffer;
 
 /**
  * A mixture of classes JOGAMP com.jogamp.common.nio.Buffers and org.lwjgl.BufferUtils
- *
+ * Create different type of buffers
  * @author Jean-Christophe Taveau
  */
 public final class BufferTools {

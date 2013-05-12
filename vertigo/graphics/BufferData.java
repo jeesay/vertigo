@@ -29,50 +29,108 @@ package vertigo.graphics;
 import java.nio.FloatBuffer;
 
 /**
+ * Class BufferData create float buffer
  *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
  * @author Clement Delestre
+ * @version 0.1
  */
 public class BufferData {
-    private int handle=-1;
-    private FloatBuffer buff;
-    private boolean bound=false;
 
-public BufferData(){
-}
-    
-     public  BufferData(float[] data){
-         buff=BufferTools.newFloatBuffer(data.length);
-         buff.put(data);
-         buff.flip();
-     }
-     
-         public  BufferData(FloatBuffer data){
-         buff.put(data);
-         buff.flip();
-     }
-     
-     
-     public boolean isBound(){
-         return bound;
-     }
-     
-     public void setBound(boolean bound){
-         this.bound=bound;
-     }
-     public void dontBind(){
-         bound=false;
-     }
-     public void setHandle(int handle){
-         this.handle=handle;
-     }
-     public int getHandle(){
-            return handle;
-     }
-     public int getCapacity(){
-         return buff.capacity();
-     }
-     public FloatBuffer getFloatBuffer(){
-         return buff;
-     }
-    
+    /**
+     * The float buffer's handle
+     *
+     * @see BufferData#setHandle(int)
+     */
+    private int handle = -1;
+    /**
+     * The FloatBuffer buff
+     *
+     * @see BufferData#BufferData(float[])
+     */
+    private FloatBuffer buff;
+    private boolean bound = false;
+
+    public BufferData() {
+    }
+
+    /**
+     * Create FloatBuffer buff, put data in buff
+     *
+     * @param data
+     */
+    public BufferData(float[] data) {
+        buff = BufferTools.newFloatBuffer(data.length);
+        buff.put(data);
+        buff.flip();
+    }
+
+    /**
+     *
+     * @param data
+     */
+    public BufferData(FloatBuffer data) {
+        buff.put(data);
+        buff.flip();
+    }
+
+    /**
+     *
+     * @return false if is not bound
+     */
+    public boolean isBound() {
+        return bound;
+    }
+
+    /**
+     * set bound
+     *
+     * @param bound
+     */
+    public void setBound(boolean bound) {
+        this.bound = bound;
+    }
+
+    /**
+     * set bound to false
+     *
+     * @param bound
+     */
+    public void dontBind() {
+        bound = false;
+    }
+
+    /**
+     * set handle
+     *
+     * @param handle
+     */
+    public void setHandle(int handle) {
+        this.handle = handle;
+    }
+
+    /**
+     *
+     * @return handle
+     */
+    public int getHandle() {
+        return handle;
+    }
+
+    /**
+     *
+     * @return buff's capacity
+     */
+    public int getCapacity() {
+        return buff.capacity();
+    }
+
+    /**
+     *
+     * @return buff
+     */
+    public FloatBuffer getFloatBuffer() {
+        return buff;
+    }
 } // end of class BufferData

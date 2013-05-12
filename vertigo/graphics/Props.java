@@ -26,27 +26,58 @@
  */
 
 package vertigo.graphics;
-
+/**
+ * Class Props set some properties
+ * @author Jean-Christophe Taveau
+ */
 public class Props {
-
+/**
+     * The type of Props
+     *
+     * @see Props#getType() 
+     */
     private String type;
+    /**
+     * The offset of Props
+     *
+     * @see Props#getOffset() 
+     */
     private int offset;
+    /**
+     * The stride of Props
+     *
+     * @see Props#stride
+     */
     private int stride;
-
+/**
+ *  sets the type, offset and stride  of Props
+ * @param type String value of Props
+ * @param offset Integer value of Props
+ * @param stride Integer value of Props
+ */
     public Props(String type,int offset, int stride) {
         this.type=type;
         this.offset=offset;
         this.stride=stride;
     }
-
+/**
+ * 
+ * @return type 
+ */
     public String getType() {
         return type;
     }
-
+/**
+ * 
+ * @return offset
+ */
     public int getOffset() {
         return offset;
     }
-
+/**
+ * 
+ * @return stride
+ */
     public int getStride() {
         return stride;
     }

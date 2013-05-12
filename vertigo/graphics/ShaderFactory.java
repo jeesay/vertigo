@@ -26,18 +26,23 @@
  */
 package vertigo.graphics;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class ShaderFactory {
 
     /**
      *
      * @author Jean-Christophe Taveau
+     * @version 0.1
      */
     private static HashMap<Integer, ShaderProg> table = new HashMap<Integer, ShaderProg>();
 
+    /**
+     * Create ShaderProg.
+     *
+     * @param name name of shader
+     * @return ShaderProg
+     */
     public static ShaderProg get(String name) {
         int index = calcIndex(name);
         ShaderProg shader;
