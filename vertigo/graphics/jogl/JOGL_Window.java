@@ -55,22 +55,94 @@ import vertigo.graphics.event.ViewportSignal;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.World;
 
+/**
+ * JOGL_Window.
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ * @see Window3D
+ *
+ */
 public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener, KeyListener, MouseWheelListener {
 
+    /**
+     * The window's width.
+     *
+     * @see JOGL_Window#setDimension(int, int)
+     */
     private int width = 400;
+    /**
+     * The window's height.
+     *
+     * @see JOGL_Window#setDimension(int, int)
+     */
     private int height = 400;
+    /**
+     * The window's title.
+     *
+     * @see JOGL_Window#setTitle(java.lang.String)
+     */
     private String win_title = "Vertigo JOGL - ";
+    /**
+     * The World.
+     *
+     * @see World
+     */
     private World world;
     private Frame frame;
+    /**
+     * The JOGL_Renderer
+     *
+     * @see JOGL_Window#display()
+     */
     private JOGL_Renderer renderer;
+    /**
+     * The MouseSignal.
+     *
+     * @see ViewportDispatcher
+     */
     private MouseSignal mouse_event;
+    /**
+     * The KeyboardDispatcher.
+     *
+     * @see KeyboardDispatcher
+     */
     private final KeyboardDispatcher keyboardDispatcher;
+    /**
+     * The MouseDispatcher.
+     *
+     * @see MouseDispatcher
+     */
     private final MouseDispatcher mouseDispatcher;
+    /**
+     * The TimerDispatcher.
+     *
+     * @see TimerDispatcher
+     */
     private final TimerDispatcher timerDispatcher;
+    /**
+     * The KeyboardSignal.
+     *
+     * @see MouseSignal
+     */
     private final KeyboardSignal key_event;
+    /**
+     * The ViewportSignal.
+     *
+     * @see KeyboardSignal
+     */
     private final ViewportSignal vp_event;
+    /**
+     * The ViewportDispatcher.
+     *
+     * @see TimerDispatcher
+     */
     private final ViewportDispatcher vpDispatcher;
-
+/**
+ * Constructor
+ */
     public JOGL_Window() {
         System.out.println("JOGL WINDOW");
         renderer = new JOGL_Renderer();
@@ -79,7 +151,7 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
         timerDispatcher = TimerDispatcher.getInstance();
         vpDispatcher = ViewportDispatcher.getInstance();
         mouse_event = new MouseSignal();
-       key_event = new KeyboardSignal();
+        key_event = new KeyboardSignal();
         vp_event = new ViewportSignal();
     }
 
@@ -125,13 +197,15 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
             createWindow();
         }
     }
-
+/**
+ * Creates windows until windowClosing event
+ */
     private void createWindow() {
         frame = new Frame();
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                frame.dispose(); 
+                frame.dispose();
             }
         });
 
@@ -150,7 +224,7 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
         canvas.addGLEventListener(renderer);
 
         frame.add(canvas);
-        frame.setVisible(true); 
+        frame.setVisible(true);
 
 
     }
@@ -162,10 +236,10 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent me) {
-    
+
         System.out.println("Modifiers int : " + me.getModifiers() + " " + " " + me.getModifiersEx());
         System.out.println("Modifiers text : " + MouseEvent.getMouseModifiersText(me.getModifiers()) + " " + " " + MouseEvent.getMouseModifiersText(me.getModifiersEx()));
-        
+
         System.out.println("Mouse pressed; # of clicks: " + me.getClickCount());
         if (me.getButton() == MouseEvent.BUTTON1) {
             mouse_event.setButton(Signal.BUTTON_LEFT);
@@ -239,7 +313,7 @@ public class JOGL_Window implements Window3D, MouseMotionListener, MouseListener
         mouse_event.setXY(me.getX(), me.getY());
         mouse_event.setButton(Signal.BUTTON_LEFT);
         System.out.println("dragged " + me.getX() + " " + me.getY());
-mouseDispatcher.fireUpdate(mouse_event);
+        mouseDispatcher.fireUpdate(mouse_event);
 
     }
 
