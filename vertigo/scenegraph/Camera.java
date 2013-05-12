@@ -44,9 +44,6 @@ import ij.IJ;
 /**
  * Class Camera
  *
- * @author Florin Buga
- * @author Olivier Catoliquot
- * @author Clement Delestre
  * @author Jean-Christophe Taveau
  * @version 0.1
  *
@@ -311,7 +308,6 @@ public class Camera extends Node implements MouseObserver, ViewportObserver {
             MouseSignal e = (MouseSignal) o1;
             // if Mouse Wheel
             this.zoom += ZOOM_FACTOR * e.getWheel();
-            System.out.println("WHEEL "+e.getWheel());
             setDirty(Node.PROJMATRIX,true);
         } 
         else if (o1 instanceof ViewportSignal) {

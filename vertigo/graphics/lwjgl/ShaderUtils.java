@@ -51,20 +51,6 @@ public final class ShaderUtils {
 
     // loads the shaders
     // in this example we assume that the shader is a file located in the applications JAR file.
-    //
-    /**
-     * ** TEST de PUSH
-     *
-     * public static String[] loadShader(String name) { StringBuilder sb = new
-     * StringBuilder(); System.out.println(name); try { InputStream is =
-     * ShaderFactory.class.getResourceAsStream(name); BufferedReader br = new
-     * BufferedReader(new InputStreamReader(is)); String line = null; while
-     * ((line = br.readLine()) != null) {
-     *
-     * sb.append(line); sb.append('\n'); } is.close(); } catch (Exception e) {
-     * e.printStackTrace(); } System.out.println("Shader is " + sb.toString());
-     * return new String[]{sb.toString()}; } *
-     */
     // This compiles and loads the shader to the video card.
     // if there is a problem with the source the program will exit at this point.
     //
@@ -123,7 +109,6 @@ public final class ShaderUtils {
         System.out.println("updateShader:\n" + prog.getVertexSource() + "\n------\n" + prog.getFragmentSource());
         if (prog.isDirty()) {
             try {
-                System.out.println("AttachShaders");
                 progID = attachVFShaders(prog);
             } catch (Exception ex) {
                 System.out.println("Exception attachShaders");

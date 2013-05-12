@@ -94,14 +94,13 @@ public class LWJGL_Window implements Window3D {
         frame = new Frame(win_title);
         frame.setLayout(new BorderLayout());
         final Canvas canvas = new Canvas();
-        System.out.println("createWindow");
         canvas.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 newCanvasSize.set(canvas.getSize());
             }
         });
-        System.out.println("add Listener");
+  
         frame.addWindowFocusListener(new WindowAdapter() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
@@ -109,7 +108,6 @@ public class LWJGL_Window implements Window3D {
             }
         });
 
-        System.out.println("add focus listener");
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -117,12 +115,11 @@ public class LWJGL_Window implements Window3D {
             }
         });
 
-        System.out.println("add window listener");
+
         frame.add(canvas, BorderLayout.CENTER);
-        System.out.println("add canvas");
         try {
             Display.setParent(canvas);
-            System.out.println("set parent");
+ 
             Display.setVSyncEnabled(true);
             frame.setPreferredSize(new Dimension(width, height));
             frame.pack();
@@ -133,7 +130,7 @@ public class LWJGL_Window implements Window3D {
         } catch (LWJGLException e) {
             //e.printStackTrace();
             frame.dispose();
-            System.out.println("ERROR HERE.");
+            System.out.println("ERROR WITH LWJGL WINDOW.");
         }
 
     }
@@ -168,7 +165,6 @@ public class LWJGL_Window implements Window3D {
 
     @Override
     public void setDimension(int w, int h) {
-        System.out.println("setDimension");
         width = w;
         height = h;
     }
@@ -215,36 +211,31 @@ public class LWJGL_Window implements Window3D {
 
             mouse_event.setButton(Signal.BUTTON_MIDDLE);
 
-            System.out.println(mouse_event);
-            System.out.println("MIDDLE");
         }
 
-        System.out.println("Grab" + Mouse.isGrabbed());
+
         int dWheel = Mouse.getDWheel(); //don't work
-        System.out.println("The WHEEL : " + dWheel);
+   
 
         if (dWheel < 0) {
-            System.out.println("WHEEL DOWN");
             mouse_event.setWheel(-1);
         } else if (dWheel > 0) {
-
             mouse_event.setWheel(1);
-            // mouse_event.setButtonStatus(Signal.NONE);
-            System.out.println("WHEEL UP");
         }
         mouseDispatcher.fireUpdate(mouse_event);
 
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-            System.out.println("space bar");
+// do nothing yet
         } else if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+            this.dispose();
             Display.destroy();
             frame.dispose();
         } else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            System.out.println("left shift");
+          // do nothing yet
         } else if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-            System.out.println("right shift");
+      // do nothing yet
         } else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-            System.out.println("Left Control");
+           // do nothing yet
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mouse_event.isButtonDown()) {
             System.out.println("Souris enfoncé et L shift aussi");
@@ -275,7 +266,6 @@ public class LWJGL_Window implements Window3D {
 
     @Override
     public void setVisible(boolean flag) {
-        System.out.println("set visible");
         if (flag == true) {
             createWindow();
             display();
@@ -283,7 +273,6 @@ public class LWJGL_Window implements Window3D {
     }
 
     private void loadObserver(Node obj) {
-        System.out.println("Load Observer observer " + obj);
         if (obj instanceof MouseObserver) {
             mouseDispatcher.addObserver((Observer) obj);
         }

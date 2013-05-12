@@ -67,19 +67,19 @@ public class Vertigo_Viewer implements PlugIn {
      *
      * @see Vertigo_Viewer#setBackgroundColor(int, int, int)
      */
-    private int red = 0;
+    private int red = 85;
     /**
      * The window's background green component
      *
      * @see Vertigo_Viewer#setBackgroundColor(int, int, int)
      */
-    private int green = 0;
+    private int green = 85;
     /**
      * The window's background blue component
      *
      * @see Vertigo_Viewer#setBackgroundColor(int, int, int)
      */
-    private int blue = 0;
+    private int blue = 85;
     /**
      * The scene of scenegraph
      *
@@ -157,7 +157,6 @@ public class Vertigo_Viewer implements PlugIn {
      */
     public void show() {
         try {
-            System.out.println("LWJGL Renderer created");
             graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
             show("LWJGL");
         } catch (ExceptionInInitializerError e) {

@@ -81,7 +81,6 @@ public class ShaderProg {
         this.name = name;
         dirty_ = true;
         program=-1;
-        System.out.println("Shader prog is creat : "+name);
     }
 
     public boolean isDirty() {
@@ -93,9 +92,7 @@ public class ShaderProg {
     }
 
     public void loadVertexShader() {
-        System.out.println("The name 1 : "+name);
         vshader = loadShader(this.name + ".vs");
-        System.out.println("The name  2 : "+name);
     }
 
     public void loadFragmentShader() {
@@ -208,10 +205,10 @@ public class ShaderProg {
      * file in the subpackage shaders
      */
     private String loadShader(String name) {
-        System.out.println("We load "+name);
+
         StringBuilder sb = new StringBuilder();
         try {
-            System.out.println("We try");
+
             InputStream is = ShaderFactory.class.getResourceAsStream(path + name);
             if(is==null){
                 System.out.println("IS "+name+" is null");
@@ -223,7 +220,6 @@ public class ShaderProg {
             }
             is.close();
         } catch (Exception e) {
-            System.out.println("We catch.");
             e.printStackTrace();
         }
        System.out.println("Shader is <Path shader> " + (path+name) +'\n'+ sb.toString());

@@ -28,27 +28,39 @@ package vertigo.graphics;
 
 import java.util.Observable;
 import vertigo.graphics.event.Signal;
-import vertigo.scenegraph.Transform;
 
 /**
+ * Class KeyboardDispatcher
  *
- * @author Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class KeyboardDispatcher extends Observable {
 
-   
     private static KeyboardDispatcher INSTANCE = new KeyboardDispatcher();
-
 
     private KeyboardDispatcher() {
         // Do nothing
         System.out.println("EventDispatcher Constructor.");
     }
 
+    /**
+     * KeyboardDispatcher is a singleton.
+     *
+     * @return instance
+     */
     public static KeyboardDispatcher getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Update an event.
+     *
+     * @param a signal
+     */
     public void fireUpdate(Signal e) {
         setChanged();
         notifyObservers(e);

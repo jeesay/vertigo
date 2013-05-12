@@ -64,7 +64,6 @@ public class Attribute {
     public Attribute(String name, String type) {
         this.name = name;
         this.type = type;
-        System.out.println(" Name is " + name + " and type : " + type + " **** ");
     }
 
     /**
@@ -99,14 +98,7 @@ public class Attribute {
         return handle;
     }
 
-    /**
-     * Gets Attribute's type
-     *
-     * @return type
-     */
-    public String getVBOtype(String type) {
-        return table.get(type);
-    }
+ 
 
     /**
      * Gets Attribute's name

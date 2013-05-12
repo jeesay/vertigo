@@ -32,20 +32,30 @@ import vertigo.graphics.VBO;
 import vertigo.graphics.BufferTools;
 import vertigo.graphics.PackedVBO;
 import vertigo.graphics.IBO;
-
+/**
+ * Class Camera
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @author Jean-Christophe Taveau
+ * @version 0.1
+ *
+ */
 public class Geometry {
-
+/**
+ * A geometry is composed of several BO.
+ * @see Geometry#addBuffer(java.lang.String, float[]) 
+ */
     private ArrayList<BO> buffers;
+    /**
+ * The data of each BO.
+ * @see Geometry#getBufferData() 
+ */
     private BufferData buffdata;
 
     public Geometry() {
         buffers = new ArrayList<BO>();
-        System.out.println("Une geometry est créée.");
-    }
-
-    public void presente() {
-        System.out.println("number of BO " + buffers.size() + " size of :  BufferData " + buffdata.getCapacity());
-
     }
 
     public BufferData getBufferData() {
@@ -67,8 +77,6 @@ public class Geometry {
         for (int i = 0; i < types.length; i++) {
             stride += getSize(types[i]);
         }
-
-
         for (int i = 0; i < types.length; i++) {
             VBO vbo = new VBO(stride, offset, types[i]);
             vbo.setBuffData(buffdata);
@@ -77,6 +85,10 @@ public class Geometry {
         }
     }
 
+    /**
+     * Gets the number of BO (VBO & IBO)
+     * @return number of BO
+     */
     public int getNumberBO() {
         return buffers.size();
     }
@@ -98,14 +110,8 @@ public class Geometry {
      * (coordinates, normal, colors,etc.).
      */
     public void addBuffer(String type, float[] data) {
-        // FloatBuffer buf = BufferTools.newFloatBuffer(data.length);
-        //buf.put(data);
-        //buf.rewind();
 
         VBO vbo = new VBO(type);
-        //vbo.setFloatBuffer(type, buf);
-
-        System.out.println("VBO created !!!");
         buffdata = new BufferData(data);
         vbo.setBuffData(buffdata);
         buffers.add(vbo);
@@ -143,14 +149,17 @@ public class Geometry {
     public void setVertices(String type, float[] data) {
         addBuffer(type, data);
     }
-
+  /**
+     * Sets indices
+     *
+     * @param indices int[]
+     */
     public void addIndices(int[] indexes) {
         IntBuffer buf = BufferTools.newIntBuffer(indexes.length);
         buf.put(indexes);
         buf.rewind();
         IBO ibo = new IBO();
         ibo.setIntBuffer(buf);
-        System.out.println("IBO ajouté");
         buffers.add(ibo);
     }
 
@@ -169,7 +178,11 @@ public class Geometry {
     public void setVertices(String[] types, float[] data) {
         addBuffer(types, data);
     }
-
+  /**
+     * Sets indices
+     *
+     * @param indices int[]
+     */
     public void setIndices(int[] indexes) {
         addIndices(indexes);
     }

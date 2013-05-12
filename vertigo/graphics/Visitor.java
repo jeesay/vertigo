@@ -30,7 +30,6 @@ import vertigo.scenegraph.BackStage;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Light;
 import vertigo.scenegraph.Lighting;
-import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Scene;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.Stage;

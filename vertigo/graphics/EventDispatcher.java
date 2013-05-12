@@ -26,30 +26,40 @@
  */
 package vertigo.graphics;
 
-import java.util.ArrayList;
 import java.util.Observable;
 import vertigo.graphics.event.Signal;
-import vertigo.scenegraph.Transform;
 
 /**
+ * Class EventDispatcher
  *
- * @author Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class EventDispatcher extends Observable {
 
-   
     private static EventDispatcher INSTANCE = new EventDispatcher();
-
 
     private EventDispatcher() {
         // Do nothing
-        System.out.println("EventDispatcher Constructor.");
     }
 
+    /**
+     * EventDispatcher is a singleton.
+     *
+     * @return instance
+     */
     public static EventDispatcher getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Update an event.
+     *
+     * @param a signal
+     */
     public void fireUpdate(Signal e) {
         setChanged();
         notifyObservers(e);

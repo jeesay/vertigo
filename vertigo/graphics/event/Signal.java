@@ -25,10 +25,14 @@
  *Clement Delestre
  */
 package vertigo.graphics.event;
-
 /**
+ * Class EventDispatcher
  *
- * @author Authors : Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class Signal {
 
