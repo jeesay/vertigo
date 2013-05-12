@@ -49,17 +49,43 @@ import vertigo.scenegraph.Light;
 import vertigo.scenegraph.Material;
 
 /**
+ * Class JOGL_Renderer
  *
- * @author Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class JOGL_Renderer implements GLEventListener, Renderer {
 
     // private GLCanvas canvas;
     private Camera cam;
     private World world;
+    /**
+     * The window's background red component
+     *
+     * @see JOGL_Renderer#setBackgroundColor(float, float, float)
+     */
     private float red;
+    /**
+     * The window's background green component
+     *
+     * @see JOGL_Renderer#setBackgroundColor(float, float, float)
+     */
     private float green;
+    /**
+     * The window's background blue component
+     *
+     * @see JOGL_Renderer#setBackgroundColor(float, float, float)
+     */
     private float blue;
+    /**
+     * The JOGL_Visitor
+     *
+     * @see JOGL_Renderer#display()
+     * @see JOGL_Visitor
+     */
     private JOGL_Visitor visitor;
     private Camera cam_;
     private ArrayList<Shape> shapes = new ArrayList();
@@ -71,8 +97,10 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
     private IBO ibo;
     private int capacity = 0;
 
+    /**
+     * Constructor.
+     */
     public JOGL_Renderer() {
-        System.out.println("JOGL_Renderer created");
         visitor = new JOGL_Visitor();
     }
 
@@ -110,9 +138,9 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
         world.accept(visitor);
         for (Shape shape : shapes) {
             // shape
-            System.out.println("Here the shape "+shape.getName());
+            System.out.println("Here the shape " + shape.getName());
             processShader(drawable, shape.getMaterial());
-           // processUniform(drawable, shape);
+            // processUniform(drawable, shape);
             drawShape(drawable, shape);
         }
     }
@@ -143,16 +171,14 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
         }
     }
 
-    
-
     private void processUniform(GLAutoDrawable drawable, Shape shape) {
         GL3 gl = drawable.getGL().getGL3();
         ArrayList<Uniform> uniforms = glshader.getAllUniforms();
         System.out.println("version " + gl.glGetString(gl.GL_VERSION));
-        System.out.println("Here the shape "+shape.getName());
-        System.out.println("Size of arrayList : "+uniforms.size());
+        System.out.println("Here the shape " + shape.getName());
+        System.out.println("Size of arrayList : " + uniforms.size());
         for (Uniform uni : uniforms) {
-            System.out.println("Handle : " + glshader.getHandle() + " name [" + uni.getName() + "] type : "+uni.getType());
+            System.out.println("Handle : " + glshader.getHandle() + " name [" + uni.getName() + "] type : " + uni.getType());
             if (uni.getType().equals("view_matrix")) {
                 int vlocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
                 System.out.println(" View : " + vlocation);
@@ -165,7 +191,7 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
                 gl.glUniformMatrix4fv(plocation, 16, false, cam_.getProjection().toColumnBuffer());
                 System.out.println(cam_.getProjection());
             } else if (uni.getType().equals("matrix")) {
-                 System.out.println("We re here !!! Model matrix ");
+                System.out.println("We re here !!! Model matrix ");
                 int mlocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
                 System.out.println(" Location : " + mlocation);
                 gl.glUniformMatrix4fv(mlocation, 16, false, shape.getModelMatrix().toColumnBuffer());
@@ -230,7 +256,7 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
         }
 
         gl.glUseProgram(obj.getMaterial().getShaderMaterial().getHandle());
-        processUniform(drawable,obj);
+        processUniform(drawable, obj);
 
         // boolean isIndexed = false;
         // PreProcessing

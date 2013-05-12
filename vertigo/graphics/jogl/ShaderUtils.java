@@ -39,7 +39,13 @@ import vertigo.graphics.ShaderProg;
 import javax.media.opengl.GL3;
 import vertigo.graphics.Attribute;
 import vertigo.graphics.Uniform;
-
+/**
+ * Class ShaderUtils
+ *
+ * @author Jean-Christophe Taveau
+ * @version 0.1
+ *
+ */
 public class ShaderUtils {
 
     public String[] vsrc;

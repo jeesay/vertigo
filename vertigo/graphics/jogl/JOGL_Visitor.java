@@ -37,38 +37,83 @@ import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 
 /**
+ * Class JOGL_Visitor
  *
- * @author clement
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ * @see Visitor
+ *
  */
 public class JOGL_Visitor implements Visitor, GLEventListener {
 
+    /**
+     * Camera.
+     *
+     * @see Camera
+     */
     private Camera cam_;
+    /**
+     * Check if the shape have IBO or not.
+     */
     private boolean isIndexed = false;
     private GLU glu;
     private GLUT glut;
     private GL3 gl;
     private GLCapabilities caps;
     private GLCanvas canvas;
+    /**
+     * VBO.
+     *
+     * @see VBO.
+     */
     private VBO vbo3f;
+    /**
+     * IBO.
+     *
+     * @see IBO
+     */
     private IBO ibo;
+    /**
+     * ShaderProg
+     *
+     * @see ShaderProg
+     */
     private int capacity = 0;
     private ShaderProg glshader;
+    /**
+     * ArrayList of shader's attribute.
+     *
+     * @see Attribute
+     */
     private ArrayList<Attribute> attribute;
     // r
     // rotate
-
 
     @Override
     public void visit(BackStage obj) {
         // do nothing
     }
 
+    /**
+     * Gets Camera's Matrix
+     *
+     * @param obj Camera
+     * @see Visitor
+     */
     @Override
     public void visit(Camera obj) {
         cam_ = obj;
 
     }
 
+    /**
+     * Process the matrix
+     *
+     * @param obj Light
+     * @see Visitor
+     */
     @Override
     public void visit(Light obj) {
         setModelMatrix(obj);
@@ -84,13 +129,19 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
         setModelMatrix(obj);
     }
 
+    /**
+     * Process the matrix and draw the shape.
+     *
+     * @param obj Shape
+     * @see Visitor
+     */
     @Override
     public void visit(Shape obj) {
         if (obj.isDirty(Node.MATRIX)) {
             obj.getModelMatrix().mul(obj.getParent().getModelMatrix(), obj.getMatrix());
             obj.setDirty(Node.MATRIX, false);
         }
-       // drawShape(obj, gl);
+        // drawShape(obj, gl);
     }
 
     @Override
@@ -98,6 +149,12 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
         // do nothing
     }
 
+    /**
+     * Process the matrix.
+     *
+     * @param obj Transform
+     * @see Visitor
+     */
     @Override
     public void visit(Transform obj) {
         if (obj.isDirty(Node.MATRIX)) {
@@ -122,120 +179,119 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
             obj.setDirty(Node.MATRIX, false);
         }
     }
-/*
-    private void drawShape(Shape obj, GL3 gl) {
-        if (obj.isDirty(Node.SHADER)) {
-            processShader(obj, gl);
-            System.out.println("The HANDLE : " + glshader.getHandle());
-            obj.setDirty(Node.SHADER, false);
-        }
+    /*
+     private void drawShape(Shape obj, GL3 gl) {
+     if (obj.isDirty(Node.SHADER)) {
+     processShader(obj, gl);
+     System.out.println("The HANDLE : " + glshader.getHandle());
+     obj.setDirty(Node.SHADER, false);
+     }
 
-        gl.glUseProgram(obj.getMaterial().getShaderMaterial().getHandle());
-        //processUniform(obj);
+     gl.glUseProgram(obj.getMaterial().getShaderMaterial().getHandle());
+     //processUniform(obj);
 
-        // boolean isIndexed = false;
-        // PreProcessing
-        //   if (obj.isDirty(Node.MATRIX)) {
-        obj.setDirty(Node.MATRIX, false);
-        //  }
-        // Geometry: VBO
-        //  if (obj.isDirty(Node.VBO)) {
-        processBO(obj);
-        obj.setDirty(Node.VBO, false);
-        // }
-        gl.glUseProgram(0);
+     // boolean isIndexed = false;
+     // PreProcessing
+     //   if (obj.isDirty(Node.MATRIX)) {
+     obj.setDirty(Node.MATRIX, false);
+     //  }
+     // Geometry: VBO
+     //  if (obj.isDirty(Node.VBO)) {
+     processBO(obj);
+     obj.setDirty(Node.VBO, false);
+     // }
+     gl.glUseProgram(0);
 
-    }
+     }
 
-    private void processBO(Shape obj) {
-
-
-        int nbBO = obj.getGeometry().getNumberBO(); //return 2 for the cube (1 vbo + 1 ibo)
-
-        System.out.println("Number of BO is : " + nbBO);
-        /*
-         //int[] buffer = new int[nbBO]; 
-         IntBuffer buffer = IntBuffer.allocate(nbBO); 
-        // Generate VBO
-
-        IntBuffer buf = Buffers.newDirectIntBuffer(nbBO);
-        //IntBuffer buf = BufferUtils.createIntBuffer(nbBO);
-        System.out.println("(again)Number of BO is : " + nbBO + " buf : " + buf);
-        gl.glGenBuffers(nbBO, buf);
-
-        int i = 0;
-        int bytesPerFloat = Float.SIZE / Byte.SIZE;
-        int bytesPerInt = Integer.SIZE / Byte.SIZE;
-        System.out.println("Debugage : " + i + " " + bytesPerFloat + " " + bytesPerInt + " " + buf);
-
-        for (BO bo : obj.getGeometry().getBuffers()) {
-            System.out.println("For loop");
-            int boHandle = buf.get(i);
-            // get ID
-            System.out.println("Handle is : " + boHandle);
-            bo.setHandle(boHandle);
-            i++;
-            // System.out.println("Buffer test : " + buffer[i]);
-
-            if (bo instanceof IBO) {
-                isIndexed = true;
-                System.out.println("Here IBO ! ");
-                ibo = (IBO) bo;
-                int numBytes = ibo.getIntBuffer().capacity() * bytesPerInt;
-
-                gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, boHandle);
-                gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, numBytes, ibo.getIntBuffer(), GL.GL_STATIC_DRAW);
-
-                /*
-                 // bind a buffer
-                 //gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, handle);
-                 System.out.println("Bind buffer IBO ");
-                 gl.glBufferData(gl.GL_ELEMENT_ARRAY_BUFFER, numBytes, ibo.getIntBuffer(), gl.GL_STATIC_DRAW);
-                 System.out.println("Buffer data IBO ");
-                 // release ibo
-                 gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, 0);
-                 System.out.println("Released IBO ! ");
-            } else {
-                System.out.println("Here VBO ! ");
-                VBO vbo = (VBO) bo;
-                //enable(vbo);
-                gl.glBindBuffer(GL.GL_ARRAY_BUFFER, boHandle);
-                gl.glBufferData(GL.GL_ARRAY_BUFFER, vbo.capacity() * 4, vbo.getFloatBuff(), GL.GL_STATIC_DRAW);
-                // pointer(vbo, bytesPerFloat);
-                attribute = glshader.getAllAttributes();
-
-                for (Attribute attrib : attribute) {
-                    int alocation = gl.glGetAttribLocation(glshader.getHandle(), attrib.getName());
-                    System.out.println(" alocation : "+alocation+" name " +attrib.getName());
-                    gl.glEnableVertexAttribArray(alocation);
-                    gl.glVertexAttribPointer(alocation, attrib.getSize(), gl.GL_FLOAT, false, vbo.getStride() * bytesPerFloat, 0L);
-                }
-
-                //  gl.glVertexPointer(vbo.getSize(), GL.GL_FLOAT, vbo.getStride() * bytesPerFloat, vbo.getSize() * bytesPerFloat);
+     private void processBO(Shape obj) {
 
 
+     int nbBO = obj.getGeometry().getNumberBO(); //return 2 for the cube (1 vbo + 1 ibo)
+
+     System.out.println("Number of BO is : " + nbBO);
+     /*
+     //int[] buffer = new int[nbBO]; 
+     IntBuffer buffer = IntBuffer.allocate(nbBO); 
+     // Generate VBO
+
+     IntBuffer buf = Buffers.newDirectIntBuffer(nbBO);
+     //IntBuffer buf = BufferUtils.createIntBuffer(nbBO);
+     System.out.println("(again)Number of BO is : " + nbBO + " buf : " + buf);
+     gl.glGenBuffers(nbBO, buf);
+
+     int i = 0;
+     int bytesPerFloat = Float.SIZE / Byte.SIZE;
+     int bytesPerInt = Integer.SIZE / Byte.SIZE;
+     System.out.println("Debugage : " + i + " " + bytesPerFloat + " " + bytesPerInt + " " + buf);
+
+     for (BO bo : obj.getGeometry().getBuffers()) {
+     System.out.println("For loop");
+     int boHandle = buf.get(i);
+     // get ID
+     System.out.println("Handle is : " + boHandle);
+     bo.setHandle(boHandle);
+     i++;
+     // System.out.println("Buffer test : " + buffer[i]);
+
+     if (bo instanceof IBO) {
+     isIndexed = true;
+     System.out.println("Here IBO ! ");
+     ibo = (IBO) bo;
+     int numBytes = ibo.getIntBuffer().capacity() * bytesPerInt;
+
+     gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, boHandle);
+     gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, numBytes, ibo.getIntBuffer(), GL.GL_STATIC_DRAW);
+
+     /*
+     // bind a buffer
+     //gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, handle);
+     System.out.println("Bind buffer IBO ");
+     gl.glBufferData(gl.GL_ELEMENT_ARRAY_BUFFER, numBytes, ibo.getIntBuffer(), gl.GL_STATIC_DRAW);
+     System.out.println("Buffer data IBO ");
+     // release ibo
+     gl.glBindBuffer(gl.GL_ELEMENT_ARRAY_BUFFER, 0);
+     System.out.println("Released IBO ! ");
+     } else {
+     System.out.println("Here VBO ! ");
+     VBO vbo = (VBO) bo;
+     //enable(vbo);
+     gl.glBindBuffer(GL.GL_ARRAY_BUFFER, boHandle);
+     gl.glBufferData(GL.GL_ARRAY_BUFFER, vbo.capacity() * 4, vbo.getFloatBuff(), GL.GL_STATIC_DRAW);
+     // pointer(vbo, bytesPerFloat);
+     attribute = glshader.getAllAttributes();
+
+     for (Attribute attrib : attribute) {
+     int alocation = gl.glGetAttribLocation(glshader.getHandle(), attrib.getName());
+     System.out.println(" alocation : "+alocation+" name " +attrib.getName());
+     gl.glEnableVertexAttribArray(alocation);
+     gl.glVertexAttribPointer(alocation, attrib.getSize(), gl.GL_FLOAT, false, vbo.getStride() * bytesPerFloat, 0L);
+     }
+
+     //  gl.glVertexPointer(vbo.getSize(), GL.GL_FLOAT, vbo.getStride() * bytesPerFloat, vbo.getSize() * bytesPerFloat);
 
 
-                /*
-                 int numBytes = vbo.getFloatBuff().capacity() * bytesPerFloat;
 
-                 System.out.println(" The VBO is stride : " + vbo.getStride() + " offset :  " + vbo.getOffset());
-                 // bind a buffer
-                 //  gl.glBindBuffer(gl.GL_ARRAY_BUFFER, handle);
-                 System.out.println(" test --");
-                 gl.glVertexPointer(vbo.getSize(), gl.GL_FLOAT, vbo.getStride(), 0);
 
-                 gl.glBufferData(gl.GL_ELEMENT_ARRAY_BUFFER, numBytes, vbo.getFloatBuff(), gl.GL_STATIC_DRAW);
+     /*
+     int numBytes = vbo.getFloatBuff().capacity() * bytesPerFloat;
 
-                 System.out.println(" test again *--");
-                 // release vbo
-                 gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0);
-                 // GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-                 System.out.println("Released VBO");*/
+     System.out.println(" The VBO is stride : " + vbo.getStride() + " offset :  " + vbo.getOffset());
+     // bind a buffer
+     //  gl.glBindBuffer(gl.GL_ARRAY_BUFFER, handle);
+     System.out.println(" test --");
+     gl.glVertexPointer(vbo.getSize(), gl.GL_FLOAT, vbo.getStride(), 0);
+
+     gl.glBufferData(gl.GL_ELEMENT_ARRAY_BUFFER, numBytes, vbo.getFloatBuff(), gl.GL_STATIC_DRAW);
+
+     System.out.println(" test again *--");
+     // release vbo
+     gl.glBindBuffer(gl.GL_ARRAY_BUFFER, 0);
+     // GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+     System.out.println("Released VBO");*/
 
     @Override
     public void init(GLAutoDrawable glad) {
-        
     }
 
     @Override
@@ -250,116 +306,115 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
     public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
     }
 
-/*
-            }
-            System.out.println("Here for loop ! i=" + i);
-        }
+    /*
+     }
+     System.out.println("Here for loop ! i=" + i);
+     }
 
 
-        if (isIndexed) { // draw with index
-            gl.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getSize(), GL.GL_UNSIGNED_INT, 0L);
+     if (isIndexed) { // draw with index
+     gl.glDrawElements(getOpenGLStyle(obj.getDrawingStyle()), ibo.getSize(), GL.GL_UNSIGNED_INT, 0L);
 
-        } else {
-            gl.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, capacity / vbo3f.getStride());
-        }
-    }
-/*
-    private int getOpenGLStyle(String vertigo_style) {
-        int style = calcIndex(vertigo_style);
-        switch (style) {
-            case 379: // LINES
-                return GL.GL_LINES;
-            /*   case 1116: // LINES_ADJACENCY
-             return GL.GL_LINES_ADJACENCY;
-            case 705: // LINE_LOOP
-                return GL.GL_LINE_LOOP;
-            case 793: // LINE_STRIP
-                return GL.GL_LINE_STRIP;
-            /*  case 1530: // LINE_STRIP_ADJACENCY
-             return GL.GL_LINE_STRIP_ADJACENCY;*/
-            /* case 520: // PATCHES
-             return GL.GL_PATCHES;
-            case 477: // POINTS
-                return GL.GL_POINTS;
-            case 681: // TRIANGLES
-                return GL.GL_TRIANGLES;
-            /* case 1418: // TRIANGLES_ADJACENCY
-             return GL.GL_TRIANGLES_ADJACENCY;
-            case 906: // TRIANGLE_FAN
-                return GL.GL_TRIANGLE_FAN;
-            case 1095: // TRIANGLE_STRIP
-                return GL.GL_TRIANGLE_STRIP;
-            /*  case 1832: // TRIANGLE_STRIP_ADJACENCY
-             return GL.GL_TRIANGLE_STRIP_ADJACENCY;
-            default: // Do nothing  
-                return -1;
-        }
-    }*/
-
+     } else {
+     gl.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, capacity / vbo3f.getStride());
+     }
+     }
+     /*
+     private int getOpenGLStyle(String vertigo_style) {
+     int style = calcIndex(vertigo_style);
+     switch (style) {
+     case 379: // LINES
+     return GL.GL_LINES;
+     /*   case 1116: // LINES_ADJACENCY
+     return GL.GL_LINES_ADJACENCY;
+     case 705: // LINE_LOOP
+     return GL.GL_LINE_LOOP;
+     case 793: // LINE_STRIP
+     return GL.GL_LINE_STRIP;
+     /*  case 1530: // LINE_STRIP_ADJACENCY
+     return GL.GL_LINE_STRIP_ADJACENCY;*/
+    /* case 520: // PATCHES
+     return GL.GL_PATCHES;
+     case 477: // POINTS
+     return GL.GL_POINTS;
+     case 681: // TRIANGLES
+     return GL.GL_TRIANGLES;
+     /* case 1418: // TRIANGLES_ADJACENCY
+     return GL.GL_TRIANGLES_ADJACENCY;
+     case 906: // TRIANGLE_FAN
+     return GL.GL_TRIANGLE_FAN;
+     case 1095: // TRIANGLE_STRIP
+     return GL.GL_TRIANGLE_STRIP;
+     /*  case 1832: // TRIANGLE_STRIP_ADJACENCY
+     return GL.GL_TRIANGLE_STRIP_ADJACENCY;
+     default: // Do nothing  
+     return -1;
+     }
+     }*/
     /**
      * Calc index by summing all the Unicode values in the string 'name'
      *
      * @param name
      * @return index
      *//*
-    private static int calcIndex(String name) {
-        int index = 0;
-        for (int i = 0; i < name.length(); i++) {
-            index += (int) name.charAt(i);
-        }
-        return index;
-    }
+     private static int calcIndex(String name) {
+     int index = 0;
+     for (int i = 0; i < name.length(); i++) {
+     index += (int) name.charAt(i);
+     }
+     return index;
+     }
 
-    @Override
-    public void init(GLAutoDrawable drawable) {
-        //  GL gl = drawable.getGL();  
-//        gl = drawable.getGL().getGL3();  // up to OpenGL 3
-        //  glu = new GLU();
-        // glut = new GLUT();
-        //
-        //gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        // gl = drawable.getGL().getGL2();
-    }
+     @Override
+     public void init(GLAutoDrawable drawable) {
+     //  GL gl = drawable.getGL();  
+     //        gl = drawable.getGL().getGL3();  // up to OpenGL 3
+     //  glu = new GLU();
+     // glut = new GLUT();
+     //
+     //gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+     // gl = drawable.getGL().getGL2();
+     }
 
-    @Override
-    public void dispose(GLAutoDrawable glad) {
-        // do nothing
-    }
+     @Override
+     public void dispose(GLAutoDrawable glad) {
+     // do nothing
+     }
 
-    @Override
-    public void display(GLAutoDrawable glad) {
-        // do nothing
-    }
+     @Override
+     public void display(GLAutoDrawable glad) {
+     // do nothing
+     }
 
-    @Override
-    public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
-        // do nothing
-    }
-/*
-    void setGLDrawable(GLAutoDrawable drawable) {
-        // System.out.println("drawable");
-        gl = drawable.getGL().getGL3();
-    }
+     @Override
+     public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
+     // do nothing
+     }
+     /*
+     void setGLDrawable(GLAutoDrawable drawable) {
+     // System.out.println("drawable");
+     gl = drawable.getGL().getGL3();
+     }
 
-    /**
+     /**
      * Enable the good type of VBO
      *
      * @param vbo
      */
-    
-    /*
-    private void enable(VBO vbo) {
-        if (vbo.getType().contains("V")) {
-            vbo3f = vbo;
-            capacity = vbo.capacity();
-            gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-        }
-        if (vbo.getType().contains("C")) {
-            gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
-        }
-    }
 
-    /**
+    /*
+     private void enable(VBO vbo) {
+     if (vbo.getType().contains("V")) {
+     vbo3f = vbo;
+     capacity = vbo.capacity();
+     gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+     }
+     if (vbo.getType().contains("C")) {
+     gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
+     }
+     }
+
+     /**
      * Attrib the good type of pointer
      *
      * @param vbo
@@ -374,80 +429,81 @@ public class JOGL_Visitor implements Visitor, GLEventListener {
      }
      }
      *//*
-    private void processShader(Shape obj, GL3 gl) {
-        int handle;
+     private void processShader(Shape obj, GL3 gl) {
+     int handle;
 
-        glshader = obj.getMaterial().getShaderMaterial();
-        // compile once
-        System.out.println("The handle 1 : " + glshader.getHandle());
-        if (glshader.getHandle() == ShaderProg.UNKNOWN) {
-            //TEST
-            System.out.println("The handle 2 : " + glshader.getHandle());
-            try {/*
-                 String[] fragment = new String[glshader.getFragmentSource().length()];
-                 for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
-                 fragment[i] = Character.toString(glshader.getFragmentSource().charAt(i));
-                 }*/
-                /*      String[] vertex = new String[glshader.getVertexSource().length()];
-                 for (int i = 0; i < glshader.getVertexSource().length(); i++) {
-                 vertex[i] = Character.toString(glshader.getVertexSource().charAt(i));
-                 }
+     glshader = obj.getMaterial().getShaderMaterial();
+     // compile once
+     System.out.println("The handle 1 : " + glshader.getHandle());
+     if (glshader.getHandle() == ShaderProg.UNKNOWN) {
+     //TEST
+     System.out.println("The handle 2 : " + glshader.getHandle());
+     try {/*
+     String[] fragment = new String[glshader.getFragmentSource().length()];
+     for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
+     fragment[i] = Character.toString(glshader.getFragmentSource().charAt(i));
+     }*/
+    /*      String[] vertex = new String[glshader.getVertexSource().length()];
+     for (int i = 0; i < glshader.getVertexSource().length(); i++) {
+     vertex[i] = Character.toString(glshader.getVertexSource().charAt(i));
+     }
 
 
-                 String[] fragment = new String[glshader.getFragmentSource().length()];
-                 for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
-                 fragment[i] = Character.toString(glshader.getFragmentSource().charAt(i));
-                 }
+     String[] fragment = new String[glshader.getFragmentSource().length()];
+     for (int i = 0; i < glshader.getFragmentSource().length(); i++) {
+     fragment[i] = Character.toString(glshader.getFragmentSource().charAt(i));
+     }
                  
-                String[] vertex = glshader.getVertexSource().split(System.getProperty("line.separator"));
-                String[] fragment = glshader.getFragmentSource().split(System.getProperty("line.separator"));
-                for (int i = 0; i < fragment.length; i++) {
-                    System.out.println("fragment : " + fragment[i]);
-                }
+     String[] vertex = glshader.getVertexSource().split(System.getProperty("line.separator"));
+     String[] fragment = glshader.getFragmentSource().split(System.getProperty("line.separator"));
+     for (int i = 0; i < fragment.length; i++) {
+     System.out.println("fragment : " + fragment[i]);
+     }
 
-                // String[] vertex = glshader.getVertexSource().split(System.getProperty("line.separator"));
-                //String[] vertex = new String[]{glshader.getVertexSource()};
-                System.out.println(" VERTEX SOURCE : " + vertex);
-                System.out.println(" FRAGMENT SOURCE : " + fragment);
+     // String[] vertex = glshader.getVertexSource().split(System.getProperty("line.separator"));
+     //String[] vertex = new String[]{glshader.getVertexSource()};
+     System.out.println(" VERTEX SOURCE : " + vertex);
+     System.out.println(" FRAGMENT SOURCE : " + fragment);
 
 
 
-                handle = ShaderUtils.attachShaders(gl, vertex, fragment,glshader);
-                System.out.println("The handle 3 : " + handle);
-                glshader.setHandle(handle);
-                System.out.println("The handle 4  : " + glshader.getHandle());
-            } catch (Exception e) {
-                IJ.log("Error with the Shader " + e);
-            } //Compile, Link error
-        }
+     handle = ShaderUtils.attachShaders(gl, vertex, fragment,glshader);
+     System.out.println("The handle 3 : " + handle);
+     glshader.setHandle(handle);
+     System.out.println("The handle 4  : " + glshader.getHandle());
+     } catch (Exception e) {
+     IJ.log("Error with the Shader " + e);
+     } //Compile, Link error
+     }
 
-    }
-/*
-    private void processUniform(Shape obj) {
-        ArrayList<Uniform> uniforms = glshader.getAllUniforms();
-        System.out.println("version " + gl.glGetString(gl.GL_VERSION));
-        for (Uniform uni : uniforms) {
-            System.out.println("Handle : " + glshader.getHandle() + " name [" + uni.getName() + "]");
-            if (uni.getType().equals("view_matrix")) {
-                int vlocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
-                System.out.println(" View : " + vlocation);
-                gl.glUniformMatrix4fv(vlocation, 16, false, cam_.getViewMatrix().toColumnBuffer());
-                // gl.gluniformMatrix4
-                System.out.println(cam_.getViewMatrix());
-            } else if (uni.getType().equals("proj_matrix")) {
-                int plocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
-                System.out.println(" Projection : " + plocation);
-                gl.glUniformMatrix4fv(plocation, 16, false, cam_.getProjection().toColumnBuffer());
-                System.out.println(cam_.getProjection());
-            } else if (uni.getType().equals("matrix")) {
-                int mlocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
-                System.out.println(" Location : " + mlocation);
-                gl.glUniformMatrix4fv(mlocation, 16, false, obj.getModelMatrix().toColumnBuffer());
-                System.out.println(obj.getModelMatrix());
-            }
-        }
-    }
+     }
+     /*
+     private void processUniform(Shape obj) {
+     ArrayList<Uniform> uniforms = glshader.getAllUniforms();
+     System.out.println("version " + gl.glGetString(gl.GL_VERSION));
+     for (Uniform uni : uniforms) {
+     System.out.println("Handle : " + glshader.getHandle() + " name [" + uni.getName() + "]");
+     if (uni.getType().equals("view_matrix")) {
+     int vlocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
+     System.out.println(" View : " + vlocation);
+     gl.glUniformMatrix4fv(vlocation, 16, false, cam_.getViewMatrix().toColumnBuffer());
+     // gl.gluniformMatrix4
+     System.out.println(cam_.getViewMatrix());
+     } else if (uni.getType().equals("proj_matrix")) {
+     int plocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
+     System.out.println(" Projection : " + plocation);
+     gl.glUniformMatrix4fv(plocation, 16, false, cam_.getProjection().toColumnBuffer());
+     System.out.println(cam_.getProjection());
+     } else if (uni.getType().equals("matrix")) {
+     int mlocation = gl.glGetUniformLocation(glshader.getHandle(), uni.getName());
+     System.out.println(" Location : " + mlocation);
+     gl.glUniformMatrix4fv(mlocation, 16, false, obj.getModelMatrix().toColumnBuffer());
+     System.out.println(obj.getModelMatrix());
+     }
+     }
+     }
     
-    */
+     */
+
 } // end of class JOGL Visitor
 // http://forum.jogamp.org/Can-someone-please-help-me-complete-this-sample-code-td3207414.html

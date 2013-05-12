@@ -37,22 +37,54 @@ import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
 
 /**
+ * Class JOGL_Visitor
  *
- * @author clement
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ * @see Visitor
+ *
  */
 public class JOGL_VisitorTwo implements Visitor, GLEventListener {
-
+    /**
+     * Camera.
+     * @see Camera
+     */
     private Camera cam_;
+        /**
+     * Check if the shape have IBO or not.
+     */
     private boolean isIndexed = false;
     private GLU glu;
     private GLUT glut;
     private GL3 gl;
     private GLCapabilities caps;
     private GLCanvas canvas;
+        /**
+     * VBO.
+     *
+     * @see VBO.
+     */
     private VBO vbo3f;
+        /**
+     * IBO.
+     *
+     * @see IBO
+     */
     private IBO ibo;
+       /**
+     * ShaderProg
+     *
+     * @see ShaderProg
+     */
     private int capacity = 0;
     private ShaderProg glshader;
+        /**
+     * ArrayList of shader's attribute.
+     *
+     * @see Attribute
+     */
     private ArrayList<Attribute> attribute;
     // r
     // rotate
@@ -63,13 +95,23 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
     public void visit(BackStage obj) {
         // do nothing
     }
-
+    /**
+     * Gets Camera's Matrix
+     *
+     * @param obj Camera
+     * @see Visitor
+     */
     @Override
     public void visit(Camera obj) {
         cam_ = obj;
 
     }
-
+    /**
+     * Process the matrix
+     *
+     * @param obj Light
+     * @see Visitor
+     */
     @Override
     public void visit(Light obj) {
         setModelMatrix(obj);
@@ -84,7 +126,12 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
     public void visit(Scene obj) {
         setModelMatrix(obj);
     }
-
+    /**
+     * Process the matrix and draw the shape.
+     *
+     * @param obj Shape
+     * @see Visitor
+     */
     @Override
     public void visit(Shape obj) {
         if (obj.isDirty(Node.MATRIX)) {
@@ -98,7 +145,12 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
     public void visit(Stage obj) {
         // do nothing
     }
-
+    /**
+     * Process the matrix.
+     *
+     * @param obj Transform
+     * @see Visitor
+     */
     @Override
     public void visit(Transform obj) {
         if (obj.isDirty(Node.MATRIX)) {
@@ -147,7 +199,10 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
         gl.glUseProgram(0);
 
     }
-
+/**
+ * Process the BO.
+ * @param obj shape
+ */
     private void processBO(Shape obj) {
 
 
@@ -246,7 +301,11 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
             gl.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, capacity / vbo3f.getStride());
         }
     }
-
+/**
+ * Makes conversion Vertigo style/OpenGL style
+ * @param vertigo_style
+ * @return 
+ */
     private int getOpenGLStyle(String vertigo_style) {
         int style = calcIndex(vertigo_style);
         switch (style) {
@@ -293,8 +352,7 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
         return index;
     }
 
-    @Override
-    public void init(GLAutoDrawable drawable) {
+        public void init(GLAutoDrawable drawable) {
         //  GL gl = drawable.getGL();  
 //        gl = drawable.getGL().getGL3();  // up to OpenGL 3
         //  glu = new GLU();
@@ -303,19 +361,18 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
         //gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         // gl = drawable.getGL().getGL2();
     }
-
-    @Override
-    public void dispose(GLAutoDrawable glad) {
+    /**
+     * Delete Buffers and Shader when the window is closed.
+     */
+        public void dispose(GLAutoDrawable glad) {
         // do nothing
     }
 
-    @Override
-    public void display(GLAutoDrawable glad) {
+        public void display(GLAutoDrawable glad) {
         // do nothing
     }
 
-    @Override
-    public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
+        public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
         // do nothing
     }
 
@@ -355,6 +412,10 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
      }
      }
      */
+    /**
+ * Process the shader.
+ * @param obj shader
+ */
     private void processShader(Shape obj) {
         int handle;
 
@@ -388,7 +449,10 @@ public class JOGL_VisitorTwo implements Visitor, GLEventListener {
         }
 
     }
-
+/**
+ * Links shader's uniform variable.
+ * @param obj shape
+ */
     private void processUniform(Shape obj) {
         ArrayList<Uniform> uniforms = glshader.getAllUniforms();
         for (Uniform uni : uniforms) {
