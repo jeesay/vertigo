@@ -27,22 +27,47 @@
 package vertigo.graphics.event;
 
 /**
+ * Class Event
  *
- * @author Authors : Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class Event {
-
+/**
+ * Left button.
+ */
     public static final int BUTTON_LEFT = 1;
+    /**
+     * Middle button (wheel).
+     */
     public static final int BUTTON_MIDDLE = 2;
+    /**
+     * Right button.
+     */
     public static final int BUTTON_RIGHT = 4;
+      /**
+     * Wheel up.
+     */
     public static final int WHEEL_UP = 1;
+     /**
+     * Wheel down.
+     */
     public static final int WHEEL_DOWN = -1;
+    /**
+     * Push button.
+     */
     public static final int PUSH = 0;
+    /**
+     * Click button.
+     */
     public static final int CLICK = 1;
     public int button;
 
     @Override
     public String toString() {
-       return "La valeur de button est : " +button;
+       return "The value of button is : " +button;
     }
 } // end of class Event

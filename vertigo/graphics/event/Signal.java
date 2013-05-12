@@ -25,8 +25,9 @@
  *Clement Delestre
  */
 package vertigo.graphics.event;
+
 /**
- * Class EventDispatcher
+ * Class Signal, composed of public variables for each signal type.
  *
  * @author Florin Buga
  * @author Olivier Catoliquot
@@ -36,22 +37,60 @@ package vertigo.graphics.event;
  */
 public class Signal {
 
+    /**
+     * No button
+     */
     public static final int NO_BUTTON = 0;
+    /**
+     * Left button.
+     */
     public static final int BUTTON_LEFT = 1;
+    /**
+     * Middle button (wheel).
+     */
     public static final int BUTTON_MIDDLE = 2;
+    /**
+     * Right Button.
+     */
     public static final int BUTTON_RIGHT = 3;
+    /**
+     * Wheel up.
+     */
     public static final int WHEEL_UP = 1;
+    /**
+     * Wheel down.
+     */
     public static final int WHEEL_DOWN = -1;
+    /**
+     * Empty keyboard.
+     */
     public static final int NONE = 100;
-   public static final int PRESSED = 101;
+    /**
+     * One letter is pressed.
+     */
+    public static final int PRESSED = 101;
+    /**
+     * One letter is released.
+     */
     public static final int RELEASED = 102;
-    public static final int CLICKED = 103; 
-    public static final int MOVED = 104; 
-    public static final int DRAGGED = 105; 
-    public static final int ENTERED = 106; 
-    public static final int EXITED = 107; 
-    
-    
-   
-    
+    /**
+     * Mouse clicking.
+     */
+    public static final int CLICKED = 103;
+    /**
+     * Mouse moving.
+     */
+    public static final int MOVED = 104;
+    /**
+     * Mouse dragging.
+     */
+    public static final int DRAGGED = 105;
+    /**
+     * Mouse entering the window.
+     */
+    public static final int ENTERED = 106;
+    /**
+     * Mouse exiting the window.
+     */
+    public static final int EXITED = 107;
 } // end of class Signal

@@ -27,124 +27,187 @@
 package vertigo.graphics.event;
 
 /**
- * @author Authors :
- *Florin Buga
- *Olivier Catoliquot
- *Clement Delestre
+ * Class MouseSignal
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @see Signal
+ * @version 0.1
+ *
  */
-
 public class MouseSignal extends Signal {
 
+    /**
+     * The button of the mouse.
+     *
+     * @see MouseSignal#getButton()
+     * @see MouseSignal#setButton(int)
+     */
     private int button;
-
+    /**
+     * The mouse's wheel
+     *
+     * @see MouseSignal#getWheel()
+     */
     private int wheel;
+    /**
+     * The mouse status
+     *
+     * @see MouseSignal#getButtonStatus()
+     */
     private int status;
+    /**
+     * The mouse's x coordinate
+     *
+     * @see MouseSignal#getX()
+     * @see MouseSignal#setXY(int, int)
+     */
     private int mouse_x;
+    /**
+     * The mouse's y coordinate
+     *
+     * @see MouseSignal#getY()
+     * @see MouseSignal#setXY(int, int)
+     */
     private int mouse_y;
-    private boolean empty=true;
-    private boolean down=false;
-    
+    /**
+     * True if no button is released.
+     *
+     * @see MouseSignal#setEmpty()
+     * @see MouseSignal#isEmpty()
+     */
+    private boolean empty = true;
+    private boolean down = false;
+
     public MouseSignal() {
-    
     }
- 
-    public int getX(){
+
+    /**
+     * Get mouse's X
+     *
+     * @return x
+     */
+    public int getX() {
         return mouse_x;
     }
 
-    public int getY(){
+    /**
+     * Get mouse's Y
+     *
+     * @return y
+     */
+    public int getY() {
         return mouse_y;
     }
- 
-   /**
-    * Set Button ID
-    *
-    * @param BUTTON1, BUTTON2 or BUTTON3
-    */
-    public void setButton(int button){
-        this.button=button;
+
+    /**
+     * Set Button ID
+     *
+     * @param button BUTTON1, BUTTON2 or BUTTON3
+     */
+    public void setButton(int button) {
+        this.button = button;
     }
 
-   /**
-    * Get Button ID
-    *
-    * @return BUTTON1, BUTTON2 or BUTTON3
-    */
-    public int getButton(){
+    /**
+     * Get Button ID
+     *
+     * @return BUTTON1, BUTTON2 or BUTTON3
+     */
+    public int getButton() {
         return this.button;
     }
 
-   /**
-    * Get wheel scroll
-    *
-    * @return -1, 0, +1 corresponding to wheel scroll as UP, NONE, DOWN, respectively
-    */
-    public int getWheel(){
+    /**
+     * Get wheel scroll
+     *
+     * @return -1, 0, +1 corresponding to wheel scroll as UP, NONE, DOWN,
+     * respectively
+     */
+    public int getWheel() {
         return this.wheel;
     }
 
-
-   /**
-    * Set wheel scroll
-    *
-    * @return -1, 0, +1 corresponding to wheel scroll as UP, NONE, DOWN, respectively
-    */
-    public void setWheel(int wheel){
-        this.wheel=wheel;
+    /**
+     * Set wheel scroll
+     *
+     * @return -1, 0, +1 corresponding to wheel scroll as UP, NONE, DOWN,
+     * respectively
+     */
+    public void setWheel(int wheel) {
+        this.wheel = wheel;
     }
 
-
+    /**
+     * Sets the mouse's coordinates.
+     *
+     * @param x
+     * @param y
+     */
     public void setXY(int x, int y) {
-        mouse_x=x;
-        mouse_y=y;
+        mouse_x = x;
+        mouse_y = y;
     }
 
+    /**
+     * Return true if the mouse is empty
+     *
+     * @return empty
+     */
     public boolean isEmpty() {
         return empty;
     }
 
-   /**
-    * Set Button status
-    *
-    * @param PRESSED, RELEASED, MOVED,
-    */
+    /**
+     * Set Button status
+     *
+     * @param status PRESSED, RELEASED, MOVED,
+     */
     public void setButtonStatus(int status) {
-        this.status=status;
+        this.status = status;
     }
 
-   /**
-    * Get Button status
-    *
-    * @return PRESSED, RELEASED, MOVED,
-    */
+    /**
+     * Get Button status
+     *
+     * @return PRESSED, RELEASED, MOVED,
+     */
     public int getButtonStatus() {
         return this.status;
     }
 
-    public void setEmpty(){
-        empty=true;
+    /**
+     * Sets the mouse empty.
+     */
+    public void setEmpty() {
+        empty = true;
     }
 
-    public void setDown(){
-        down=true;
+    public void setDown() {
+        down = true;
     }
 
+    /**
+     * Return true if the mouse is dragged.
+     *
+     * @param button
+     * @return boolean
+     */
     public boolean isDragged(int button) {
-        return (isButtonDown(button) && status==Signal.MOVED);
+        return (isButtonDown(button) && status == Signal.MOVED);
     }
-    
+
     public boolean isButtonDown(int button) {
         return down;
     }
-    
+
     public boolean isButtonDown() {
         return down;
     }
-    
+
     @Override
     public String toString() {
-       return "[Button : " +button+" Status : " +status +" Wheel :  "+wheel+" xy("+mouse_x+";"+mouse_y + ") ]";
+        return "[Button : " + button + " Status : " + status + " Wheel :  " + wheel + " xy(" + mouse_x + ";" + mouse_y + ") ]";
     }
-    
-    
 } // end of class MouseSignal

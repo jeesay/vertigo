@@ -27,24 +27,63 @@
 package vertigo.graphics.event;
 
 /**
+ * Class KeyboardSignal
  *
- * @author Clement DELESTRE
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @author Jean-Christophe Taveau
+ * @see Signal
+ * @version 0.1
+ *
  */
-
 public class KeyboardSignal extends Signal {
-   private char letter; 
-   private boolean empty=true;
-        public void setChar(char letter){
-        this.letter=letter;
+
+    /**
+     * The letter pressed
+     *
+     * @see KeyboardSignal#setChar(char)
+     * @see KeyboardSignal#setLetter(char)
+     */
+    private char letter;
+    /**
+     * True if 0 letters is pressed
+     *
+     * @see KeyboardSignal#isEmpty()
+     * @see KeyboardSignal#setEmpty()
+     */
+    private boolean empty = true;
+
+    /**
+     * Sets char.
+     *
+     * @param letter
+     */
+    public void setChar(char letter) {
+        this.letter = letter;
     }
 
+    /**
+     *
+     * @return empty
+     */
     public boolean isEmpty() {
         return empty;
     }
-    public void setEmpty(){
-        empty=true;
+
+    /**
+     * Sets Empty.
+     */
+    public void setEmpty() {
+        empty = true;
     }
-    public void setLetter(char letter){
-        this.letter=letter;
+
+    /**
+     * Sets a letter.
+     *
+     * @param letter
+     */
+    public void setLetter(char letter) {
+        this.letter = letter;
     }
 } // end of Class KeyboardSignal

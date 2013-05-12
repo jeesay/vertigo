@@ -27,23 +27,31 @@
 package vertigo.graphics.event;
 
 /**
- * @author Authors :
- *Florin Buga
- *Olivier Catoliquot
- *Clement Delestre
+ * Class EventMouse
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @see Event
+ * @version 0.1
+ *
  */
 public class EventMouse extends Event {
-    
+    /**
+     * The mouse's status
+     */
 
     private int buttonStatus;
 
  public EventMouse(){
      
  }
+ /**
+  * Sets the status button.
+  * @param button 
+  */
     public void setButton(int button){
         this.button=button;
     }
-    
-    
-    
+
 } // end of class EventMouse
