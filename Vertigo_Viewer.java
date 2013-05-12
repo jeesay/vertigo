@@ -42,6 +42,17 @@ import ij.plugin.PlugIn;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Class Vertigo_Viewer. The main class of Vertigo.
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
+
+
 public class Vertigo_Viewer implements PlugIn {
 
     /**
@@ -104,6 +115,9 @@ public class Vertigo_Viewer implements PlugIn {
      */
     public static final String VERTIGO_VERSION = "0.01";
 
+    /**
+     * Constructor, create a default scenegraph.
+     */
     public Vertigo_Viewer() {
         default_scenegraph();
         title_ = " ";
@@ -121,7 +135,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Sets The title of the Window
      *     
-* @param a_title A string containing the title
+* @param a_title a string containing the title
      */
     public void setTitle(String a_title) {
         title_ = a_title;
@@ -187,9 +201,9 @@ public class Vertigo_Viewer implements PlugIn {
     }
 
     /**
-     * Run the rendering engine for display
+     * Run the rendering engine for display.
      *
-     * @param name of the rendering engine
+     * @param render : Name of the rendering engine
      */
     public void show(String render) {
         if (render.equals("G2D")) {
@@ -233,7 +247,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Gets the scene of the scene graph. Convenient method equivalent to
      * getWorld().get("Stage").get("Scene");
-     *
+     * @return scene
      */
     public Scene getScene() {
         return scene_;
@@ -242,6 +256,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Gets the Camera for *this* (default) scene graph. This is a convenient
      * method equivalent to `getScene().getCamera()'.
+     * @return camera
      *
      */
     public Camera getCamera() {
@@ -251,8 +266,8 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Gets a node of the scene graph.
      *
-     * @param node's name
-     *
+     * @param name of node
+     * @return Node.
      */
     public Node getNode(String name) {
         Node a_node = searchName(world_, name);

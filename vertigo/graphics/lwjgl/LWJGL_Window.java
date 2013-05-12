@@ -58,26 +58,93 @@ import vertigo.graphics.event.MouseSignal;
 import vertigo.graphics.event.TimerObserver;
 import vertigo.graphics.event.ViewportObserver;
 import vertigo.graphics.event.ViewportSignal;
+/**
+ * LWJGL_Window. 
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ * @see Window3D
+ *
+ */
+
 
 public class LWJGL_Window implements Window3D {
+       /**
+     * The window's width.
+     *
+     * @see LWJGL_Window#setDimension(int, int) 
+     */
 
     private int width = 640;
+      /**
+     * The window's height.
+     *
+     * @see LWJGL_Window#setDimension(int, int) 
+     */
     private int height = 480;
+        /**
+     * The window's title.
+     *
+     * @see LWJGL_Window#setTitle(java.lang.String) 
+     */
     private String win_title = "Vertigo LWJGL - ";
+    /**
+     * Check if the window is closed or not.
+     */
     private static boolean closeRequested;
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<Dimension>();
     private Frame frame;
     private Dimension newDim;
+    /**
+     * The LWJGL Renderer
+     * @see LWJGL_Window#display() 
+     */
     private LWJGL_Renderer renderer;
+    /**
+     * The KeyboardDispatcher.
+     * @see KeyboardDispatcher
+     */
     private final KeyboardDispatcher keyboardDispatcher;
+    /**
+     * The MouseDispatcher.
+     * @see MouseDispatcher
+     */
     private final MouseDispatcher mouseDispatcher;
+    /**
+     * The TimerDispatcher.
+     * @see  TimerDispatcher
+     */
     private final TimerDispatcher timerDispatcher;
+    /**
+     * The ViewportDispatcher.
+     * @see TimerDispatcher
+     */
     private final ViewportDispatcher vpDispatcher;
+    /**
+     * The MouseSignal.
+     * @see ViewportDispatcher
+     */
     private MouseSignal mouse_event;
+    /**
+     * The KeyboardSignal.
+     * @see MouseSignal
+     */
     private KeyboardSignal key_event;
+    /**
+     * The ViewportSignal.
+     * @see KeyboardSignal
+     */
     private ViewportSignal vp_event;
+    /**
+     * The World.
+     * @see World
+     */
     private World world;
-
+/**
+ * Constructor
+ */
     public LWJGL_Window() {
         mouseDispatcher = MouseDispatcher.getInstance();
         keyboardDispatcher = KeyboardDispatcher.getInstance();
@@ -134,6 +201,10 @@ public class LWJGL_Window implements Window3D {
         }
 
     }
+    /*
+     * Display while the window is not closed.
+     * 
+     */
     public void display() {
 
         while (!Display.isCloseRequested() && !closeRequested) {
@@ -154,7 +225,9 @@ public class LWJGL_Window implements Window3D {
         Display.destroy();
         frame.dispose();
     }
-
+/**
+ * Close the window
+ */
     public void dispose() {
         renderer.dispose();
     }

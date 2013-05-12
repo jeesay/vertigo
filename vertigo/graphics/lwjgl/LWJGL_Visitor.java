@@ -1,6 +1,28 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * $Id:$
+ *
+ * Vertigo_viewer: 3D Viewer Plugin for ImageJ.
+ * Copyright (C) 2013 Jean-Christophe Taveau.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ *
+ * Authors :
+ * Florin Buga
+ * Olivier Catoliquot
+ * Clement Delestre
  */
 package vertigo.graphics.lwjgl;
 
@@ -17,7 +39,6 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL40;
 import vertigo.graphics.Attribute;
 import vertigo.graphics.BO;
 import vertigo.graphics.IBO;
@@ -36,20 +57,49 @@ import vertigo.scenegraph.Stage;
 import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
-
 /**
+ * Class LWJGL_Visitor
  *
- * @author Clement DELESTRE
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ * @see Visitor
+ *
  */
 public class LWJGL_Visitor implements Visitor {
-
+    /**
+     * Camera.
+     * @see Camera
+     */
     private Camera cam_;
+    /**
+     * Check if the shape have IBO or not.
+     */
     private boolean isIndexed = false;
-    private int iboid;
+    /**
+     * IBO.
+     * @see IBO
+     */
     private IBO ibo = null;
+    /**
+     * VBO.
+     * @see VBO.
+     */
     private VBO vbo3f = null;
+    /**
+     * The VBO's length.
+     */
     private int capacity = 0;
+    /**
+     * ShaderProg
+     * @see ShaderProg
+     */
     private ShaderProg glshader;
+    /**
+     * ArrayList of shader's attribute.
+     * @see Attribute
+     */
     private ArrayList<Attribute> attribute;
     private IntBuffer ib;
 
@@ -57,14 +107,23 @@ public class LWJGL_Visitor implements Visitor {
     public void visit(BackStage obj) {
         // do nothing
     }
+    
+    /**
+     * Gets Camera's Matrix
+     * @param obj Camera
+     *  @see Visitor
+     */
 
     @Override
     public void visit(Camera obj) {
         cam_ = obj;
-        // get matrix for the shader
-
     }
 
+    /**
+     * Process the matrix
+     * @param obj Light
+     *  @see Visitor
+     */
     @Override
     public void visit(Light obj) {
         setModelMatrix(obj);
@@ -80,6 +139,11 @@ public class LWJGL_Visitor implements Visitor {
         setModelMatrix(obj);
     }
 
+    /**
+     * Process the matrix and draw the shape.
+     * @param obj Shape
+     *  @see Visitor
+     */
     @Override
     public void visit(Shape obj) {
         if (obj.isDirty(Node.MATRIX)) {
@@ -93,7 +157,11 @@ public class LWJGL_Visitor implements Visitor {
     public void visit(Stage obj) {
         // do nothing
     }
-
+/**
+ * Process the matrix.
+ * @param obj Transform
+ * @see Visitor
+ */
     @Override
     public void visit(Transform obj) {
         if (obj.isDirty(Node.MATRIX)) {
@@ -121,7 +189,6 @@ public class LWJGL_Visitor implements Visitor {
     }
 
     private void drawShape(Shape obj) {
-
         // PreProcessing
         if (obj.isDirty(Node.SHADER)) {
             processShader(obj);
@@ -129,25 +196,20 @@ public class LWJGL_Visitor implements Visitor {
         }
         GL20.glUseProgram(obj.getMaterial().getShaderMaterial().getHandle());
         processUniform(obj);
-        // Geometry: VBO
-        //  if (obj.isDirty(Node.VBO)) {
+        // Geometry: VBO and IBO
         processBO(obj);
         obj.setDirty(Node.VBO, false);
-        // }
-
         GL20.glUseProgram(0);
-
-
-
     }
-
+/**
+ * Process the shader.
+ * @param obj shader
+ */
     private void processShader(Shape obj) {
         int handle;
-
         glshader = obj.getMaterial().getShaderMaterial();
         // compile once
         if (glshader.getHandle() == ShaderProg.UNKNOWN) {
-            //TEST
             try {
                 handle = ShaderUtils.attachShaders(glshader.getVertexSource(), glshader.getFragmentSource());
                 glshader.setHandle(handle);
@@ -157,26 +219,25 @@ public class LWJGL_Visitor implements Visitor {
         }
 
     }
-
+/**
+ * Process the BO.
+ * @param obj shape
+ */
     private void processBO(Shape obj) {
-
 
         int nbBO = obj.getGeometry().getNumberBO(); //return 2 for the cube (1 vbo + 1 ibo)
         ib = BufferUtils.createIntBuffer(nbBO);
         GL15.glGenBuffers(ib);
-
         int i = 0;
         for (BO bo : obj.getGeometry().getBuffers()) {
             int boHandle = ib.get(i);
             bo.setHandle(boHandle);
             i++;
-
             if (bo instanceof IBO) {
                 isIndexed = true;
                 ibo = (IBO) bo;
                 GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, boHandle);
                 GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, ibo.getIntBuffer(), GL15.GL_STATIC_DRAW);
-
             } else {
                 VBO vbo = (VBO) bo;
                 if (vbo.getType().contains("V")) {
@@ -186,7 +247,6 @@ public class LWJGL_Visitor implements Visitor {
                 GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, boHandle);
                 attribute = glshader.getAllAttributes();
                 GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vbo.getFloatBuff(), GL15.GL_STATIC_DRAW);
-
                 for (Attribute attrib : attribute) {
                     if (vbo.getType().equals(attrib.getType())) {
                         int alocation = GL20.glGetAttribLocation(glshader.getHandle(), attrib.getName());
@@ -194,9 +254,7 @@ public class LWJGL_Visitor implements Visitor {
                         GL20.glVertexAttribPointer(alocation, attrib.getSize(), GL11.GL_FLOAT, false, vbo.getStride() << 2, 0L);
                     }
                 }
-
                 GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-
             }
         }
         if (isIndexed) { // draw with index
@@ -204,8 +262,6 @@ public class LWJGL_Visitor implements Visitor {
             GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
             GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
             GL20.glDisableVertexAttribArray(0);
-
-
         } else {
             // draw withouh index
             GL11.glDrawArrays(getOpenGLStyle(obj.getDrawingStyle()), 0, capacity / vbo3f.getStride());
@@ -214,7 +270,11 @@ public class LWJGL_Visitor implements Visitor {
         }
         GL15.glDeleteBuffers(ib);
     }
-
+/**
+ * Makes conversion Vertigo style/OpenGL style
+ * @param vertigo_style
+ * @return 
+ */
     private int getOpenGLStyle(String vertigo_style) {
         int style = calcIndex(vertigo_style);
         switch (style) {
@@ -281,18 +341,17 @@ public class LWJGL_Visitor implements Visitor {
     private void enable(VBO vbo) {
         if (vbo.getType().contains("V")) {
             vbo3f = vbo;
-
-
-
             capacity = vbo.capacity();
             GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-
         }
         if (vbo.getType().contains("C")) {
             GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
         }
     }
-
+/**
+ * Links shader's uniform variable.
+ * @param obj shape
+ */
     private void processUniform(Shape obj) {
 
         ArrayList<Uniform> uniforms = glshader.getAllUniforms();
@@ -315,7 +374,7 @@ public class LWJGL_Visitor implements Visitor {
         }
     }
 
-    /*
+    /**
      * Delete Buffers and Shader when the window is closed.
      */
     public void dispose() {

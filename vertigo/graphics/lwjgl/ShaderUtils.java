@@ -41,8 +41,11 @@ import vertigo.graphics.BufferTools;
 import vertigo.graphics.ShaderProg;
 import vertigo.graphics.Uniform;
 /**
- * 
- * @author
+ * Class ShaderUtils
+ *
+ * @author Jean-Christophe Taveau
+ * @version 0.1
+ *
  */
 public final class ShaderUtils {
 

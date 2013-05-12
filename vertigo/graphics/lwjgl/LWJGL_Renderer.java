@@ -27,27 +27,52 @@
 package vertigo.graphics.lwjgl;
 
 import java.awt.Dimension;
-import java.util.concurrent.atomic.AtomicReference;
 import org.lwjgl.opengl.GL11;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.World;
 import vertigo.graphics.Renderer;
 
 /**
+ * Class LWJGL_Renderer
  *
- * @author Authors : Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class LWJGL_Renderer implements Renderer {
-
-    private boolean closeRequested;
+   /**
+     * The window's background red component
+     *
+     * @see LWJGL_Renderer#setBackgroundColor(float, float, float) 
+     */
     private float red;
+     /**
+     * The window's background green component
+     *
+     * @see LWJGL_Renderer#setBackgroundColor(float, float, float) 
+     */
     private float green;
+     /**
+     * The window's background blue component
+     *
+     * @see LWJGL_Renderer#setBackgroundColor(float, float, float) 
+     */
     private float blue;
     private World world;
     private Camera cam;
     private Dimension newDim;
+    /**
+     * The LWJGL_Visitor
+     *
+     * @see LWJGL_Renderer#display() 
+     * @see LWJGL_Visitor
+     */
     LWJGL_Visitor LWJGLVisitor;
-
+/**
+ * Constructor.
+ */
     public LWJGL_Renderer() {
         LWJGLVisitor = new LWJGL_Visitor();
     }
@@ -74,10 +99,10 @@ public class LWJGL_Renderer implements Renderer {
     void syncViewportSize(int i, int i0, int width, int height) {
         GL11.glViewport(0, 0, newDim.width, newDim.height);
     }
-    /*
+    
+    /**
      * Clean memory when the window is closed
      */
-
     public void dispose() {
         LWJGLVisitor.dispose();
     }
