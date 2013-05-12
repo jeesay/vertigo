@@ -27,13 +27,29 @@
 package vertigo.graphics;
 
 /**
+ * Class Uniform
  *
- ** Authors : Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class Uniform {
-
+  /**
+ * The uniform's name
+ * @see Uniform#getName() 
+ */
     private String name;
+       /**
+ * The uniform's handle
+ * @see Uniform#getHandle() 
+ */
     private int handle = -1;
+         /**
+ * The uniform's type
+ * @see Uniform#getType() 
+ */
     private  String type;
     
     
@@ -48,14 +64,27 @@ public class Uniform {
         this.name=name;
         this.handle=handle;
     }
+       /**
+     * Gets Uniform's name
+     *
+     * @return name
+     */
     public String getName(){
         return name;
     }
-
+ /**
+     * Gets Uniform's handle
+     *
+     * @return handle
+     */
     public int getHandle() {
         return handle;
     }
-
+ /**
+     * Gets Uniform's type
+     *
+     * @return type
+     */
     public String getType() {
         return type;
     }

@@ -29,26 +29,56 @@ package vertigo.graphics;
 /**
  * Class BO
  *
- * @author Florin Buga Olivier Catoliquot Clement Delestre
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class BO {
-
+/**
+ * the BO's handle
+ * @see BO#getHandle() 
+ * @see BO#isDirty() 
+ * @see BO#setHandle(int) 
+ */
     protected int handle;
+    /**
+     * the BO's stride
+     * @see VBO
+     */
     protected int stride;
+    /**
+     * The BO type
+     * @see VBO
+     * @see IBO
+     */
     protected String type;
 
     public BO() {
         handle = -1;
     }
-
+  /**
+     * Sets the handle
+     *
+     * @param handle
+     */
     public void setHandle(int value) {
         handle = value;
     }
-
+/**
+     * Gets the handle
+     *
+     * @return handle
+     */
     public int getHandle() {
         return handle;
     }
-
+/**
+     * BO is dirty if it is not bound
+     *
+     * @return boolean
+     */
     public boolean isDirty() {
         return (handle == -1);
     }

@@ -37,7 +37,15 @@ import vertigo.scenegraph.Stage;
 import vertigo.scenegraph.Transform;
 import vertigo.scenegraph.Viewing;
 import vertigo.scenegraph.World;
-
+/**
+ *Interface Visitor 
+ * Have a method by type of Node.
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
+ */
 
 public interface Visitor {
 
@@ -45,7 +53,6 @@ public interface Visitor {
     void visit(Camera obj);
     void visit(Light obj);
     void visit(Lighting obj);
-//     void visit(Node obj);
     void visit(Scene obj);
     void visit(Shape obj);
     void visit(Stage obj);
