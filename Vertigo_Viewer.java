@@ -44,16 +44,64 @@ import java.util.Iterator;
 
 public class Vertigo_Viewer implements PlugIn {
 
+    /**
+     * The window's title
+     *
+     * @see Vertigo_Viewer#setTitle(java.lang.String)
+     */
     private String title_;
-    private int window_width= 512;
-    private int window_height= 512;
-    private int red=0;
-    private int green=0;
-    private int blue=0;
+    /**
+     * The window's width
+     *
+     * @see Vertigo_Viewer#setDimension(int, int)
+     */
+    private int window_width = 512;
+    /**
+     * The window's height
+     *
+     * @see Vertigo_Viewer#setDimension(int, int)
+     */
+    private int window_height = 512;
+    /**
+     * The window's background red component
+     *
+     * @see Vertigo_Viewer#setBackgroundColor(int, int, int)
+     */
+    private int red = 0;
+    /**
+     * The window's background green component
+     *
+     * @see Vertigo_Viewer#setBackgroundColor(int, int, int)
+     */
+    private int green = 0;
+    /**
+     * The window's background blue component
+     *
+     * @see Vertigo_Viewer#setBackgroundColor(int, int, int)
+     */
+    private int blue = 0;
+    /**
+     * The scene of scenegraph
+     *
+     * @see Vertigo_Viewer#getScene()
+     */
     private Scene scene_;
+    /**
+     * The camera of scenegraph
+     *
+     * @see Vertigo_Viewer#getCamera()
+     */
     private Camera camera_;
     private Window3D graphWin;
+    /**
+     * The world of scenegraph
+     *
+     * @see Vertigo_Viewer#getWorld()
+     */
     private World world_;
+    /**
+     * The vertigo's version
+     */
     public static final String VERTIGO_VERSION = "0.01";
 
     public Vertigo_Viewer() {
@@ -73,7 +121,7 @@ public class Vertigo_Viewer implements PlugIn {
     /**
      * Sets The title of the Window
      *     
-* @param  a_title A string containing the title
+* @param a_title A string containing the title
      */
     public void setTitle(String a_title) {
         title_ = a_title;
@@ -92,6 +140,12 @@ public class Vertigo_Viewer implements PlugIn {
         this.blue = blue;
     }
 
+    /**
+     * Sets the window's dimension
+     *     
+* @param width
+     * @param height
+     */
     public void setDimension(int w, int h) {
         window_width = w;
         window_height = h;
@@ -101,7 +155,7 @@ public class Vertigo_Viewer implements PlugIn {
      * Displays the window and triggers the OpenGL rendering in an infinite
      * loop.
      */
-    public void show()  {
+    public void show() {
         try {
             System.out.println("LWJGL Renderer created");
             graphWin = new vertigo.graphics.lwjgl.LWJGL_Window();
@@ -138,7 +192,7 @@ public class Vertigo_Viewer implements PlugIn {
      *
      * @param name of the rendering engine
      */
-    public void show(String render)  {
+    public void show(String render) {
         if (render.equals("G2D")) {
             graphWin = (Window3D) new vertigo.graphics.G2D.G2D_Window();
             initWindow();
@@ -194,12 +248,12 @@ public class Vertigo_Viewer implements PlugIn {
     public Camera getCamera() {
         return camera_;
     }
-    
+
     /**
-     * Gets a node of the scene graph. 
-     * 
+     * Gets a node of the scene graph.
+     *
      * @param node's name
-     * 
+     *
      */
     public Node getNode(String name) {
         Node a_node = searchName(world_, name);
