@@ -30,6 +30,7 @@ import vertigo.graphics.Visitor;
 import vertigo.math.AxisAngle4;
 import vertigo.math.Matrix4;
 import vertigo.math.Vector3;
+
 /**
  * Class Shape
  *
@@ -46,7 +47,6 @@ public class Shape extends Node {
     private String style_;
     // Local matrix
     protected Matrix4 matrix;
-
     public static int count = 0;
 
     public Shape() {
@@ -71,33 +71,32 @@ public class Shape extends Node {
         material = new Material();
     }
 
-   /**
-     * Get the Shape's Geometry
+    /**
+     * Gets the Shape's Geometry
      *
      * @return geo
-     *
      */
     public Geometry getGeometry() {
         return geo;
     }
 
-   /**
-     * Set the  Geometry
+    /**
+     * Sets the Geometry
      *
      * @param types, data as float[]
-     *
      */
     public void setGeometry(String type, float[] data) {
         geo.setVertices(type, data);
-        
+
         if (type.equals("V3F")) {
             bbox.expand(data);
-            setDirty(Node.AABB,false);
+            setDirty(Node.AABB, false);
         }
 
     }
-   /**
-     * Set the  Geometry
+
+    /**
+     * Sets the Geometry
      *
      * @param types, data as float[]
      *
@@ -113,11 +112,12 @@ public class Shape extends Node {
             for (int i = offset; i < data.length; i += step) {
                 bbox.expand(data[i], data[i + 1], data[i + 2]);
             }
-            setDirty(Node.AABB,false);
+            setDirty(Node.AABB, false);
         }
     }
+
     /**
-     * Set the  Indexed Geometry
+     * Sets the Indexed Geometry
      *
      * @param types, data as float[], indices as int []
      *
@@ -126,8 +126,9 @@ public class Shape extends Node {
         setGeometry(type, data);
         setIndices(indices);
     }
+
     /**
-     * Set the  Indexed Geometry
+     * Sets the Indexed Geometry
      *
      * @param types, data as float[], indices as int []
      *
@@ -137,12 +138,32 @@ public class Shape extends Node {
         setIndices(indices);
     }
 
+    /**
+     * Sets the Indexed Geometry
+     *
+     * @param indices as int []
+     *
+     */
     public void setIndices(int[] indices) {
         geo.setIndices(indices);
     }
 
+    /**
+     * Sets the Color
+     *
+     * @param float red, float green, float blue, float alpha (RGBA)
+     */
     public void setColor(float red, float green, float blue, float alpha) {
-        // TODO
+        material.setColor(red, green, blue, alpha);
+    }
+
+    /**
+     * Sets the Color
+     *
+     * @param float red, float green, float blue (RGB)
+     */
+    public void setColor(float red, float green, float blue) {
+        material.setColor(red, green, blue);
     }
 
     public void setShaderMaterial(String shaderName) {
@@ -159,7 +180,8 @@ public class Shape extends Node {
     /**
      * Get the drawing style
      *
-     * @return style - Available styles: POINTS, LINES, LINESTRIP, TRIANGLES
+     * @return style - Available styles: POINTS, LINES, LINE_STRIP, TRIANGLES,
+     * LINE_LOOP, TRIANGLE_FAN
      *
      */
     public String getDrawingStyle() {
@@ -188,7 +210,7 @@ public class Shape extends Node {
      * @param axis_x,axis_y,axis_z XYZ coordinates of the rotation axis
      */
     public void rotate(float angle_in_degrees, float axis_x, float axis_y, float axis_z) {
-        matrix.setRotation(new AxisAngle4( axis_x, axis_y, axis_z, (float) (angle_in_degrees /180.0f * Math.PI)) );
+        matrix.setRotation(new AxisAngle4(axis_x, axis_y, axis_z, (float) (angle_in_degrees / 180.0f * Math.PI)));
     }
 
     /**
@@ -200,7 +222,7 @@ public class Shape extends Node {
         matrix.setTranslation(new Vector3(tx, ty, tz));
     }
 
-/**
+    /**
      * Set the Shape's scale
      *
      * @param float s
@@ -210,10 +232,10 @@ public class Shape extends Node {
         matrix.setScale(s);
     }
 
-/**
+    /**
      * Get the Shape's Matrix
      *
-     * @return Matrix4 
+     * @return Matrix4
      */
     public Matrix4 getMatrix() {
         return matrix;
@@ -231,5 +253,4 @@ public class Shape extends Node {
     public Material getMaterial() {
         return material;
     }
-
 } // End of class Shape

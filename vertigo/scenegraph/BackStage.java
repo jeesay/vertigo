@@ -29,14 +29,20 @@ package vertigo.scenegraph;
 import vertigo.graphics.Visitor;
 
 /**
+ * Class BackStage
  *
- * @author Clement DELESTRE
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  */
 public class BackStage extends Node {
     public BackStage(){
             super();
             name="backstage";
     }
+    @Override
       public void add(Node a_node) {
         if (a_node instanceof Viewing){
             children.add(0,a_node);

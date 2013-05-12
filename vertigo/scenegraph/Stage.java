@@ -29,8 +29,12 @@ package vertigo.scenegraph;
 import vertigo.graphics.Visitor;
 
 /**
+ * Class Stage
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
  *
- * @author Clement DELESTRE
  */
 public class Stage extends Node {
     public Stage(){
