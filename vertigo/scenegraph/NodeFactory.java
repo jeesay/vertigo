@@ -34,13 +34,20 @@ import vertigo.scenegraph.shapes.Sphere;
 import vertigo.scenegraph.shapes.Tetrahedron;
 import vertigo.scenegraph.shapes.Torus;
 
+/**
+ * Class NodeFactory
+ *
+ * @author Jean-Christophe Taveau
+ */
 public class NodeFactory {
 
     /**
+     * Gets a node from the scenegraph of a given name.
      *
-     * @author Jean-Christophe Taveau
+     * @params node_name : Node name.
+     * @return Node.
      */
-   public static Node get(String name) {
+    public static Node get(String name) {
         int index = calcIndex(name);
         Node a_node = null;
         IJ.log("get node " + name + " " + index);
@@ -101,7 +108,7 @@ public class NodeFactory {
                 a_node = new Cube("Wire");
                 break;
             case 1133: // WirePyramid
-                 a_node = new Pyramid("Wire");
+                a_node = new Pyramid("Wire");
                 break;
             case 1022: // WireSphere
                 break;

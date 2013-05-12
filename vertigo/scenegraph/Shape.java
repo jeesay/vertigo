@@ -41,13 +41,30 @@ import vertigo.math.Vector3;
  *
  */
 public class Shape extends Node {
+    /**
+     * Each Shape have a Geometry.
+     */
 
     protected Geometry geo;
+     /**
+     * Each Shape have a Material.
+     */
     protected Material material;
+     /**
+     * Each Shape have a drawable style.
+     */
     private String style_;
-    // Local matrix
+     /**
+     * Each Shape have a local matrix.
+     */
     protected Matrix4 matrix;
+    /**
+     * Number of shapes.
+     */
     public static int count = 0;
+    /**
+     * Constructor.
+     */
 
     public Shape() {
         super();
@@ -61,6 +78,10 @@ public class Shape extends Node {
         count++;
     }
 
+    /**
+     * Constructor with name.
+     * @param name 
+     */
     public Shape(String name) {
         super(name);
         // Init matrix

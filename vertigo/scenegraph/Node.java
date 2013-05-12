@@ -32,11 +32,12 @@ import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
 
 /**
- * Class Node
+ * Abstract Class Node.
  *
  * @author Florin Buga
  * @author Olivier Catoliquot
  * @author Clement Delestre
+ * @author Jean-Christophe Taveau
  * @version 0.1
  *
  */
@@ -71,12 +72,11 @@ public abstract class Node {
     protected boolean drawable_;
     /**
      * The Node's name
-     * @see Node#setName(java.lang.String) 
-     * @see Node#getName() 
+     *
+     * @see Node#setName(java.lang.String)
+     * @see Node#getName()
      */
     protected String name;
-    
-    
     public static byte MATRIX = 0x1;
     public static byte AABB = 0x2;
     public static byte VBO = 0x4;
@@ -90,7 +90,14 @@ public abstract class Node {
     public Node() {
         default_create();
     }
+    
+    
 
+    /**
+     * Constructor with a name.
+     *
+     * @param name
+     */
     public Node(String name) {
         default_create();
         this.name = name;
@@ -178,7 +185,7 @@ public abstract class Node {
     /**
      * Gets the Node's parent
      *
-     * @param parent.
+     * @return parent
      */
     public Node getParent() {
         return parent;
@@ -187,7 +194,7 @@ public abstract class Node {
     /**
      * Gets a node from the scenegraph of a given name.
      *
-     * @params node_name : Node name.
+     * @param node_name  Node's name
      * @return Node.
      */
     public Node getNode(String node_name) {
@@ -300,10 +307,11 @@ public abstract class Node {
         }
     }
 
-    public boolean check() {
-        return true; // TODO
-    }
 
+/**
+ * Abstract method. Accept a visitor.
+ * @param visitor 
+ */
     public abstract void accept(Visitor visitor);
 
     public boolean isDrawable() {

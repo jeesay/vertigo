@@ -38,10 +38,19 @@ import vertigo.graphics.Visitor;
  *
  */
 public class Viewing extends Node {
+    /**
+     * Regular constructor.
+     * @see Node
+     */
     public Viewing(){
         super();
         name="viewing";
     }
+      /**
+     * Constructor with name.
+     * @param name
+     * @see Node
+     */
     public Viewing(String name){
         super(name);
     }

@@ -37,6 +37,10 @@ import vertigo.graphics.Visitor;
  *
  */
 public class Scene extends Node {
+    /**
+     * Regular constructor
+     * @see Node
+     */
 
     public Scene (){
 	super();

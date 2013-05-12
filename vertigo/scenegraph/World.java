@@ -29,15 +29,23 @@ package vertigo.scenegraph;
 import vertigo.graphics.Visitor;
 
 /**
- * class World
+ * Class World. Root of scenegraph.
  * @author Florin Buga
  * @author Olivier Catoliquot
  * @author Clement Delestre
  * @version 0.1
  */
 public class World extends Node {
+    /**
+     * The world's camera.
+     */
 
     private Camera cam_;
+    
+      /**
+     * Regular constructor.
+     * @see Node
+     */
 
     public World(){
         super();

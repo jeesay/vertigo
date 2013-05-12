@@ -30,6 +30,7 @@ import vertigo.graphics.Visitor;
 
 /**
  * Class Stage
+ *
  * @author Florin Buga
  * @author Olivier Catoliquot
  * @author Clement Delestre
@@ -37,15 +38,22 @@ import vertigo.graphics.Visitor;
  *
  */
 public class Stage extends Node {
-    public Stage(){
+
+    /**
+     * Regular constructor
+     *
+     * @see Node
+     */
+    public Stage() {
         super();
-        name="stage";
+        name = "stage";
     }
 
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-        for (Node child : getChildren() )
+        for (Node child : getChildren()) {
             child.accept(visitor);
+        }
     }
 } // end of class Stage

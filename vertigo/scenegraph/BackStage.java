@@ -38,6 +38,10 @@ import vertigo.graphics.Visitor;
  *
  */
 public class BackStage extends Node {
+    /**
+     * Regular constructor.
+     * @see Node
+     */
     public BackStage(){
             super();
             name="backstage";

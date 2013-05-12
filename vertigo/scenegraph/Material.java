@@ -28,8 +28,9 @@ package vertigo.scenegraph;
 
 import vertigo.graphics.ShaderProg;
 import vertigo.graphics.ShaderFactory;
+
 /**
- * Class Material
+ * Class Material. Define the color and shader use by a Shape.
  *
  * @author Florin Buga
  * @author Olivier Catoliquot
@@ -39,22 +40,40 @@ import vertigo.graphics.ShaderFactory;
  */
 public class Material {
 
+    /**
+     * The material's color.
+     *
+     * @see Material#getColor()
+     * @see Material#setColor(float, float, float)
+     * @see Material#setColor(float, float, float, float)
+     */
     private float[] color;
+    /**
+     * The ShaderProg use with this material.
+     *
+     * @see Material#getShaderMaterial()
+     * @see Material#setShaderMaterial(java.lang.String)
+     */
     private ShaderProg shader;
-    
+
+    /**
+     * Constructor, by default the shader used is monochrome.
+     */
     public Material() {
         shader = ShaderFactory.get("monochrome");
-        color=new float[4];
-        this.setColor(0.0f,0.0f,0.0f);
+        color = new float[4];
+        this.setColor(0.0f, 0.0f, 0.0f);
     }
- /**
+
+    /**
      * Sets the shader
      *
-     * @param shader's name
+     * @param shaderName
      */
     public void setShaderMaterial(String shaderName) {
         shader = ShaderFactory.get(shaderName);
     }
+
     /**
      * Gets the shader
      *
@@ -63,26 +82,27 @@ public class Material {
     public ShaderProg getShaderMaterial() {
         return shader;
     }
-    
-       /**
+
+    /**
      * Sets the Color (RGB format)
-      * @param  red : float value between 0 and 1
-     * @param  green : float value between 0 and 1
-     * @param  blue : float value between 0 and 1
+     *
+     * @param red : float value between 0 and 1
+     * @param green : float value between 0 and 1
+     * @param blue : float value between 0 and 1
      */
-    
     public void setColor(float red, float green, float blue) {
         color[0] = red;
         color[1] = green;
         color[2] = blue;
         color[3] = 1.0f;
     }
- /**
+
+    /**
      * Sets the Color (RGBA format)
      *
-     * @param  red : float value between 0 and 1
-     * @param  green : float value between 0 and 1
-     * @param  blue : float value between 0 and 1
+     * @param red : float value between 0 and 1
+     * @param green : float value between 0 and 1
+     * @param blue : float value between 0 and 1
      * @param alpha : float value between 0 and 1
      */
     public void setColor(float red, float green, float blue, float alpha) {
@@ -91,13 +111,13 @@ public class Material {
         color[2] = blue;
         color[3] = alpha;
     }
- /**
+
+    /**
      * Gets the Material's color
      *
-     * @return  color[]
+     * @return color[]
      */
     public float[] getColor() {
         return color;
     }
-    
 } // end of class Material

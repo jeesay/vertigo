@@ -26,12 +26,9 @@
  */
 package vertigo.scenegraph;
 
-import java.util.ArrayList;
-import vertigo.graphics.AABB;
 import vertigo.graphics.Visitor;
 import vertigo.math.Matrix4;
 import vertigo.math.Vector3;
-import java.util.Iterator;
 
 /**
  * Class Transform
@@ -39,12 +36,15 @@ import java.util.Iterator;
  * @author Florin Buga
  * @author Olivier Catoliquot
  * @author Clement Delestre
+ * @author Jean-Christophe Taveau
  * @version 0.1
  *
  */
 public class Transform extends Node {
 
-    // Local matrix
+    /**
+     * Local matrix
+     */
     protected Matrix4 matrix;
 
     /**

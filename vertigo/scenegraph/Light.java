@@ -38,14 +38,25 @@ import vertigo.graphics.Visitor;
  *
  */
 public class Light extends Node {
+    /**
+     * Number of Lights.
+     * @see Light#getNumber() 
+     */
 
     public static int count = 0;
-
+/**
+ * Regular Light's constructor.
+ */
     public Light() {
         super();
         count++;
         name = "Light_n" + count;
     }
+    
+    /**
+ *  Light's constructor with it name.
+ * @param name
+ */
 
     public Light(String name) {
         super(name);
@@ -57,14 +68,17 @@ public class Light extends Node {
     }
 
     /**
-     * Return the number of Camera
+     * Return the number of Lights
      *
      * @return number of camera (int)
      */
-    public int getNumberCamera() {
+    public int getNumber() {
         return count;
     }
-
+/**
+ * Sets the Light's type
+ * @param type 
+ */
     public void setType(String type) {
         //TODO
     }

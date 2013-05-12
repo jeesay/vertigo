@@ -30,7 +30,6 @@ import vertigo.graphics.BO;
 import vertigo.graphics.BufferData;
 import vertigo.graphics.VBO;
 import vertigo.graphics.BufferTools;
-import vertigo.graphics.PackedVBO;
 import vertigo.graphics.IBO;
 /**
  * Class Camera
