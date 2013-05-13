@@ -26,7 +26,7 @@
  */
 package vertigo.graphics;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * Class UniformTable
@@ -38,11 +38,11 @@ import java.util.Hashtable;
  
 public class UniformTable  {
 
-    private Hashtable<String, Object> uniforms;
+    private HashMap<String, Object> uniforms;
     private static UniformTable INSTANCE = new UniformTable();
 
     private UniformTable() {
-        uniforms = new Hashtable<String, Object>();
+        uniforms = new HashMap<String, Object>();
     }
 
     /**
