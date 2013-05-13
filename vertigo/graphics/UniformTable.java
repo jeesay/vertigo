@@ -34,7 +34,8 @@ import java.util.Hashtable;
  * @author Jean-Christophe Taveau
  * @version 0.1
  *
-
+ */
+ 
 public class UniformTable  {
 
     private Hashtable<String, Object> uniforms;
