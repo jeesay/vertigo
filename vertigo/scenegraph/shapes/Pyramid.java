@@ -26,10 +26,17 @@
  */
 package vertigo.scenegraph.shapes;
 
+import vertigo.scenegraph.Geometry;
 import vertigo.scenegraph.Shape;
 
 /**
  * Class Pyramid
+ *
+ * @author Florin Buga
+ * @author Olivier Catoliquot
+ * @author Clement Delestre
+ * @version 0.1
+ *
  * @author Jean-Christophe Taveau
  */
 
@@ -43,24 +50,24 @@ public class Pyramid extends Shape {
 
     float[] vertices = {
             // Front face
-             0.0f,  0.5f,  0.0f,
-            -0.5f, -0.5f,  0.5f,
-             0.5f, -0.5f,  0.5f,
+             0.0f,  1.0f,  0.0f,
+            -1.0f, -1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f,
 
             // Right face
-             0.0f,  0.5f,  0.0f,
-             0.5f, -0.5f,  0.5f,
-             0.5f, -0.5f, -0.5f,
+             0.0f,  1.0f,  0.0f,
+             1.0f, -1.0f,  1.0f,
+             1.0f, -1.0f, -1.0f,
 
             // Back face
-             0.0f,  0.5f,  0.0f,
-             0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f, -0.5f,
+             0.0f,  1.0f,  0.0f,
+             1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
 
             // Left face
-             0.0f,  0.5f,  0.0f,
-            -0.5f, -0.5f, -0.5f,
-            -0.5f, -0.5f,  0.5f
+             0.0f,  1.0f,  0.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f
     };
 
     float[] colors = {
@@ -92,7 +99,6 @@ public class Pyramid extends Shape {
         w_ = 1.0f;
         h_ = 1.0f;
         d_ = 1.0f;
-        create_wirepyramid();
 }
 
     public Pyramid(String name) {
@@ -112,15 +118,22 @@ public class Pyramid extends Shape {
     }
 
 
-public void setType(int type) {
-        switch (type) {
-        case WIRE:
-            type=WIRE;
-            create_wirepyramid(); 
-            break;
-        default:
-            create_pyramid(); 
-        }
+    public void setType(int type) {
+        this.type = type; 
+    }
+
+    @Override
+    public Geometry getGeometry() {
+        if (geo.getBuffers().isEmpty() )
+           switch (this.type) {
+           case WIRE : 
+               create_wirepyramid();
+               break;
+           default : 
+               create_pyramid();
+               break;
+           }
+        return geo;
     }
 
     private void create_wirepyramid() {
@@ -144,7 +157,6 @@ public void setType(int type) {
 
     private void create_pyramid() {
     }
-
 
 } // End of class Pyramid
 
