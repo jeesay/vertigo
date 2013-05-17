@@ -173,22 +173,22 @@ public class Shape extends Node {
     /**
      * Sets the Color (RGBA format)
      *
-     * @param  red : float value between 0 and 1
-     * @param  green : float value between 0 and 1
-     * @param  blue : float value between 0 and 1
-     * @param alpha : float value between 0 and 1
+     * @param  red : float value between 0 and 255
+     * @param  green : float value between 0 and 255
+     * @param  blue : float value between 0 and 255
+     * @param alpha : float value between 0 and 255
      */
-    public void setColor(float red, float green, float blue, float alpha) {
+    public void setColor(int red, int green, int blue, int alpha) {
         material.setColor(red, green, blue, alpha);
     }
 
     /**
      * Sets the Color (RGB format)
-      * @param  red : float value between 0 and 1
-     * @param  green : float value between 0 and 1
-     * @param  blue : float value between 0 and 1
+      * @param  red : float value between 0 and 255
+     * @param  green : float value between 0 and 255
+     * @param  blue : float value between 0 and 255
      */
-    public void setColor(float red, float green, float blue) {
+    public void setColor(int red, int green, int blue) {
         material.setColor(red, green, blue);
     }
 
