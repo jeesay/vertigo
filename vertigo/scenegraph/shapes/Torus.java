@@ -65,7 +65,7 @@ public class Torus extends Shape {
         MinorRadius = 0.5f;
         TextureWrapVert=6;
         TextureWrapHoriz=6;
-        setDrawingStyle("LINES");
+        setDrawingStyle("TRIANGLE_STRIP");
     }
 
     public void setInnerRadius(float radius) {
