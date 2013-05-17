@@ -26,6 +26,7 @@
  */
 package vertigo.graphics;
 
+import java.nio.IntBuffer;
 import java.nio.FloatBuffer;
 
 /**
@@ -49,7 +50,8 @@ public class BufferData {
      *
      * @see BufferData#BufferData(float[])
      */
-    private FloatBuffer buff;
+    private FloatBuffer fbuf;
+    private IntBuffer ibuf;
     private boolean bound = false;
 
     public BufferData() {
@@ -61,9 +63,20 @@ public class BufferData {
      * @param data
      */
     public BufferData(float[] data) {
-        buff = BufferTools.newFloatBuffer(data.length);
-        buff.put(data);
-        buff.flip();
+        fbuf = BufferTools.newFloatBuffer(data.length);
+        fbuf.put(data);
+        fbuf.flip();
+    }
+
+    /**
+     * Create IntBuffer buff, put data in buff
+     *
+     * @param data
+     */
+    public BufferData(int[] data) {
+        ibuf = BufferTools.newIntBuffer(data.length);
+        ibuf.put(data);
+        ibuf.flip();
     }
 
     /**
@@ -71,8 +84,17 @@ public class BufferData {
      * @param data
      */
     public BufferData(FloatBuffer data) {
-        buff.put(data);
-        buff.flip();
+        fbuf=data;
+        fbuf.flip(); //rewind ?
+    }
+
+    /**
+     *
+     * @param data
+     */
+    public BufferData(IntBuffer data) {
+        ibuf=data;
+        ibuf.flip(); //rewind ?
     }
 
     /**
@@ -93,37 +115,11 @@ public class BufferData {
     }
 
     /**
-     * set bound to false
-     *
-     * @param bound
-     */
-    public void dontBind() {
-        bound = false;
-    }
-
-    /**
-     * set handle
-     *
-     * @param handle
-     */
-    public void setHandle(int handle) {
-        this.handle = handle;
-    }
-
-    /**
-     *
-     * @return handle
-     */
-    public int getHandle() {
-        return handle;
-    }
-
-    /**
      *
      * @return buff's capacity
      */
     public int getCapacity() {
-        return buff.capacity();
+        return (ibuf == null) ? fbuf.capacity() : ibuf.capacity();
     }
 
     /**
@@ -131,6 +127,15 @@ public class BufferData {
      * @return buff
      */
     public FloatBuffer getFloatBuffer() {
-        return buff;
+        return fbuf;
     }
+
+    /**
+     *
+     * @return buff
+     */
+    public IntBuffer getIntBuffer() {
+        return ibuf;
+    }
+
 } // end of class BufferData
