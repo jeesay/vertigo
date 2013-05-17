@@ -56,7 +56,7 @@ public class Sphere extends Shape {
         segmentsPerLoop = 15;
         name = "sphere";
         radius = 1.0f;
-        setDrawingStyle("LINES");
+        setDrawingStyle("TRIANGLE_STRIP");
     }
 
     @Override
@@ -65,75 +65,6 @@ public class Sphere extends Shape {
             createSpiralSphere(radius,loops,segmentsPerLoop);
         return geo;
     }
-
-/*******
-
-    // From http://www.swiftless.com/tutorials/opengl/sphere.html
-    private void createSphere (double radius, double H, double K, double Z) {
-
-        double a;
-        double b;
-        double RADIAN = Math.PI / 180;
-
-        for( int b = 0; b <= 90 - space; b+=space){
-            for( int a = 0; a <= 360 - space; a+=space){
-                float sina = Math.sin(a * RADIAN);
-                float sinb = Math.sin(b * RADIAN);
-                float cosa = Math.cos(a * RADIAN);
-                float cosb = Math.cos(b * RADIAN);
-                float sinaa = Math.sin( (a + space) * RADIAN);
-                float sinbb = Math.sin( (b + space) * RADIAN);
-                float cosaa = Math.cos( (a + space) * RADIAN);
-                float cosbb = Math.cos( (b + space) * RADIAN);
-
-                // X,Y,Z
-                data[count++]  = radius * sina * sinb - H;
-                data[count++]  = radius * cosa * sinb + K;
-                data[count++]  = radius * cosb - Z;
-                // NX,NY,NZ
-                data[count++]  = sina * sinb;
-                data[count++]  = cosa * sinb;
-                data[count++]  = cosb;
-                // U,V
-                data[count++]  = (a) / 360;
-                data[count++]  = (2 * b) / 360;
-
-                // X,Y,Z
-                data[count++]  = radius * sina * sinbb - H;
-                data[count++]  = radius * cosa * sinbb + K;
-                data[count++]  = radius * cosbb - Z;
-                // NX,NY,NZ
-                data[count++]  = sina * sinbb;
-                data[count++]  = cosa * sinbb;
-                data[count++]  = cosbb;
-                // U,V
-                data[count++]  = (a) / 360;
-                data[count++]  = (2 * (b + space)) / 360;
-
-
-                data[count++]  = radius * sinaa * sinb - H;
-                data[count++]  = radius * cosaa * sinb + K;
-                data[count++]  = radius * cosb - Z;
-                // NX,NY,NZ
-                // U,V
-                data[count++]  = (a + space) / 360;
-                data[count++]  = (2 * b) / 360;
-
-
-
-                data[count++]  = radius * sinaa * sinbb - H;
-                data[count++]  = radius * cosaa * sinbb + K;
-                data[count++]  = radius * cosbb - Z;
-                // NX,NY,NZ
-                // U,V
-                data[count++]  = (a + space) / 360;
-                data[count++]  = (2 * (b + space)) / 360;
-            }
-    
-        }
-    }
-
-****/
 
 
 	// From Enigma posted 11 Oct 2005
