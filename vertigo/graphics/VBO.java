@@ -39,9 +39,7 @@ import java.util.Hashtable;
  */
 public class VBO extends BO {
 
-    private FloatBuffer buffer;
-    private Hashtable<String, Props> props;
-    private BufferData Buffdata;
+    private BufferData buffer;
     /**
      * The VBO's offset
      * @see VBO#getOffset() 
@@ -51,31 +49,32 @@ public class VBO extends BO {
 
     public VBO() {
         super();
-        props = new Hashtable<String, Props>();
     }
 
-    public VBO(String type) {
-        super();
-        this.type = type;
-        offset = 0;
-        stride = getSize(type);
-    }
 
-    public VBO(int stride, int offset, String type) {
+
+    public VBO(String type, int offset, int stride) {
         super();
         this.stride = stride;
         this.offset = offset;
         this.type = type;
     }
- /**
+
+   /**
      * Gets VBO's size
      *
      * @return size
      */
     public int getSize() {
-        return getSize(type);
+        if (type.contains("3")) {
+            return 3;
+        } else if (type.contains("2")) {
+            return 2;
+        }
+        return 4;
     }
-/**
+
+   /**
      * Gets VBO's offset
      *
      * @return offset
@@ -85,17 +84,15 @@ public class VBO extends BO {
     }
 
     public void setBound(boolean bound) {
-        Buffdata.setBound(bound);
+        buffer.setBound(bound);
     }
 
     public boolean isBound() {
-        return Buffdata.isBound();
+        return buffer.isBound();
     }
 
-    public Hashtable<String, Props> getProps() {
-        return props;
-    }
-/**
+
+   /**
      * Gets VBO's type
      *
      * @return size
@@ -103,34 +100,27 @@ public class VBO extends BO {
     public String getType() {
         return type;
     }
-/**
+
+   /**
      * Return true if the vbo is interleaved
      *
      * @return true or false
-     */
+
     public boolean IsInterleaved() {
         return (props.size() > 1);
     }
-/**
+     */   
+   /**
      * Sets the bufferData
      *
      * @param BufferData
      */
-    public void setBuffData(BufferData BuffData) {
-        this.Buffdata = BuffData;
+    public void setBufferData(BufferData BuffData) {
+        this.buffer = BuffData;
     }
-/**
-     * Sets the FloatBuffer
-     *
-     * @param FloatBuffer, type
-     */
-    public void setFloatBuffer(String type, FloatBuffer buf) {
-        props.put(type, new Props(type, 0, getSize(type)));
-        offset = 0;
-        stride = getSize(type);
-        buffer = buf;
-    }
-/**
+
+
+   /**
      * Gets the VBO stride
      *
      * @return stride
@@ -138,11 +128,63 @@ public class VBO extends BO {
     public int getStride() {
         return stride;
     }
-/**
+
+
+   /**
+     * Gets the FloatBuffer
+     *
+     * @return FloatBuffer
+     */
+    public FloatBuffer getFloatBuffer() {
+        return buffer.getFloatBuffer();
+    }
+
+
+   /**
+     * Gets the VBO's length
+     *
+     * @return length
+     */
+    public int capacity() {
+        // return buffer.capacity();
+        return buffer.getCapacity();
+    }
+
+
+} // End of class VBO
+
+
+/***
+
+    public VBO(String type) {
+        super();
+        this.type = type;
+        offset = 0;
+        stride = getSize(type);
+    }
+
+
+    public Hashtable<String, Props> getProps() {
+        return props;
+    }
+
+***/
+
+   /**
+     * Gets the VBO's stride
+     *
+     * @return stride
+
+    public int getStride(String type) {
+        return props.get(type).getStride();
+    }
+     */
+
+   /**
      * Sets the FloatBuffer
      *
      * @param types, FloatBuffer
-     */
+
     public void setFloatBuffer(String[] types, FloatBuffer buf) {
         buffer = buf;
 
@@ -158,62 +200,28 @@ public class VBO extends BO {
             offset += getSize(types[i]);
         }
     }
-/**
-     * Gets the FloatBuffer
-     *
-     * @return FloatBuffer
      */
-    public FloatBuffer getFloatBuffer() {
-        return buffer;
-    }
-/**
-     * Gets the VBO's offset
+
+   /**
+     * Sets the FloatBuffer
      *
-     * @return offset
-     */
-    public int getOffset(String type) {
-        return props.get(type).getOffset();
+     * @param FloatBuffer, type
+
+    public void setFloatBuffer(String type, FloatBuffer buf) {
+        props.put(type, new Props(type, 0, getSize(type)));
+        offset = 0;
+        stride = getSize(type);
+        buffer = buf;
     }
-/**
+     */
+
+   /**
      * Gets the VBO's FloatBuff
      *
      * @return FloatBuff
-     */
+
     public FloatBuffer getFloatBuff() {
         return Buffdata.getFloatBuffer();
     }
-/**
-     * Gets the VBO's stride
-     *
-     * @return stride
      */
-    public int getStride(String type) {
-        return props.get(type).getStride();
-    }
-/**
-     * Gets the VBO's type
-     *
-     * @return type
-     */
-    public String getType(String type) {
-        return props.get(type).getType();
-    }
-/**
-     * Gets the VBO's length
-     *
-     * @return length
-     */
-    public int capacity() {
-        // return buffer.capacity();
-        return Buffdata.getCapacity();
-    }
 
-    private int getSize(String type) {
-        if (type.contains("3")) {
-            return 3;
-        } else if (type.contains("2")) {
-            return 2;
-        }
-        return 4;
-    }
-} // End of class VBO
