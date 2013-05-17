@@ -81,11 +81,13 @@ public class G2D_Window implements Window3D, MouseMotionListener, MouseListener,
      *
      */
     public G2D_Window() {
-        // Do nothing ?
         mouseDispatcher = MouseDispatcher.getInstance();
         keyboardDispatcher = KeyboardDispatcher.getInstance();
         timerDispatcher = TimerDispatcher.getInstance();
         viewportDispatcher = ViewportDispatcher.getInstance();
+        red = 0.0f; 
+        green = 0.0f;
+        blue = 0.0f;
     }
 
     @Override
