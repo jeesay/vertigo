@@ -32,7 +32,7 @@ package vertigo.graphics;
  */
 public interface Renderer {
 
-    public void display();
+    // public void display();
 
     /**
      * Sets the background color
