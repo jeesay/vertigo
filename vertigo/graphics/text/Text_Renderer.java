@@ -40,7 +40,7 @@ import vertigo.scenegraph.World;
  *
  *
  */
-public class Text_Renderer implements Renderer {
+public class Text_Renderer {
 
     public static int handle = 99;
     private Scene scene = new Scene();
@@ -62,7 +62,8 @@ public class Text_Renderer implements Renderer {
             handle++;
             return handle;
     }
-    @Override
+
+
     public void display() {
         world.accept(new PrintVisitor());
         world.accept(new GraphAnalyzer());
@@ -115,33 +116,39 @@ public class Text_Renderer implements Renderer {
         // Draw stuff
     }
 
-    @Override
+
+
     public void setDimension(int w, int h) {
         window_width = w;
         window_height = h;
         //Do Nothing
     }
 
-    @Override
+
+
     public void setTitle(String title) {
         this.title = title;
         //Do Nothing
     }
 
-    @Override
+
+
     public void setBackgroundColor(int red, int green, int blue) {
         //Do Nothing
     }
 
-    @Override
+
+
     public void createWindow() {
         IJ.log("Window: " + title + " [" + window_width + "," + window_height + "]");
 
     }
 
-    @Override
+
+
     public void init(World world) {
         this.world = world;
         
     }
+
 } // End of class Text_Renderer
