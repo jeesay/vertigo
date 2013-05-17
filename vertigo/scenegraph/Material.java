@@ -47,7 +47,7 @@ public class Material {
      * @see Material#setColor(float, float, float)
      * @see Material#setColor(float, float, float, float)
      */
-    private float[] color;
+    private int[] color;
     /**
      * The ShaderProg use with this material.
      *
@@ -61,8 +61,8 @@ public class Material {
      */
     public Material() {
         shader = ShaderFactory.get("monochrome");
-        color = new float[4];
-        this.setColor(0.0f, 0.0f, 0.0f);
+        color = new int[4];
+        this.setColor(255, 128, 50, 255);
     }
 
     /**
@@ -86,26 +86,26 @@ public class Material {
     /**
      * Sets the Color (RGB format)
      *
-     * @param red : float value between 0 and 1
-     * @param green : float value between 0 and 1
-     * @param blue : float value between 0 and 1
+     * @param red : float value between 0 and 255
+     * @param green : float value between 0 and 255
+     * @param blue : float value between 0 and 255
      */
-    public void setColor(float red, float green, float blue) {
+    public void setColor(int red, int green, int blue) {
         color[0] = red;
         color[1] = green;
         color[2] = blue;
-        color[3] = 1.0f;
+        color[3] = 255;
     }
 
     /**
      * Sets the Color (RGBA format)
      *
-     * @param red : float value between 0 and 1
-     * @param green : float value between 0 and 1
-     * @param blue : float value between 0 and 1
-     * @param alpha : float value between 0 and 1
+     * @param red : float value between 0 and 255
+     * @param green : float value between 0 and 255
+     * @param blue : float value between 0 and 255
+     * @param alpha : float value between 0 and 255
      */
-    public void setColor(float red, float green, float blue, float alpha) {
+    public void setColor(int red, int green, int blue, int alpha) {
         color[0] = red;
         color[1] = green;
         color[2] = blue;
@@ -117,7 +117,7 @@ public class Material {
      *
      * @return color[]
      */
-    public float[] getColor() {
+    public int[] getColor() {
         return color;
     }
 } // end of class Material
