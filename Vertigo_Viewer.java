@@ -277,15 +277,13 @@ public class Vertigo_Viewer implements PlugIn {
         return a_node;
     }
 
+
     private Node searchName(Node a_node, String name) {
         if (a_node.getName().equals(name)) {
-            IJ.log("this is " + a_node.getName());
             return a_node;
         } else {
-            ArrayList children = a_node.getChildren();
-            for (Iterator<Node> it = children.iterator(); it.hasNext();) {
-                Node nodetemp = it.next();
-                a_node = searchName(nodetemp, name);
+            for (Node tmp : a_node.getChildren() ) {
+                a_node = searchName(tmp, name);
                 if (a_node != null) {
                     return a_node;
                 }
@@ -293,6 +291,7 @@ public class Vertigo_Viewer implements PlugIn {
         }
         return null;
     }
+
 
     private void default_scenegraph() {
         world_ = new World();
