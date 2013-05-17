@@ -124,7 +124,7 @@ public class Pyramid extends Shape {
 
     @Override
     public Geometry getGeometry() {
-        if (geo.getBuffers().isEmpty() )
+        if (geo.getAllBO().isEmpty() )
            switch (this.type) {
            case WIRE : 
                create_wirepyramid();
