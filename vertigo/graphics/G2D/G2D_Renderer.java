@@ -31,6 +31,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import vertigo.graphics.BO;
 import vertigo.graphics.IBO;
 import vertigo.graphics.VBO;
 import vertigo.math.Matrix4;
@@ -70,84 +71,102 @@ public class G2D_Renderer {
     }
     
     private void drawShape(Shape obj) {
-        // Draw 
-        if (obj.getDrawingStyle().equals("POINTS")) {
-            drawPoints(obj);
-        } else if (obj.getDrawingStyle().equals("LINES")) {
-            drawLines(obj);
-        } else if (obj.getDrawingStyle().equals("LINESTRIP")) {
-            drawLineStrips(obj);
-        } else if (obj.getDrawingStyle().equals("TRIANGLES")) {
-            drawTriangles(obj);
-        }
-    }
-
-    private void drawPoints(Shape obj) {
-        System.out.println("draw points: " + cam_.getProjection());
+        // Matrix 
         Matrix4 mvp = new Matrix4();
-        mvp.mul(cam_.getProjection(), cam_.getViewMatrix());
-        mvp.mul(obj.getModelMatrix());
-        Point4 point = new Point4();
-//        Point point2d = new Point();
-
-        VBO vbo = (VBO) obj.getGeometry().getBO(0);
-        FloatBuffer data = vbo.getFloatBuffer();
-        for (int i = vbo.getOffset("V3F"); i < vbo.capacity(); i += vbo.getStride("V3F")) {
-            System.out.println(vbo.getFloatBuffer().get(i) + "; " + vbo.getFloatBuffer().get(i + 1) + "; " + vbo.getFloatBuffer().get(i + 2));
-            point.set(vbo.getFloatBuffer().get(i), vbo.getFloatBuffer().get(i + 1), vbo.getFloatBuffer().get(i + 2) + 5.0f, 1.0f);
-            mvp.transform(point);
-            float x = point.x / point.z * cam_.getViewport().x / 2.0f + cam_.getViewport().x / 2.0f;
-            float y = point.y / point.z * cam_.getViewport().y / 2.0f + cam_.getViewport().y / 2.0f;
-            System.out.println("TRNSF " + point.x + "; " + point.y + "; " + point.z + "--> PROJ: " + x + " " + y);
-            g.setColor(new Color(1.0f, 0.5f, 0.2f));
-            g.fillOval(Math.round(x), Math.round(y), 5, 5);
-        }
-    }
-
-    private void drawLines(Shape obj) {
-        Matrix4 mvp = new Matrix4();
-        cam_.getViewMatrix().setTranslation(new Vector3(0.0f,0.0f,5.0f));
         mvp.mul(cam_.getProjection(), cam_.getViewMatrix() );
         mvp.mul(obj.getModelMatrix());
+
+        // Draw
+        if (obj.getDrawingStyle().equals("POINTS")) {
+            drawPoints(obj,mvp);
+        } else if (obj.getDrawingStyle().equals("LINES")) {
+            drawLines(obj,mvp);
+        } else if (obj.getDrawingStyle().equals("LINE_STRIP")) {
+            drawLineStrips(obj,mvp);
+        } else if (obj.getDrawingStyle().equals("TRIANGLES")) {
+            drawTriangles(obj,mvp);
+        } else if (obj.getDrawingStyle().equals("TRIANGLE_STRIP")) {
+            drawTriangleStrips(obj,mvp);
+        }
+    }
+
+    private void drawPoints(Shape obj, Matrix4 mvp) {
         Point4 point = new Point4();
         float halfWidth  = cam_.getViewport().x / 2.0f;
         float halfHeight = cam_.getViewport().y / 2.0f;
 
         VBO vbo = (VBO) obj.getGeometry().getBO(0);
-        int[] points = new int[vbo.capacity()];
-        int count = 0;
         FloatBuffer data = vbo.getFloatBuffer();
-        for (int i = vbo.getOffset("V3F"); i < vbo.capacity(); i += vbo.getStride("V3F")) {
+        int[] points = new int[vbo.capacity()/3 * 2];
+        int count = 0;
+        for (int i = vbo.getOffset(); i < vbo.capacity(); i += vbo.getStride()) {
             point.set(vbo.getFloatBuffer().get(i), vbo.getFloatBuffer().get(i + 1), vbo.getFloatBuffer().get(i + 2),1.0f);
             mvp.transform(point);
             points[count++] = Math.round(point.x / point.w * halfWidth  + halfWidth);
-            points[count++] = Math.round((0.5f - point.y) / point.w * halfHeight + halfHeight);
+            points[count++] = Math.round(point.y / point.w * halfHeight + halfHeight);
+            // points[count++] = Math.round((1.0f - point.y) / point.w * halfHeight + halfHeight);
         }
 
-        // Indices
-        IBO ibo = (IBO) obj.getGeometry().getBO(1);
         g.setColor(new Color(1.0f, 0.5f, 0.2f));
-        for (int i = 0; i < ibo.getIntBuffer().capacity() - 1; i++) {
-            int j = ibo.getIntBuffer().get(i);
-            int k = ibo.getIntBuffer().get(i + 1);
-            g.drawLine(points[j * 2], points[j * 2 + 1], points[k * 2], points[k * 2 + 1]);
+        for (int i = 0; i < count - 1; i+=2) {
+            g.fillOval(points[i], points[i+1], 5, 5);
         }
     }
 
-    private void drawIndexedLines(Shape obj) {
-        /**
-         * Matrix4 mvp = obj.getModelMatrix() cam.getViewMatrix()
-         * cam_.getProjection(); for (int i=0; i< obj.getGeometry().;i++) {
-         * transform(mvp); g2d.drawLine(x0,y0,x1,y1); } for (int
-         * i=0;i<indices;i+=2) { g2d*.drawLine()
-*
-         */
+    private void drawLineStrips(Shape obj, Matrix4 mvp) {
+        Point4 point = new Point4();
+        float halfWidth  = cam_.getViewport().x / 2.0f;
+        float halfHeight = cam_.getViewport().y / 2.0f;
+        int[] points = null;
+        IBO ibo = null;
+        int count = 0;
+
+        for (BO bo : obj.getGeometry().getAllBO() ) {
+            if (bo instanceof VBO) {
+                VBO vbo = (VBO) bo;
+                if (vbo.getType().equals("V3F") ) {
+                    points = new int[vbo.capacity()/vbo.getStride() * 2];
+                    FloatBuffer data = vbo.getFloatBuffer();
+                    for (int i = vbo.getOffset(); i < vbo.capacity(); i += vbo.getStride()) {
+                        point.set(vbo.getFloatBuffer().get(i), vbo.getFloatBuffer().get(i + 1), vbo.getFloatBuffer().get(i + 2),1.0f);
+                        mvp.transform(point);
+                        points[count++] = Math.round(point.x / point.w * halfWidth  + halfWidth);
+                        // points[count++] = Math.round(point.y / point.w * halfHeight + halfHeight);
+                        points[count++] = Math.round( (1.0f - point.y) / point.w * halfHeight + halfHeight);
+                    }
+                }
+            }
+            else { // IBO
+                ibo = (IBO) bo;
+            }
+        }
+
+        // Draw
+        int[] col = obj.getMaterial().getColor();
+        g.setColor(new Color(col[0]/255.0f, col[1]/255.0f, col[2]/255.0f));
+
+        if (ibo != null) { // Indexed
+            for (int i = 0; i < ibo.getIntBuffer().capacity() - 1; i++) {
+                int j = ibo.getIntBuffer().get(i);
+                int k = ibo.getIntBuffer().get(i + 1);
+                g.drawLine(points[j * 2], points[j * 2 + 1], points[k * 2], points[k * 2 + 1]);
+            }
+        }
+        else {
+            for (int i = 0; i < count - 2; i+=2)
+                g.drawLine(points[i], points[i + 1], points[i + 2], points[i + 3]);
+        }
+
     }
 
-    private void drawLineStrips(Shape obj) {
+    private void drawLines(Shape obj, Matrix4 mvp) {
     }
 
-    private void drawTriangles(Shape obj) {
+    private void drawTriangles(Shape obj, Matrix4 mvp) {
+    }
+
+    private void drawTriangleStrips(Shape obj, Matrix4 mvp) {
+        drawLineStrips(obj, mvp);
     }
 
 
