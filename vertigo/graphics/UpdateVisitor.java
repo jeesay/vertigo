@@ -42,9 +42,11 @@ import vertigo.scenegraph.World;
 
 public class UpdateVisitor implements Visitor {
 
+    private Camera cam_;
 
     public UpdateVisitor() {
         // Do nothing ?
+        cam_ = null;
     }
 
 
