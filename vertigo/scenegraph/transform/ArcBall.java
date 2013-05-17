@@ -103,7 +103,7 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
     private void updateMouse(MouseSignal e) {
         // if Mouse Down and dragging
         if ( e.getButton() == Signal.BUTTON_LEFT && e.getButtonStatus() == Signal.MOVED ) {
-            System.out.println("Arcball : left drag " + e);
+            // System.out.println("Arcball : left drag " + e);
             // Update End Vector And Get Rotation As Quaternion
             drag(new Point2(e.getX(), e.getY()), thisRot);
             
@@ -117,7 +117,7 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
         // if Mouse Down and not dragging: First Click
         else if (e.getButton() == Signal.BUTTON_LEFT)             
         {
-            System.out.println("Arcball : left click " + e);
+            // System.out.println("Arcball : left click " + e);
             // Set Last Rotation To Current Rotation
             lastRot.set(thisRot);
             // Update Start Vector And Prepare For Dragging
@@ -188,7 +188,7 @@ public class ArcBall extends Transform implements MouseObserver, ViewportObserve
             vector.y = tempPoint.y;
             vector.z = (float) Math.sqrt(1.0f - length);
         }
-        System.out.println("MAP " + point + " = " + tempPoint + " -> " + length);
+        // System.out.println("MAP " + point + " = " + tempPoint + " -> " + length);
         vector.normalize();
     }
 
