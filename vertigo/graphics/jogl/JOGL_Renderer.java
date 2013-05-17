@@ -37,14 +37,15 @@ import javax.media.opengl.GLEventListener;
 import vertigo.graphics.Attribute;
 import vertigo.graphics.BO;
 import vertigo.graphics.IBO;
+import vertigo.graphics.Renderer;
+import vertigo.graphics.ShaderProg;
+import vertigo.graphics.Uniform;
+import vertigo.graphics.UpdateVisitor;
+import vertigo.graphics.VBO;
 import vertigo.scenegraph.Camera;
 import vertigo.scenegraph.Node;
 import vertigo.scenegraph.Shape;
 import vertigo.scenegraph.World;
-import vertigo.graphics.Renderer;
-import vertigo.graphics.ShaderProg;
-import vertigo.graphics.Uniform;
-import vertigo.graphics.VBO;
 import vertigo.scenegraph.Light;
 import vertigo.scenegraph.Material;
 
@@ -86,7 +87,7 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
      * @see JOGL_Renderer#display()
      * @see JOGL_Visitor
      */
-    private JOGL_Visitor visitor;
+    private UpdateVisitor visitor;
     private Camera cam_;
     private ArrayList<Shape> shapes = new ArrayList();
     private ArrayList<Light> lights = new ArrayList();
@@ -101,7 +102,7 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
      * Constructor.
      */
     public JOGL_Renderer() {
-        visitor = new JOGL_Visitor();
+        visitor = new UpdateVisitor();
     }
 
     @Override
@@ -292,7 +293,7 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
         int bytesPerInt = Integer.SIZE / Byte.SIZE;
         System.out.println("Debugage : " + i + " " + bytesPerFloat + " " + bytesPerInt + " " + buf);
 
-        for (BO bo : obj.getGeometry().getBuffers()) {
+        for (BO bo : obj.getGeometry().getAllBO()) {
             System.out.println("For loop");
             int boHandle = buf.get(i);
             // get ID
@@ -324,7 +325,7 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
                 VBO vbo = (VBO) bo;
                 //enable(vbo);
                 gl.glBindBuffer(GL.GL_ARRAY_BUFFER, boHandle);
-                gl.glBufferData(GL.GL_ARRAY_BUFFER, vbo.capacity() * 4, vbo.getFloatBuff(), GL.GL_STATIC_DRAW);
+                gl.glBufferData(GL.GL_ARRAY_BUFFER, vbo.capacity() * 4, vbo.getFloatBuffer(), GL.GL_STATIC_DRAW);
                 // pointer(vbo, bytesPerFloat);
                 attribute = glshader.getAllAttributes();
 
@@ -417,8 +418,5 @@ public class JOGL_Renderer implements GLEventListener, Renderer {
         return index;
     }
 
-    @Override
-    public void display() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 } //end of class JOGL_Renderer
