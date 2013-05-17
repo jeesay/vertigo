@@ -186,9 +186,9 @@ public class ShaderUtils {
         int shaderprogram;
         vertexShaderProgram = gl.glCreateShader(GL3.GL_VERTEX_SHADER);
         fragmentShaderProgram = gl.glCreateShader(GL3.GL_FRAGMENT_SHADER);
-        gl.glShaderSource(vertexShaderProgram, 1, prog.getVertexSource(), null, 0);
+        // HACK gl.glShaderSource(vertexShaderProgram, 1, prog.getVertexSource(), null, 0);
         gl.glCompileShader(vertexShaderProgram);
-        gl.glShaderSource(fragmentShaderProgram, 1, prog.getFragmentSource(), null, 0);
+        // HACK gl.glShaderSource(fragmentShaderProgram, 1, prog.getFragmentSource(), null, 0);
         gl.glCompileShader(fragmentShaderProgram);
         shaderprogram = gl.glCreateProgram();
         //
