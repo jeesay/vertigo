@@ -1,8 +1,8 @@
 /*
  * $Id:$
  *
- * VoltIJ, VOLume viewing Tools for ImageJ.
- * Copyright (C) 2009-2012  Jean-Christophe Taveau.
+ * vertigo, volume viewing Tools for ImageJ.
+ * Copyright (C) 2009-2013  Jean-Christophe Taveau.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,6 +25,7 @@
  *  Frederic Romagné
  *  Michael Vacher
  */
+
 package vertigo.math;
 
 import java.util.Observable;
