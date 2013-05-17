@@ -119,7 +119,7 @@ public class Cube extends Shape {
     public Cube(String name) {
         super(name);
         if (name.equals("Wire") ) {
-            setDrawingStyle("LINES");
+            setDrawingStyle("LINE_STRIP");
             setType(WIRE);
         }
         else if  (name.equals("Flat") ) {
@@ -151,7 +151,7 @@ public class Cube extends Shape {
 
     @Override
     public Geometry getGeometry() {
-        if (geo.getBuffers().isEmpty() )
+        if (geo.getAllBO().isEmpty() )
            switch (this.type) {
            case WIRE : 
                create_wirecube();
